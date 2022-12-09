@@ -17,8 +17,8 @@ function setCanvasSize() {
 function getCursorPosition(event) {
     let posX = event.clientX
     let posY = event.clientY
-    let xOffset = (posX - canvas.width / 2) / 6
-    let yOffset = (posY - canvas.height / 2) / 6
+    let xOffset = (posX - canvas.width / 2) / 5
+    let yOffset = (posY - canvas.height / 2) / 5
     let centerX = (canvas.width / 2) - xOffset
     let centerY = (((canvas.height / 2) * 1.3) - yOffset)
 
@@ -30,52 +30,70 @@ function getCursorPosition(event) {
     ctx.fillStyle = lColor
     ctx.fill();
 
-    ctx.lineWidth = 6
+    let lineBaseWidth = 3
 
     //4 lines towards center
     ctx.beginPath()
-    ctx.moveTo(0, 0)
+    ctx.moveTo(-lineBaseWidth, lineBaseWidth)
     ctx.lineTo(centerX, centerY)
+    ctx.lineTo(lineBaseWidth, -lineBaseWidth)
     let grd = ctx.createLinearGradient(0, 0, centerX, centerY)
     grd.addColorStop(0, dColor)
     grd.addColorStop(0.5, dColor)
     grd.addColorStop(0.8, lColor)
     grd.addColorStop(1, lColor)
-    ctx.strokeStyle = grd
-    ctx.stroke()
+    ctx.fillStyle = grd
+    ctx.fill()
 
     ctx.beginPath()
-    ctx.moveTo(canvas.width, 0)
+    ctx.moveTo(canvas.width - lineBaseWidth, -lineBaseWidth)
     ctx.lineTo(centerX, centerY)
+    ctx.lineTo(canvas.width + lineBaseWidth, +lineBaseWidth)
     grd = ctx.createLinearGradient(canvas.width, 0, centerX, centerY)
     grd.addColorStop(0, dColor)
     grd.addColorStop(0.5, dColor)
     grd.addColorStop(0.8, lColor)
     grd.addColorStop(1, lColor)
-    ctx.strokeStyle = grd
-    ctx.stroke()
+    ctx.fillStyle = grd
+    ctx.fill()
+
+    /*
+     ctx.beginPath()
+     ctx.moveTo(-lineBaseWidth, canvas.height-lineBaseWidth)
+     ctx.lineTo(centerX, centerY)
+     ctx.lineTo(canvas.width+lineBaseWidth, canvas.height-lineBaseWidth)
+     grd = ctx.createLinearGradient(canvas.width/2, canvas.height, canvas.width/2, centerY)
+     grd.addColorStop(0, dColor)
+     grd.addColorStop(0.4, dColor)
+     grd.addColorStop(0.8, lColor)
+     grd.addColorStop(1, lColor)
+     ctx.fillStyle = grd
+     ctx.fill()
+     */
 
     ctx.beginPath()
-    ctx.moveTo(0, canvas.height)
+    ctx.moveTo(canvas.width + lineBaseWidth, canvas.height - lineBaseWidth)
     ctx.lineTo(centerX, centerY)
-    grd = ctx.createLinearGradient(0, canvas.height, centerX, centerY)
-    grd.addColorStop(0, dColor)
-    grd.addColorStop(0.5, dColor)
-    grd.addColorStop(0.8, lColor)
-    grd.addColorStop(1, lColor)
-    ctx.strokeStyle = grd
-    ctx.stroke()
-
-    ctx.beginPath()
-    ctx.moveTo(canvas.width, canvas.height)
-    ctx.lineTo(centerX, centerY)
+    ctx.lineTo(canvas.width - lineBaseWidth, canvas.height + lineBaseWidth)
     grd = ctx.createLinearGradient(canvas.width, canvas.height, centerX, centerY)
     grd.addColorStop(0, dColor)
     grd.addColorStop(0.5, dColor)
     grd.addColorStop(0.8, lColor)
     grd.addColorStop(1, lColor)
-    ctx.strokeStyle = grd
-    ctx.stroke()
+    ctx.fillStyle = grd
+    ctx.fill()
+
+    ctx.beginPath()
+    ctx.moveTo(lineBaseWidth, canvas.height + lineBaseWidth)
+    ctx.lineTo(centerX, centerY)
+    ctx.lineTo(-lineBaseWidth, canvas.height - lineBaseWidth)
+    grd = ctx.createLinearGradient(0, canvas.height, centerX, centerY)
+    grd.addColorStop(0, dColor)
+    grd.addColorStop(0.5, dColor)
+    grd.addColorStop(0.8, lColor)
+    grd.addColorStop(1, lColor)
+    ctx.fillStyle = grd
+    ctx.fill()
 
     //back rectangle
     let dist = 0.15
