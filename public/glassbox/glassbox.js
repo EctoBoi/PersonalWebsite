@@ -1,19 +1,26 @@
 const canvasEle = document.createElement("canvas")
 canvasEle.setAttribute('id', 'glassbox-canvas')
-document.body.setAttribute('onmousemove', 'getCursorPosition(event)')
 $('body').append(canvasEle)
-
 let canvas = document.getElementById('glassbox-canvas')
 let ctx = canvas.getContext('2d')
-window.onresize = setCanvasSize
+
 setCanvasSize()
 getCursorPosition()
+
+window.addEventListener('resize', windowResize)
+
+function windowResize() {
+    setCanvasSize()
+    getCursorPosition()
+}
 
 function setCanvasSize() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
     ctx = canvas.getContext('2d')
 }
+
+document.body.setAttribute('onmousemove', 'getCursorPosition(event)')
 
 function getCursorPosition(event) {
     let posX
