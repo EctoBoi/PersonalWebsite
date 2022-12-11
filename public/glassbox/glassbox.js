@@ -33,7 +33,7 @@ function getCursorPosition(event) {
 function positionContent(posX, posY) {
     let contentDiv = document.getElementById('glassbox-content')
     let contentSize = 0.9
-    let warpLimiter = 8
+    let warpLimiter = 15
     let xOffset = (posX - canvas.width / 2) / warpLimiter
     let yOffset = (posY - canvas.height / 2) / warpLimiter
 
