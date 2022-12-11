@@ -9,6 +9,7 @@ const port = 8080
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use('/', express.static(process.cwd() + '/public'))
 app.use('/Emoticon-Rumble', express.static(process.cwd() + '/Emoticon-Rumble/public'))
 
 app.route('/')
