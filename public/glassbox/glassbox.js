@@ -7,12 +7,10 @@ let ctx = canvas.getContext('2d')
 setCanvasSize()
 getCursorPosition()
 
-window.addEventListener('resize', windowResize)
-
-function windowResize() {
+window.addEventListener('resize', function() {
     setCanvasSize()
     getCursorPosition()
-}
+}, true)
 
 function setCanvasSize() {
     canvas.width = window.innerWidth
@@ -21,6 +19,12 @@ function setCanvasSize() {
 }
 
 document.body.setAttribute('onmousemove', 'getCursorPosition(event)')
+document.body.addEventListener('touchmove', (e) => {
+    let posX = e.touches[0].clientX
+    let posY = e.touches[0].clientY
+    drawGlassbox(posX, posY)
+    positionContent(posX, posY)
+}, false);
 
 function getCursorPosition(event) {
     let posX
