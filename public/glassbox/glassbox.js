@@ -55,7 +55,7 @@ function positionContent(posX, posY) {
 }
 
 function drawGlassbox(posX, posY) {
-    let warpLimiter = 1.5
+    let warpLimiter = 2
     let xOffset = (posX - canvas.width / 2) / warpLimiter
     let yOffset = (posY - canvas.height / 2) / warpLimiter
     let centerX = (canvas.width / 2) - xOffset
