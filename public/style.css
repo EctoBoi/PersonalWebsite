@@ -14,3 +14,8 @@ body {
     background-color: #f3e9e9;
     border: 4px solid #d6caca;
 }
+
+#welcome-div {
+    font-size: 30px;
+    position: relative;
+}
