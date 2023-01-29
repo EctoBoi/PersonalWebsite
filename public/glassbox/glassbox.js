@@ -64,10 +64,10 @@ function drawGlassbox(posX, posY) {
     let dColor = '#dfd3d3'
     let lColor = '#fff5f5'
 
-    ctx.beginPath();
+    ctx.beginPath()
     ctx.rect(0, 0, canvas.width, canvas.height)
     ctx.fillStyle = lColor
-    ctx.fill();
+    ctx.fill()
 
     let lineBaseWidth = 3
 
