@@ -1,6 +1,13 @@
+:root {
+    --dColor: #dfd3d3;
+    --lColor: #fff5f5;
+}
+
 body {
     margin: 0;
     font-size: 20px;
+    font-family: Georgia;
+    overflow: hidden;
 }
 
 #Emoticon-Rumble-button {
@@ -19,4 +26,28 @@ body {
 #welcome-div {
     font-size: 30px;
     position: relative;
+}
+
+#glassbox-content {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#glassbox-canvas {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: -1000;
+}
+
+#nav-box {
+    display: flex;
+    justify-content: center;
+    width: 70%;
+    position: absolute;
+    top: 0px;
+    z-index: 1000;
 }
