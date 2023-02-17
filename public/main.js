@@ -5,6 +5,7 @@ let navCanvases = document.getElementById('nav-box').children
 let lineWidth = 6
 let dColor = '#dfd3d3'
 let lColor = '#fff5f5'
+let lColorHover = '#f1e9e9'
 let fontColor = 'black'
 let fontName = 'Georgia'
 
@@ -27,12 +28,12 @@ document.body.addEventListener('touchmove', (e) => {
     positionNav(posX)
 }, false);
 
-function getCursorPosition(event) {
+function getCursorPosition(e) {
     let posX
     let posY
-    if (event) {
-        posX = event.clientX
-        posY = event.clientY
+    if (e) {
+        posX = e.clientX
+        posY = e.clientY
     } else {
         posX = glassboxCanvas.width / 2
         posY = glassboxCanvas.height / 2
@@ -41,6 +42,7 @@ function getCursorPosition(event) {
     drawGlassbox(posX, posY, glassboxCanvas)
     positionContent(posX, posY)
     positionNav(posX)
+    drawNav(posX, posY)
 }
 
 //===============Content===============
@@ -185,10 +187,10 @@ function setNavSize() {
         navCanvases[i].height = height
     }
 
-    drawNav1(navCanvases[0].getContext('2d'))
-    drawNav2(navCanvases[1].getContext('2d'))
-    drawNav3(navCanvases[2].getContext('2d'))
-    drawNav4(navCanvases[3].getContext('2d'))
+    drawNav0(navCanvases[0].getContext('2d'), false)
+    drawNav1(navCanvases[1].getContext('2d'), false)
+    drawNav2(navCanvases[2].getContext('2d'), false)
+    drawNav3(navCanvases[3].getContext('2d'), false)
 }
 
 function positionNav(posX) {
@@ -199,14 +201,52 @@ function positionNav(posX) {
     navBox.style.left = window.innerWidth / 2 - navBox.clientWidth / 2 + xOffset + 'px'
 }
 
+//Nav Clicks
 navCanvases[0].onclick = function() {
-    alert('1')
+    alert('Home')
 }
 navCanvases[1].onclick = function() {
-    alert('2')
+    alert('About')
+}
+navCanvases[2].onclick = function() {
+    alert('Portfolio')
+}
+navCanvases[3].onclick = function() {
+    alert('Contact')
 }
 
-function drawNav1(ctx) {
+function drawNav(posX, posY) {
+    let ctx0 = navCanvases[0].getContext('2d'),
+        ctx1 = navCanvases[1].getContext('2d'),
+        ctx2 = navCanvases[2].getContext('2d'),
+        ctx3 = navCanvases[3].getContext('2d')
+
+    let rect = navCanvases[0].getBoundingClientRect(),
+        x = posX - rect.left,
+        y = posY - rect.top,
+        isHovered = ctx0.isPointInPath(x, y)
+    drawNav0(ctx0, isHovered)
+
+    rect = navCanvases[1].getBoundingClientRect()
+    x = posX - rect.left
+    y = posY - rect.top
+    isHovered = ctx1.isPointInPath(x, y)
+    drawNav1(ctx1, isHovered)
+
+    rect = navCanvases[2].getBoundingClientRect()
+    x = posX - rect.left
+    y = posY - rect.top
+    isHovered = ctx2.isPointInPath(x, y)
+    drawNav2(ctx2, isHovered)
+
+    rect = navCanvases[3].getBoundingClientRect()
+    x = posX - rect.left
+    y = posY - rect.top
+    isHovered = ctx3.isPointInPath(x, y)
+    drawNav3(ctx3, isHovered)
+}
+
+function drawNav0(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
     ctx.beginPath()
@@ -214,9 +254,10 @@ function drawNav1(ctx) {
     ctx.lineTo((ctx.canvas.height + lineWidth / 2) * (ctx.canvas.width / 200), ctx.canvas.height - lineWidth / 2)
     ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lineWidth / 2)
     ctx.lineTo(ctx.canvas.width, 0)
+
     ctx.strokeStyle = dColor
     ctx.lineWidth = lineWidth
-    ctx.fillStyle = lColor
+    ctx.fillStyle = isHovered ? lColorHover : lColor
     ctx.fill()
     ctx.stroke()
 
@@ -230,7 +271,7 @@ function drawNav1(ctx) {
     ctx.fillText(text, textPosX, fontHeight + 8)
 }
 
-function drawNav2(ctx) {
+function drawNav1(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
     ctx.beginPath()
@@ -241,7 +282,7 @@ function drawNav2(ctx) {
 
     ctx.strokeStyle = dColor
     ctx.lineWidth = lineWidth
-    ctx.fillStyle = lColor
+    ctx.fillStyle = isHovered ? lColorHover : lColor
     ctx.fill()
     ctx.stroke()
 
@@ -253,7 +294,7 @@ function drawNav2(ctx) {
     ctx.fillText(text, canvasTextCenter, fontHeight + 8)
 }
 
-function drawNav3(ctx) {
+function drawNav2(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
     ctx.beginPath()
@@ -264,7 +305,7 @@ function drawNav3(ctx) {
 
     ctx.strokeStyle = dColor
     ctx.lineWidth = lineWidth
-    ctx.fillStyle = lColor
+    ctx.fillStyle = isHovered ? lColorHover : lColor
     ctx.fill()
     ctx.stroke()
 
@@ -276,7 +317,7 @@ function drawNav3(ctx) {
     ctx.fillText(text, canvasTextCenter, fontHeight + 8)
 }
 
-function drawNav4(ctx) {
+function drawNav3(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
     ctx.beginPath()
@@ -287,7 +328,7 @@ function drawNav4(ctx) {
 
     ctx.strokeStyle = dColor
     ctx.lineWidth = lineWidth
-    ctx.fillStyle = lColor
+    ctx.fillStyle = isHovered ? lColorHover : lColor
     ctx.fill()
     ctx.stroke()
 
