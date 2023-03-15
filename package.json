@@ -5,6 +5,7 @@
     "description": "Justin Banton's Personal Website",
     "main": "app.js",
     "scripts": {
+        "transpile": "tsc public/main.ts --outFile public/main.js -w",
         "start": "node app.js"
     },
     "dependencies": {
