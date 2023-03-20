@@ -1,20 +1,25 @@
 var glassboxCanvas = document.getElementById('glassbox-canvas');
-var navCanvases = document.getElementById('nav-box').children;
+var menuButtonCanvas = document.getElementById('menu-button-canvas');
+var navCanvases = document.getElementById('nav-box-div').children;
+var navBox = document.getElementById('nav-box-div');
 var lineWidth = 6;
 var dColor = '#dfd3d3';
 var lColor = '#fff5f5';
 var lColorHover = '#f1e9e9';
 var fontColor = 'black';
 var fontName = 'Georgia';
+var mobileMaxWidth = 500;
+var mobileMode = window.innerWidth <= mobileMaxWidth;
 setGlassboxSize();
 setNavSize();
 getCursorPosition(null);
 window.addEventListener('resize', function () {
+    mobileMode = window.innerWidth <= mobileMaxWidth;
     setGlassboxSize();
     setNavSize();
     getCursorPosition(null);
 }, true);
-document.body.setAttribute('onmousemove', 'getCursorPosition(event)');
+document.body.addEventListener('mousemove', function (e) { getCursorPosition(e); });
 document.body.addEventListener('touchmove', function (e) {
     var posX = e.touches[0].clientX;
     var posY = e.touches[0].clientY;
@@ -37,10 +42,11 @@ function getCursorPosition(e) {
     positionContent(posX, posY);
     positionNav(posX);
     drawNav(posX, posY);
+    drawMenuButton(posX, posY);
 }
 //===============Content===============
 function positionContent(posX, posY) {
-    var glassboxContent = document.getElementById('glassbox-content');
+    var glassboxContent = document.getElementById('glassbox-content-div');
     var contentSize = 0.9;
     var warpLimiter = 15;
     var xOffset = (posX - glassboxCanvas.width / 2) / warpLimiter;
@@ -51,8 +57,7 @@ function positionContent(posX, posY) {
     glassboxContent.style.top = (((1 - contentSize) * window.innerHeight) / 2) + yOffset + 'px';
 }
 document.getElementById('welcome-div').addEventListener('mouseover', function () {
-    var glassboxContent = document.getElementById('glassbox-content');
-    console.log(glassboxContent);
+    var glassboxContent = document.getElementById('glassbox-content-div');
     var randX = Math.floor(Math.random() * ((+glassboxContent.clientWidth / 2) - 100));
     var randY = Math.floor(Math.random() * ((+glassboxContent.clientHeight / 2) - 60));
     if (Math.random() < 0.5) {
@@ -84,7 +89,7 @@ function drawGlassbox(posX, posY, canvas) {
     ctx.rect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = lColor;
     ctx.fill();
-    var lineBaseWidth = 3;
+    var lc = lineWidth / 2; //lineCenter
     function addColorStop(grd) {
         grd.addColorStop(0, dColor);
         grd.addColorStop(0.5, dColor);
@@ -93,17 +98,17 @@ function drawGlassbox(posX, posY, canvas) {
     }
     //4 lines towards center
     ctx.beginPath();
-    ctx.moveTo(-lineBaseWidth, lineBaseWidth);
+    ctx.moveTo(-lc, lc);
     ctx.lineTo(centerX, centerY);
-    ctx.lineTo(lineBaseWidth, -lineBaseWidth);
+    ctx.lineTo(lc, -lc);
     var grd = ctx.createLinearGradient(0, 0, centerX, centerY);
     addColorStop(grd);
     ctx.fillStyle = grd;
     ctx.fill();
     ctx.beginPath();
-    ctx.moveTo(canvas.width - lineBaseWidth, -lineBaseWidth);
+    ctx.moveTo(canvas.width - lc, -lc);
     ctx.lineTo(centerX, centerY);
-    ctx.lineTo(canvas.width + lineBaseWidth, +lineBaseWidth);
+    ctx.lineTo(canvas.width + lc, +lc);
     grd = ctx.createLinearGradient(canvas.width, 0, centerX, centerY);
     addColorStop(grd);
     ctx.fillStyle = grd;
@@ -111,9 +116,9 @@ function drawGlassbox(posX, posY, canvas) {
     /*
     //floor for hallway look
      ctx.beginPath()
-     ctx.moveTo(-lineBaseWidth, canvas.height-lineBaseWidth)
+     ctx.moveTo(-lc, canvas.height-lc)
      ctx.lineTo(centerX, centerY)
-     ctx.lineTo(canvas.width+lineBaseWidth, canvas.height-lineBaseWidth)
+     ctx.lineTo(canvas.width+lc, canvas.height-lc)
      grd = ctx.createLinearGradient(canvas.width/2, canvas.height, canvas.width/2, centerY)
      grd.addColorStop(0, dColor)
      grd.addColorStop(0.4, dColor)
@@ -123,17 +128,17 @@ function drawGlassbox(posX, posY, canvas) {
      ctx.fill()
      */
     ctx.beginPath();
-    ctx.moveTo(canvas.width + lineBaseWidth, canvas.height - lineBaseWidth);
+    ctx.moveTo(canvas.width + lc, canvas.height - lc);
     ctx.lineTo(centerX, centerY);
-    ctx.lineTo(canvas.width - lineBaseWidth, canvas.height + lineBaseWidth);
+    ctx.lineTo(canvas.width - lc, canvas.height + lc);
     grd = ctx.createLinearGradient(canvas.width, canvas.height, centerX, centerY);
     addColorStop(grd);
     ctx.fillStyle = grd;
     ctx.fill();
     ctx.beginPath();
-    ctx.moveTo(lineBaseWidth, canvas.height + lineBaseWidth);
+    ctx.moveTo(lc, canvas.height + lc);
     ctx.lineTo(centerX, centerY);
-    ctx.lineTo(-lineBaseWidth, canvas.height - lineBaseWidth);
+    ctx.lineTo(-lc, canvas.height - lc);
     grd = ctx.createLinearGradient(0, canvas.height, centerX, centerY);
     addColorStop(grd);
     ctx.fillStyle = grd;
@@ -153,28 +158,35 @@ function drawGlassbox(posX, posY, canvas) {
 }
 //===============Navigation===============
 function setNavSize() {
-    var navBox = document.getElementById('nav-box');
-    var navWidth = (50 + (1 - (document.body.clientWidth / 1920)) * 100);
+    menuButtonVisability(mobileMode);
+    navBoxVisability(!mobileMode);
+    var navWidth = 90;
+    if (!mobileMode) {
+        (50 + (1 - (document.body.clientWidth / 1920)) * 100);
+        navBox.style.flexDirection = 'row';
+        navBox.style.top = '0px';
+    }
+    else {
+        navBox.style.flexDirection = 'column';
+        navBox.style.top = '55px';
+    }
     if (navWidth > 100)
         navWidth = 100;
     navBox.style.width = navWidth + "%";
-    var width = Math.floor(navBox.clientWidth / 4) - 1;
-    var height = 35 + Math.round(window.innerHeight * .02);
+    var canvasWidth = Math.floor(navBox.clientWidth / 4) - 1;
+    var canvasHeight = 35 + Math.round(window.innerHeight * .02);
     for (var i = 0; i < navCanvases.length; i++) {
         var canvas = navCanvases.item(i);
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = mobileMode ? navBox.clientWidth : canvasWidth;
+        canvas.height = canvasHeight;
+        if (i == 0 && mobileMode) {
+            canvas.height = canvasHeight + lineWidth;
+        }
     }
-    /*
-    drawNav0(navCanvases[0].getContext('2d'), false)
-    drawNav1(navCanvases[1].getContext('2d'), false)
-    drawNav2(navCanvases[2].getContext('2d'), false)
-    drawNav3(navCanvases[3].getContext('2d'), false)
-    */
     drawNav(window.innerWidth / 2, window.innerHeight / 2);
+    drawMenuButton(window.innerWidth / 2, window.innerHeight / 2);
 }
 function positionNav(posX) {
-    var navBox = document.getElementById('nav-box');
     var warpLimiter = 15;
     var xOffset = (posX - glassboxCanvas.width / 2) / warpLimiter;
     navBox.style.left = window.innerWidth / 2 - navBox.clientWidth / 2 + xOffset + 'px';
@@ -212,34 +224,63 @@ function drawNav(posX, posY) {
     isHovered = ctx3.isPointInPath(x, y);
     drawNav3(ctx3, isHovered);
 }
+function navBoxVisability(visible) {
+    if (visible) {
+        navBox.style.visibility = 'visible';
+    }
+    else {
+        navBox.style.visibility = 'hidden';
+    }
+}
 function drawNav0(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    var lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
-    ctx.moveTo(lineWidth / 2, -lineWidth / 2);
-    ctx.lineTo((ctx.canvas.height + lineWidth / 2) * (ctx.canvas.width / 200), ctx.canvas.height - lineWidth / 2);
-    ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lineWidth / 2);
-    ctx.lineTo(ctx.canvas.width, 0);
+    if (mobileMode) {
+        ctx.lineTo(lc, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - lc, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - lc, lc);
+        ctx.lineTo((ctx.canvas.height + lc) * (ctx.canvas.width / 200), lc);
+        ctx.closePath();
+    }
+    else {
+        ctx.moveTo(lc, -lc);
+        ctx.lineTo((ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width, 0);
+    }
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
     ctx.fillStyle = isHovered ? lColorHover : lColor;
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = fontColor;
-    var fontHeight = (30 * (ctx.canvas.height / 50)) - 8;
+    var fontHeight = (30 * ((mobileMode ? ctx.canvas.height - lineWidth : ctx.canvas.height) / 50)) - 8;
     var text = "Home";
     ctx.font = fontHeight + "px " + fontName;
     var canvasTextCenter = (ctx.canvas.width / 2) - (ctx.measureText(text).width / 2);
-    var canvasSlopeOffset = (ctx.canvas.height - lineWidth / 2) * (ctx.canvas.width / 600);
+    var canvasSlopeOffset = (ctx.canvas.height - lc) * (ctx.canvas.width / 600);
+    if (mobileMode)
+        canvasSlopeOffset = 0;
     var textPosX = canvasTextCenter + canvasSlopeOffset;
-    ctx.fillText(text, textPosX, fontHeight + 8);
+    ctx.fillText(text, textPosX, fontHeight + (mobileMode ? 8 + lineWidth : 8));
 }
 function drawNav1(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    var lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, ctx.canvas.height - lineWidth / 2);
-    ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lineWidth / 2);
-    ctx.lineTo(ctx.canvas.width, 0);
+    if (mobileMode) {
+        ctx.moveTo(lc, 0);
+        ctx.lineTo(lc, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - lc, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - lc, 0);
+    }
+    else {
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width, 0);
+    }
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
     ctx.fillStyle = isHovered ? lColorHover : lColor;
@@ -254,11 +295,20 @@ function drawNav1(ctx, isHovered) {
 }
 function drawNav2(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    var lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, ctx.canvas.height - lineWidth / 2);
-    ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lineWidth / 2);
-    ctx.lineTo(ctx.canvas.width, 0);
+    if (mobileMode) {
+        ctx.moveTo(lc, 0);
+        ctx.lineTo(lc, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - lc, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - lc, 0);
+    }
+    else {
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width, 0);
+    }
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
     ctx.fillStyle = isHovered ? lColorHover : lColor;
@@ -273,11 +323,20 @@ function drawNav2(ctx, isHovered) {
 }
 function drawNav3(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    var lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, ctx.canvas.height - lineWidth / 2);
-    ctx.lineTo(ctx.canvas.width - ((ctx.canvas.height + lineWidth / 2) * (ctx.canvas.width / 200)), ctx.canvas.height - lineWidth / 2);
-    ctx.lineTo(ctx.canvas.width - lineWidth / 2, -lineWidth / 2);
+    if (mobileMode) {
+        ctx.moveTo(lc, 0);
+        ctx.lineTo(lc, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - ((ctx.canvas.height + lc) * (ctx.canvas.width / 200)), ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width, -lc);
+    }
+    else {
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - ((ctx.canvas.height + lc) * (ctx.canvas.width / 200)), ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - lc, -lc);
+    }
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
     ctx.fillStyle = isHovered ? lColorHover : lColor;
@@ -288,7 +347,71 @@ function drawNav3(ctx, isHovered) {
     var text = "Contact";
     ctx.font = fontHeight + "px " + fontName;
     var canvasTextCenter = (ctx.canvas.width / 2) - (ctx.measureText(text).width / 2);
-    var canvasSlopeOffset = (ctx.canvas.height - lineWidth / 2) * (ctx.canvas.width / 600);
+    var canvasSlopeOffset = (ctx.canvas.height - lc) * (ctx.canvas.width / 600);
+    if (mobileMode)
+        canvasSlopeOffset = 0;
     var textPosX = canvasTextCenter - canvasSlopeOffset;
     ctx.fillText(text, textPosX, fontHeight + 8);
+}
+//Menu Button
+function drawMenuButton(posX, posY) {
+    menuButtonCanvas.height = 45;
+    menuButtonCanvas.width = 45;
+    var ctx = menuButtonCanvas.getContext('2d');
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    var lc = lineWidth / 2; //lineCenter
+    ctx.beginPath();
+    ctx.rect(lc, lc, menuButtonCanvas.width - lineWidth, menuButtonCanvas.height - lineWidth);
+    ctx.closePath();
+    ctx.strokeStyle = dColor;
+    ctx.lineWidth = lineWidth;
+    var rect = menuButtonCanvas.getBoundingClientRect();
+    var x = posX - rect.left;
+    var y = posY - rect.top;
+    var isHovered = ctx.isPointInPath(x, y);
+    ctx.fillStyle = isHovered ? lColorHover : lColor;
+    ctx.fill();
+    ctx.stroke();
+    if (navBox.style.visibility == 'hidden') {
+        ctx.beginPath();
+        ctx.moveTo(lineWidth * 1.5, lineWidth * 2);
+        ctx.lineTo(ctx.canvas.width - (lineWidth * 1.5), lineWidth * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(lineWidth * 1.5, ctx.canvas.height / 2);
+        ctx.lineTo(ctx.canvas.width - (lineWidth * 1.5), ctx.canvas.height / 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(lineWidth * 1.5, ctx.canvas.height - (lineWidth * 2));
+        ctx.lineTo(ctx.canvas.width - (lineWidth * 1.5), ctx.canvas.height - (lineWidth * 2));
+        ctx.stroke();
+    }
+    else {
+        ctx.beginPath();
+        ctx.moveTo(lineWidth * 1.5, lineWidth * 1.5);
+        ctx.lineTo(ctx.canvas.width - (lineWidth * 1.5), ctx.canvas.height - (lineWidth * 1.5));
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(lineWidth * 1.5, ctx.canvas.height - (lineWidth * 1.5));
+        ctx.lineTo(ctx.canvas.width - (lineWidth * 1.5), lineWidth * 1.5);
+        ctx.stroke();
+    }
+}
+menuButtonCanvas.addEventListener('click', function () {
+    if (navBox.style.visibility == 'hidden') {
+        navBoxVisability(true);
+    }
+    else {
+        navBoxVisability(false);
+    }
+    drawMenuButton(window.innerWidth / 2, window.innerHeight / 2);
+});
+function menuButtonVisability(visible) {
+    var menuButtonDiv = document.getElementById('menu-button-div');
+    if (visible) {
+        menuButtonDiv.style.visibility = 'visible';
+    }
+    else {
+        menuButtonDiv.style.visibility = 'hidden';
+    }
 }

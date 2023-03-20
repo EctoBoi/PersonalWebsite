@@ -24,11 +24,12 @@ body {
 }
 
 #welcome-div {
+    user-select: none;
     font-size: 30px;
     position: relative;
 }
 
-#glassbox-content {
+#glassbox-content-div {
     position: absolute;
     display: flex;
     justify-content: center;
@@ -43,7 +44,14 @@ body {
     z-index: -1000;
 }
 
-#nav-box {
+#menu-button-div {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 1001;
+}
+
+#nav-box-div {
     display: flex;
     justify-content: center;
     width: 70%;
