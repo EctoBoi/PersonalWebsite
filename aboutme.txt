@@ -1,6 +1,6 @@
  
 
-Javascript (React JQuery (Node.js Express Mongoose) D3.js)
+Javascript (React JQuery TypeScript (Node.js Express Mongoose) D3.js)
 HTML CSS (SASS Bootstrap)
 MongoDB
 SQL

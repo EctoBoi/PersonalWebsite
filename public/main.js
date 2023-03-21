@@ -1,7 +1,9 @@
 var glassboxCanvas = document.getElementById('glassbox-canvas');
 var menuButtonCanvas = document.getElementById('menu-button-canvas');
 var navCanvases = document.getElementById('nav-box-div').children;
+var galleryImgs = document.getElementsByClassName("gallery-img");
 var navBox = document.getElementById('nav-box-div');
+var glassboxContentDiv = document.getElementById('glassbox-content-div');
 var lineWidth = 6;
 var dColor = '#dfd3d3';
 var lColor = '#fff5f5';
@@ -12,12 +14,15 @@ var mobileMaxWidth = 500;
 var mobileMode = window.innerWidth <= mobileMaxWidth;
 setGlassboxSize();
 setNavSize();
+setImgOnClick();
 getCursorPosition(null);
+setImgSize();
 window.addEventListener('resize', function () {
     mobileMode = window.innerWidth <= mobileMaxWidth;
     setGlassboxSize();
     setNavSize();
     getCursorPosition(null);
+    setImgSize();
 }, true);
 document.body.addEventListener('mousemove', function (e) { getCursorPosition(e); });
 document.body.addEventListener('touchmove', function (e) {
@@ -193,19 +198,30 @@ function positionNav(posX) {
 }
 //Nav Clicks
 navCanvases[0].addEventListener('click', function () {
-    alert('Home');
+    hideAllContent();
+    document.getElementById('welcome-div').style.display = 'block';
 });
 navCanvases[1].addEventListener('click', function () {
-    alert('About');
+    hideAllContent();
+    document.getElementById('about-div').style.display = 'block';
 });
 navCanvases[2].addEventListener('click', function () {
-    alert('Portfolio');
+    hideAllContent();
+    document.getElementById('portfolio-div').style.display = 'block';
+    setImgSize();
 });
 navCanvases[3].addEventListener('click', function () {
-    alert('Contact');
+    hideAllContent();
+    document.getElementById('contact-div').style.display = 'block';
 });
+function hideAllContent() {
+    document.getElementById('welcome-div').style.display = 'none';
+    document.getElementById('about-div').style.display = 'none';
+    document.getElementById('portfolio-div').style.display = 'none';
+    document.getElementById('contact-div').style.display = 'none';
+}
 function drawNav(posX, posY) {
-    var ctx0 = navCanvases.item(0).getContext('2d'), ctx1 = navCanvases.item(1).getContext('2d'), ctx2 = navCanvases.item(2).getContext('2d'), ctx3 = navCanvases.item(3).getContext('2d');
+    var ctx0 = navCanvases[0].getContext('2d'), ctx1 = navCanvases[1].getContext('2d'), ctx2 = navCanvases[2].getContext('2d'), ctx3 = navCanvases[3].getContext('2d');
     var rect = navCanvases[0].getBoundingClientRect(), x = posX - rect.left, y = posY - rect.top, isHovered = ctx0.isPointInPath(x, y);
     drawNav0(ctx0, isHovered);
     rect = navCanvases[1].getBoundingClientRect();
@@ -413,5 +429,54 @@ function menuButtonVisability(visible) {
     }
     else {
         menuButtonDiv.style.visibility = 'hidden';
+    }
+}
+//===============Portfolio Gallery===============
+var imgDefaultHeight = 130;
+var imgDefaultWidth = 200;
+function setImgOnClick() {
+    for (var i = 0; i < galleryImgs.length; i++) {
+        galleryImgs[i].addEventListener('click', expand);
+    }
+}
+function expand() {
+    if (this.expanded === undefined)
+        this.expanded = false;
+    if (this.expanded) {
+        for (var j = 0; j < galleryImgs.length; j++) {
+            var img = galleryImgs[j];
+            img.hidden = false;
+        }
+        this.style.height = imgDefaultHeight + 'px';
+        this.style.width = imgDefaultWidth + 'px';
+    }
+    else {
+        for (var j = 0; j < galleryImgs.length; j++) {
+            var img = galleryImgs[j];
+            if (img != this) {
+                img.hidden = true;
+            }
+            else {
+                this.style.width = (this.width * 2) + 'px';
+                this.style.height = (this.height * 2) + 'px';
+            }
+        }
+    }
+    this.expanded = !this.expanded;
+}
+function setImgSize() {
+    var gallery = document.getElementById('gallery-div');
+    imgDefaultHeight = glassboxContentDiv.clientWidth / 4;
+    imgDefaultWidth = glassboxContentDiv.clientWidth * 0.39;
+    for (var i = 0; i < galleryImgs.length; i++) {
+        if (galleryImgs[i].expanded) {
+            galleryImgs[i].style.height = (imgDefaultHeight * 2) + 'px';
+            galleryImgs[i].style.width = (imgDefaultWidth * 2) + 'px';
+        }
+        else {
+            galleryImgs[i].style.height = imgDefaultHeight + 'px';
+            galleryImgs[i].style.width = imgDefaultWidth + 'px';
+        }
+        galleryImgs[i].style.margin = (gallery.clientWidth * 0.05) + 'px';
     }
 }

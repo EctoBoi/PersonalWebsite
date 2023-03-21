@@ -10,6 +10,22 @@ body {
     overflow: hidden;
 }
 
+#about-div {
+    display: none;
+}
+
+#portfolio-div {
+    display: none;
+}
+
+#project-list-div {
+    display: none;
+}
+
+#contact-div {
+    display: none;
+}
+
 #Emoticon-Rumble-button {
     margin-top: 20px;
     padding: 5px;
@@ -58,4 +74,15 @@ body {
     position: absolute;
     top: 0px;
     z-index: 1000;
+}
+
+#gallery-div {
+    height: 100%;
+    width: 100%;
+    margin: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
 }

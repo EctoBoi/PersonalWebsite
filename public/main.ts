@@ -1,21 +1,25 @@
-let glassboxCanvas = document.getElementById('glassbox-canvas') as HTMLCanvasElement
-let menuButtonCanvas = document.getElementById('menu-button-canvas') as HTMLCanvasElement
-let navCanvases = (document.getElementById('nav-box-div') as HTMLDivElement).children
-let navBox = document.getElementById('nav-box-div') as HTMLDivElement
+const glassboxCanvas = document.getElementById('glassbox-canvas') as HTMLCanvasElement
+const menuButtonCanvas = document.getElementById('menu-button-canvas') as HTMLCanvasElement
+const navCanvases = (document.getElementById('nav-box-div') as HTMLDivElement).children as HTMLCollectionOf<HTMLCanvasElement>
+const galleryImgs = document.getElementsByClassName("gallery-img") as HTMLCollectionOf<ExpandableImage>
+const navBox = document.getElementById('nav-box-div') as HTMLDivElement
+const glassboxContentDiv = document.getElementById('glassbox-content-div') as HTMLDivElement
 
-let lineWidth = 6
-let dColor = '#dfd3d3'
-let lColor = '#fff5f5'
-let lColorHover = '#f1e9e9'
-let fontColor = 'black'
-let fontName = 'Georgia'
+const lineWidth = 6
+const dColor = '#dfd3d3'
+const lColor = '#fff5f5'
+const lColorHover = '#f1e9e9'
+const fontColor = 'black'
+const fontName = 'Georgia'
 
-let mobileMaxWidth = 500
+const mobileMaxWidth = 500
 let mobileMode = window.innerWidth <= mobileMaxWidth
 
 setGlassboxSize()
 setNavSize()
+setImgOnClick()
 getCursorPosition(null)
+setImgSize()
 
 window.addEventListener('resize', function () {
     mobileMode = window.innerWidth <= mobileMaxWidth
@@ -23,6 +27,7 @@ window.addEventListener('resize', function () {
     setGlassboxSize()
     setNavSize()
     getCursorPosition(null)
+    setImgSize()
 }, true)
 
 document.body.addEventListener('mousemove', (e) => { getCursorPosition(e) })
@@ -221,23 +226,35 @@ function positionNav(posX: number) {
 
 //Nav Clicks
 navCanvases[0].addEventListener('click', function () {
-    alert('Home')
+    hideAllContent();
+    (document.getElementById('welcome-div') as HTMLDivElement).style.display = 'block';
 })
 navCanvases[1].addEventListener('click', function () {
-    alert('About')
+    hideAllContent();
+    (document.getElementById('about-div') as HTMLDivElement).style.display = 'block';
 })
 navCanvases[2].addEventListener('click', function () {
-    alert('Portfolio')
+    hideAllContent();
+    (document.getElementById('portfolio-div') as HTMLDivElement).style.display = 'block';
+    setImgSize()
 })
 navCanvases[3].addEventListener('click', function () {
-    alert('Contact')
+    hideAllContent();
+    (document.getElementById('contact-div') as HTMLDivElement).style.display = 'block';
 })
 
+function hideAllContent() {
+    (document.getElementById('welcome-div') as HTMLDivElement).style.display = 'none';
+    (document.getElementById('about-div') as HTMLDivElement).style.display = 'none';
+    (document.getElementById('portfolio-div') as HTMLDivElement).style.display = 'none';
+    (document.getElementById('contact-div') as HTMLDivElement).style.display = 'none';
+}
+
 function drawNav(posX: number, posY: number) {
-    let ctx0 = (navCanvases.item(0) as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D,
-        ctx1 = (navCanvases.item(1) as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D,
-        ctx2 = (navCanvases.item(2) as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D,
-        ctx3 = (navCanvases.item(3) as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D
+    let ctx0 = navCanvases[0].getContext('2d') as CanvasRenderingContext2D,
+        ctx1 = navCanvases[1].getContext('2d') as CanvasRenderingContext2D,
+        ctx2 = navCanvases[2].getContext('2d') as CanvasRenderingContext2D,
+        ctx3 = navCanvases[3].getContext('2d') as CanvasRenderingContext2D
 
     let rect = navCanvases[0].getBoundingClientRect(),
         x = posX - rect.left,
@@ -471,5 +488,66 @@ function menuButtonVisability(visible: boolean) {
         menuButtonDiv.style.visibility = 'visible'
     } else {
         menuButtonDiv.style.visibility = 'hidden'
+    }
+}
+
+//===============Portfolio Gallery===============
+
+let imgDefaultHeight = 130
+let imgDefaultWidth = 200
+
+interface ExpandableImage extends HTMLImageElement{
+    expanded: boolean;
+}
+
+function setImgOnClick() {
+    for (let i = 0; i < galleryImgs.length; i++) {
+        galleryImgs[i].addEventListener('click', expand)
+    }
+}
+
+function expand() {
+
+    if (this.expanded === undefined)
+        this.expanded = false
+
+    if (this.expanded) {
+        for (let j = 0; j < galleryImgs.length; j++) {
+            let img = galleryImgs[j]
+            img.hidden = false
+        }
+        this.style.height = imgDefaultHeight + 'px'
+        this.style.width = imgDefaultWidth + 'px'
+    } else {
+        for (let j = 0; j < galleryImgs.length; j++) {
+            let img = galleryImgs[j]
+            if (img != this) {
+                img.hidden = true
+            } else {
+                this.style.width = (this.width * 2) + 'px'
+                this.style.height = (this.height * 2) + 'px'
+            }
+        }
+    }
+
+    this.expanded = !this.expanded
+}
+
+function setImgSize() {
+    let gallery = document.getElementById('gallery-div') as HTMLDivElement
+
+    imgDefaultHeight = glassboxContentDiv.clientWidth / 4
+    imgDefaultWidth = glassboxContentDiv.clientWidth * 0.39
+
+    for (let i = 0; i < galleryImgs.length; i++) {
+        if (galleryImgs[i].expanded) {
+            galleryImgs[i].style.height = (imgDefaultHeight * 2) + 'px'
+            galleryImgs[i].style.width = (imgDefaultWidth * 2) + 'px'
+        } else {
+            galleryImgs[i].style.height = imgDefaultHeight + 'px'
+            galleryImgs[i].style.width = imgDefaultWidth + 'px'
+        }
+
+        galleryImgs[i].style.margin = (gallery.clientWidth * 0.05) + 'px'
     }
 }
