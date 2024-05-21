@@ -1,5 +1,29 @@
+:root {
+    --dColor: #dfd3d3;
+    --lColor: #fff5f5;
+}
+
 body {
+    margin: 0;
     font-size: 20px;
+    font-family: Georgia;
+    overflow: hidden;
+}
+
+#about-div {
+    display: none;
+}
+
+#portfolio-div {
+    display: none;
+}
+
+#project-list-div {
+    display: none;
+}
+
+#contact-div {
+    display: none;
 }
 
 #Emoticon-Rumble-button {
@@ -11,6 +35,54 @@ body {
 }
 
 #Emoticon-Rumble-button:hover {
-    background-color: #f3e9e9;
+    background-color: #f1e9e9;
     border: 4px solid #d6caca;
+}
+
+#welcome-div {
+    user-select: none;
+    font-size: 30px;
+    position: relative;
+}
+
+#glassbox-content-div {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#glassbox-canvas {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: -1000;
+}
+
+#menu-button-div {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 1001;
+}
+
+#nav-box-div {
+    display: flex;
+    justify-content: center;
+    width: 70%;
+    position: absolute;
+    top: 0px;
+    z-index: 1000;
+}
+
+#gallery-div {
+    height: 100%;
+    width: 100%;
+    margin: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
 }
