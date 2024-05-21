@@ -213,21 +213,21 @@ navCanvases[0].addEventListener("click", function () {
     if (mobileMode)
         navBoxVisability(false);
 });
+/* turned off for temp update
 navCanvases[1].addEventListener("click", function () {
     hideAllContent();
-    document.getElementById("about-div").style.display =
+    (document.getElementById("about-div") as HTMLDivElement).style.display =
         "block";
-    if (mobileMode)
-        navBoxVisability(false);
+    if (mobileMode) navBoxVisability(false);
 });
 navCanvases[2].addEventListener("click", function () {
     hideAllContent();
-    document.getElementById("portfolio-div").style.display =
+    (document.getElementById("portfolio-div") as HTMLDivElement).style.display =
         "block";
-    if (mobileMode)
-        navBoxVisability(false);
+    if (mobileMode) navBoxVisability(false);
     setImgSize();
 });
+*/
 navCanvases[3].addEventListener("click", function () {
     hideAllContent();
     document.getElementById("contact-div").style.display =
@@ -332,7 +332,7 @@ function drawNav1(ctx, isHovered) {
     ctx.stroke();
     ctx.fillStyle = fontColor;
     let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
-    let text = "About";
+    let text = ""; // About
     ctx.font = fontHeight + "px " + fontName;
     let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
     ctx.fillText(text, canvasTextCenter, fontHeight + 8);
@@ -360,7 +360,7 @@ function drawNav2(ctx, isHovered) {
     ctx.stroke();
     ctx.fillStyle = fontColor;
     let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
-    let text = "Portfolio";
+    let text = ""; //
     ctx.font = fontHeight + "px " + fontName;
     let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
     ctx.fillText(text, canvasTextCenter, fontHeight + 8);
