@@ -11,5 +11,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-runtime: nodejs16
+runtime: nodejs20
 env: standard
