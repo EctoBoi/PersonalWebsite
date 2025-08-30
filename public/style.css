@@ -12,6 +12,8 @@ body {
 
 #about-div {
     display: none;
+    margin: 10%;
+    max-height: 80%;
 }
 
 #portfolio-div {
@@ -76,13 +78,67 @@ body {
     z-index: 1000;
 }
 
-#gallery-div {
-    height: 100%;
+/*===============Portfolio Gallery===============*/
+
+.slideshow-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    max-width: 900px;
+    margin: 20px auto;
+}
+.slide-item {
+    text-align: center;
+}
+.slide-item img {
     width: 100%;
-    margin: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
+    max-height: 600px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.slide-item a {
+    text-decoration: none !important;
+}
+.caption {
+    margin-top: 8px;
+    font-size: 18px;
+    color: black;
+}
+.dots {
+    margin-top: 15px;
+    text-align: center;
+}
+.dot {
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.active {
+    background-color: #333;
+}
+
+/*===============Responsive Design===============*/
+
+@media (max-width: 700px) {
+    #about-div {
+        font-size: 17px;
+    }
+    .slideshow-container {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 500px) {
+    #about-div {
+        font-size: 15px;
+    }
+
+    .slideshow-container {
+        grid-template-columns: 1fr;
+    }
 }

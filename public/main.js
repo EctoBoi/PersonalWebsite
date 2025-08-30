@@ -3,7 +3,6 @@ const glassboxCanvas = document.getElementById("glassbox-canvas");
 const menuButtonCanvas = document.getElementById("menu-button-canvas");
 const navCanvases = document.getElementById("nav-box-div")
     .children;
-const galleryImgs = document.getElementsByClassName("gallery-img");
 const navBox = document.getElementById("nav-box-div");
 const glassboxContentDiv = document.getElementById("glassbox-content-div");
 const lineWidth = 6;
@@ -15,18 +14,19 @@ const fontName = "Georgia";
 let imgDefaultHeight = 130;
 let imgDefaultWidth = 200;
 const mobileMaxWidth = 500;
-let mobileMode = window.innerWidth <= mobileMaxWidth;
+let mobileMode = window.screen.width <= mobileMaxWidth;
+mobileMode = window.innerWidth <= mobileMaxWidth;
 setGlassboxSize();
 setNavSize();
-setImgOnClick();
 getCursorPosition(null);
-setImgSize();
 window.addEventListener("resize", function () {
+    mobileMode = window.screen.width <= mobileMaxWidth;
     mobileMode = window.innerWidth <= mobileMaxWidth;
     setGlassboxSize();
     setNavSize();
     getCursorPosition(null);
-    setImgSize();
+    renderSlides();
+    currentPage = 0;
 }, true);
 document.body.addEventListener("mousemove", (e) => {
     getCursorPosition(e);
@@ -213,21 +213,21 @@ navCanvases[0].addEventListener("click", function () {
     if (mobileMode)
         navBoxVisability(false);
 });
-/* turned off for temp update
+/* turned off for temp update*/
 navCanvases[1].addEventListener("click", function () {
     hideAllContent();
-    (document.getElementById("about-div") as HTMLDivElement).style.display =
+    document.getElementById("about-div").style.display =
         "block";
-    if (mobileMode) navBoxVisability(false);
+    if (mobileMode)
+        navBoxVisability(false);
 });
 navCanvases[2].addEventListener("click", function () {
     hideAllContent();
-    (document.getElementById("portfolio-div") as HTMLDivElement).style.display =
+    document.getElementById("portfolio-div").style.display =
         "block";
-    if (mobileMode) navBoxVisability(false);
-    setImgSize();
+    if (mobileMode)
+        navBoxVisability(false);
 });
-*/
 navCanvases[3].addEventListener("click", function () {
     hideAllContent();
     document.getElementById("contact-div").style.display =
@@ -332,7 +332,7 @@ function drawNav1(ctx, isHovered) {
     ctx.stroke();
     ctx.fillStyle = fontColor;
     let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
-    let text = ""; // About
+    let text = "About";
     ctx.font = fontHeight + "px " + fontName;
     let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
     ctx.fillText(text, canvasTextCenter, fontHeight + 8);
@@ -360,7 +360,7 @@ function drawNav2(ctx, isHovered) {
     ctx.stroke();
     ctx.fillStyle = fontColor;
     let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
-    let text = ""; //
+    let text = "Portfolio";
     ctx.font = fontHeight + "px " + fontName;
     let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
     ctx.fillText(text, canvasTextCenter, fontHeight + 8);
@@ -452,6 +452,9 @@ menuButtonCanvas.addEventListener("click", function () {
     }
     drawMenuButton(window.innerWidth / 2, window.innerHeight / 2);
 });
+if (mobileMode) {
+    menuButtonCanvas.click();
+}
 function menuButtonVisability(visible) {
     let menuButtonDiv = document.getElementById("menu-button-div");
     if (visible) {
@@ -461,49 +464,88 @@ function menuButtonVisability(visible) {
         menuButtonDiv.style.visibility = "hidden";
     }
 }
-function setImgOnClick() {
-    for (let i = 0; i < galleryImgs.length; i++) {
-        galleryImgs[i].addEventListener("click", expand);
+const slides = [
+    {
+        img: "/imgs/Bears.jpg",
+        title: "Bears",
+        url: "/imgs/Bears.jpg",
+    },
+    {
+        img: "/imgs/Deer.jpg",
+        title: "Deer",
+        url: "/imgs/Deer.jpg",
+    },
+    {
+        img: "/imgs/Forest.jpg",
+        title: "Forest",
+        url: "/imgs/Forest.jpg",
+    },
+    {
+        img: "/imgs/Highlands.jpg",
+        title: "Highlands",
+        url: "/imgs/Highlands.jpg",
+    },
+    {
+        img: "/imgs/Mountain Range.jpg",
+        title: "Mountain Range",
+        url: "/imgs/Mountain Range.jpg",
+    },
+    {
+        img: "/imgs/Mountainous Forest.jpg",
+        title: "Mountainous Forest",
+        url: "/imgs/Mountainous Forest.jpg",
+    },
+    {
+        img: "/imgs/Waterfall.jpg",
+        title: "Waterfall",
+        url: "/imgs/Waterfall.jpg",
+    },
+    {
+        img: "/imgs/Wave.jpg",
+        title: "Wave",
+        url: "/imgs/Wave.jpg",
+    },
+];
+let currentPage = 0;
+const slideshowEl = document.getElementById("slideshow");
+const dotsEl = document.getElementById("dots");
+function renderSlides() {
+    let itemsPerPage = 4;
+    if (mobileMode)
+        itemsPerPage = 2;
+    slideshowEl.innerHTML = "";
+    const start = currentPage * itemsPerPage;
+    const end = start + itemsPerPage;
+    const pageSlides = slides.slice(start, end);
+    pageSlides.forEach((slide) => {
+        const div = document.createElement("div");
+        div.className = "slide-item";
+        const link = document.createElement("a");
+        link.href = slide.url;
+        link.target = "_blank";
+        const img = document.createElement("img");
+        img.src = slide.img;
+        const caption = document.createElement("div");
+        caption.className = "caption";
+        caption.textContent = slide.title;
+        link.appendChild(img);
+        link.appendChild(caption);
+        div.appendChild(link);
+        slideshowEl.appendChild(div);
+    });
+    renderDots(itemsPerPage);
+}
+function renderDots(itemsPerPage) {
+    dotsEl.innerHTML = "";
+    const pageCount = Math.ceil(slides.length / itemsPerPage);
+    for (let i = 0; i < pageCount; i++) {
+        const dot = document.createElement("span");
+        dot.className = "dot" + (i === currentPage ? " active" : "");
+        dot.addEventListener("click", () => {
+            currentPage = i;
+            renderSlides();
+        });
+        dotsEl.appendChild(dot);
     }
 }
-function expand() {
-    if (this.expanded === undefined)
-        this.expanded = false;
-    if (this.expanded) {
-        for (let j = 0; j < galleryImgs.length; j++) {
-            let img = galleryImgs[j];
-            img.hidden = false;
-        }
-        this.style.height = imgDefaultHeight + "px";
-        this.style.width = imgDefaultWidth + "px";
-    }
-    else {
-        for (let j = 0; j < galleryImgs.length; j++) {
-            let img = galleryImgs[j];
-            if (img != this) {
-                img.hidden = true;
-            }
-            else {
-                this.style.width = this.width * 2 + "px";
-                this.style.height = this.height * 2 + "px";
-            }
-        }
-    }
-    this.expanded = !this.expanded;
-}
-function setImgSize() {
-    let gallery = document.getElementById("gallery-div");
-    imgDefaultHeight = glassboxContentDiv.clientWidth / 4;
-    imgDefaultWidth = glassboxContentDiv.clientWidth * 0.39;
-    for (let i = 0; i < galleryImgs.length; i++) {
-        if (galleryImgs[i].expanded) {
-            galleryImgs[i].style.height = imgDefaultHeight * 2 + "px";
-            galleryImgs[i].style.width = imgDefaultWidth * 2 + "px";
-        }
-        else {
-            galleryImgs[i].style.height = imgDefaultHeight + "px";
-            galleryImgs[i].style.width = imgDefaultWidth + "px";
-        }
-        galleryImgs[i].style.margin = gallery.clientWidth * 0.05 + "px";
-    }
-}
+renderSlides();
