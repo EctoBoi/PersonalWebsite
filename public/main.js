@@ -579,7 +579,7 @@ function showDetail(slide) {
     detailViewEl.innerHTML = `
     <div class="detail-content">
       <div class="detail-image">
-        <img src="${slide.img}" alt="${slide.title}">
+        <img id="detail-img" src="${slide.img}" alt="${slide.title}">
       </div>
       <div class="detail-info">
         <h2>${slide.title}</h2>
@@ -594,6 +594,14 @@ function showDetail(slide) {
       </div>
     </div>
   `;
+    // When img clicked, open slide.url (if exists)
+    const detailImg = document.getElementById("detail-img");
+    if (slide.url) {
+        detailImg.style.cursor = "pointer";
+        detailImg.addEventListener("click", () => {
+            window.open(slide.url, "_blank");
+        });
+    }
     detailViewEl.classList.remove("hidden");
     const backBtn = document.getElementById("backBtn");
     backBtn.addEventListener("click", () => {
