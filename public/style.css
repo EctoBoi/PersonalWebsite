@@ -12,6 +12,7 @@ body {
 
 #about-div {
     display: none;
+    max-width: 1000px;
     max-height: 90%;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
