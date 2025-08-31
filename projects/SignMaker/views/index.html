@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Sign Maker</title>
+    <link rel="icon" type="image/x-icon" href="/images/signpost.ico">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div id="content">
+        <h1>Sign Maker</h1>
+
+        <button class="button-87" role="button" id="fillInfoButton">Fill From Info</button>
+
+        <div id="form">
+            <div class="formInputDiv" id="formSignType">
+                <p>Sign Type:</p>
+                <select id="sizes">
+                    <option value="2x4 Hang Tag">2x4 Hang Tag</option>
+                    <option value="3.25x5.75 Hang Tag">3.25x5.75 Hang Tag</option>
+                    <option value="4x4 Fact Tag" selected="selected">4x4 Fact Tag</option>
+                    <option value="4.5x2.75 Binocular">4.5x2.75 Binocular</option>
+                    <option value="11x11 Sign Insert">11x11 Sign Insert</option>
+                    <option value="17x17 Sign Insert">17x17 Sign Insert</option>
+                </select>
+            </div>
+            <div class="formInputDiv" id="formTitle1">
+                <p>Title 1:</p>
+                <input type="text" id="title1" size="35">
+            </div>
+            <div class="formInputDiv" id="formTitle2">
+                <p>Title 2:</p>
+                <input type="text" id="title2" size="35">
+            </div>
+            <div class="formInputDiv" id="formPrice">
+                <p>Price:</p>
+                <input type="text" id="price" size="10">
+            </div>
+            <div class="formInputDiv" id="formSKU">
+                <p>SKU:</p>
+                <input type="text" id="sku" size="10">
+            </div>
+            <div class="formInputDiv" id="formRegPrice">
+                <p>Reg. Price:</p>
+                <input type="text" id="regPrice" size="10">
+            </div>
+            <div class="formInputDiv" id="formSaleEndDate">
+                <p>Sale End Date:</p>
+                <input type="date" id="endDate" placeholder="MON DD, YYYY" size="15">
+            </div>
+            <div class="formInputDiv" id="formCopies">
+                <p>Copies:</p>
+                <input type="number" id="copies" value=1>
+            </div>
+        </div>
+
+        <button class="button-87" role="button" id="createButton">Create</button>
+        <button class="button-87" role="button" id="printButton" style="visibility: hidden;">Print</button>
+
+        <div id="canvasDiv"></div>
+        <div id="barcodeDiv"></div>
+
+        <button class="button-87" role="button" id="saveToBatch" style="visibility: hidden;">Save To Batch</button>
+        <button class="button-87" role="button" id="printBatch" style="visibility: hidden;">Print Batch</button>
+
+        <div id="batchPreview"></div>
+
+        <button class="button-87" role="button" id="clearBatch" style="visibility: hidden;">Clear Batch</button>
+
+    </div>
+
+    <script src="JsBarcode.all.min.js"></script>
+    <script type="module" src="CreateSign.js"></script>
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>
