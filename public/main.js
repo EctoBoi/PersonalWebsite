@@ -25,8 +25,8 @@ window.addEventListener("resize", function () {
     setGlassboxSize();
     setNavSize();
     getCursorPosition(null);
-    renderSlides();
     currentPage = 0;
+    renderSlides();
 }, true);
 document.body.addEventListener("mousemove", (e) => {
     getCursorPosition(e);
@@ -231,7 +231,7 @@ navCanvases[2].addEventListener("click", function () {
 navCanvases[3].addEventListener("click", function () {
     hideAllContent();
     document.getElementById("contact-div").style.display =
-        "block";
+        "flex";
     if (mobileMode)
         navBoxVisability(false);
 });
@@ -469,50 +469,57 @@ const slides = [
         img: "/imgs/Bears.jpg",
         title: "Bears",
         url: "/imgs/Bears.jpg",
+        description: "A family of bears in the wild.",
     },
     {
         img: "/imgs/Deer.jpg",
         title: "Deer",
         url: "/imgs/Deer.jpg",
+        description: "A deer wandering through the woods.",
     },
     {
         img: "/imgs/Forest.jpg",
         title: "Forest",
         url: "/imgs/Forest.jpg",
+        description: "A dense and serene forest.",
     },
     {
         img: "/imgs/Highlands.jpg",
         title: "Highlands",
         url: "/imgs/Highlands.jpg",
+        description: "Rolling highland scenery.",
     },
     {
         img: "/imgs/Mountain Range.jpg",
         title: "Mountain Range",
         url: "/imgs/Mountain Range.jpg",
+        description: "Flowing mountains with a lake running through.",
     },
     {
         img: "/imgs/Mountainous Forest.jpg",
         title: "Mountainous Forest",
         url: "/imgs/Mountainous Forest.jpg",
+        description: "A forest nestled in mountains.",
     },
     {
         img: "/imgs/Waterfall.jpg",
         title: "Waterfall",
         url: "/imgs/Waterfall.jpg",
+        description: "A majestic waterfall.",
     },
     {
         img: "/imgs/Wave.jpg",
         title: "Wave",
         url: "/imgs/Wave.jpg",
+        description: "A giant ocean wave.",
     },
 ];
 let currentPage = 0;
 const slideshowEl = document.getElementById("slideshow");
 const dotsEl = document.getElementById("dots");
+const detailViewEl = document.getElementById("detail-view");
 function renderSlides() {
-    let itemsPerPage = 4;
-    if (mobileMode)
-        itemsPerPage = 2;
+    let itemsPerPage = mobileMode ? 2 : 4;
     slideshowEl.innerHTML = "";
     const start = currentPage * itemsPerPage;
     const end = start + itemsPerPage;
@@ -520,17 +527,15 @@ function renderSlides() {
     pageSlides.forEach((slide) => {
         const div = document.createElement("div");
         div.className = "slide-item";
-        const link = document.createElement("a");
-        link.href = slide.url;
-        link.target = "_blank";
         const img = document.createElement("img");
         img.src = slide.img;
+        img.alt = slide.title;
+        img.addEventListener("click", () => showDetail(slide));
         const caption = document.createElement("div");
         caption.className = "caption";
         caption.textContent = slide.title;
-        link.appendChild(img);
-        link.appendChild(caption);
-        div.appendChild(link);
+        div.appendChild(img);
+        div.appendChild(caption);
         slideshowEl.appendChild(div);
     });
     renderDots(itemsPerPage);
@@ -547,5 +552,29 @@ function renderDots(itemsPerPage) {
         });
         dotsEl.appendChild(dot);
     }
+}
+function showDetail(slide) {
+    slideshowEl.classList.add("hidden");
+    dotsEl.classList.add("hidden");
+    detailViewEl.innerHTML = `
+    <div class="detail-content">
+      <div class="detail-image">
+        <img src="${slide.img}" alt="${slide.title}">
+      </div>
+      <div class="detail-info">
+        <h2>${slide.title}</h2>
+        <p>${slide.description}</p>
+        <a href="${slide.url}" target="_blank">View Full Image</a> <br>
+        <button id="backBtn">Back to Portfolio</button>
+      </div>
+    </div>
+  `;
+    detailViewEl.classList.remove("hidden");
+    const backBtn = document.getElementById("backBtn");
+    backBtn.addEventListener("click", () => {
+        detailViewEl.classList.add("hidden");
+        slideshowEl.classList.remove("hidden");
+        dotsEl.classList.remove("hidden");
+    });
 }
 renderSlides();

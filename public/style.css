@@ -24,10 +24,6 @@ body {
     display: none;
 }
 
-#contact-div {
-    display: none;
-}
-
 #Emoticon-Rumble-button {
     margin-top: 20px;
     padding: 5px;
@@ -78,6 +74,10 @@ body {
     z-index: 1000;
 }
 
+.hidden {
+    display: none !important;
+}
+
 /*===============Portfolio Gallery===============*/
 
 .slideshow-container {
@@ -96,6 +96,10 @@ body {
     object-fit: cover;
     border-radius: 8px;
     cursor: pointer;
+    transition: transform 0.2s;
+}
+.slide-item img:hover {
+    transform: scale(1.05);
 }
 .slide-item a {
     text-decoration: none !important;
@@ -111,18 +115,95 @@ body {
 }
 .dot {
     display: inline-block;
-    height: 18px;
-    width: 18px;
-    margin: 0 5px;
+    height: 30px;
+    width: 30px;
+    margin: 0 10px;
     background-color: #bbb;
     border-radius: 50%;
     cursor: pointer;
 }
+.dot:hover {
+    background-color: #616161;
+}
 .active {
     background-color: #333;
 }
+.active:hover {
+    background-color: #333;
+}
+
+.detail-content {
+    display: flex;
+    gap: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    align-items: flex-start;
+}
+.detail-image img {
+    max-width: 600px;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+.detail-image img:hover {
+    transform: scale(1.03);
+}
+.detail-info {
+    flex: 1;
+}
+.detail-info h2 {
+    margin: 0 0 10px;
+    font-size: 24px;
+}
+.detail-info p {
+    margin-bottom: 20px;
+}
+.detail-info button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    border: none;
+    background: #333;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.detail-info button:hover {
+    background: #555;
+}
+
+/*===============Contact Section===============*/
+#contact-div {
+    display: none;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+.contact-item {
+    text-align: center;
+}
+.contact-item img {
+    width: 100px;
+    display: block;
+    margin: 0 auto 8px;
+    transition: transform 0.2s;
+}
+.contact-item img:hover {
+    transform: scale(1.1);
+}
+.contact-item a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+.contact-item a:hover {
+    color: #0077b5;
+}
 
 /*===============Responsive Design===============*/
+@media (max-width: 1000px) {
+    .detail-image img {
+        max-width: 400px;
+    }
+}
 
 @media (max-width: 700px) {
     #about-div {
@@ -130,6 +211,15 @@ body {
     }
     .slideshow-container {
         gap: 20px;
+    }
+
+    .detail-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .detail-image img {
+        max-width: 100%;
     }
 }
 
