@@ -14,9 +14,9 @@ app.route("/").get(function (req, res) {
     res.sendFile(process.cwd() + "/views/index.html");
 });
 
-app.use("/Emoticon-Rumble", express.static("projects/Emoticon-Rumble/public"));
-app.route("/Emoticon-Rumble").get(function (req, res) {
-    res.sendFile(process.cwd() + "/projects/Emoticon-Rumble/views/index.html");
+app.use("/EmoticonRumble", express.static("projects/EmoticonRumble/public"));
+app.route("/EmoticonRumble").get(function (req, res) {
+    res.sendFile(process.cwd() + "/projects/EmoticonRumble/views/index.html");
 });
 
 app.use("/OatSoup", express.static("projects/OatSoup/public"));

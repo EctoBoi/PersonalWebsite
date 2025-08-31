@@ -283,7 +283,7 @@ navCanvases[0].addEventListener("click", function () {
 navCanvases[1].addEventListener("click", function () {
     hideAllContent();
     (document.getElementById("about-div") as HTMLDivElement).style.display =
-        "block";
+        "flex";
     if (mobileMode) navBoxVisability(false);
 });
 navCanvases[2].addEventListener("click", function () {
@@ -299,6 +299,23 @@ navCanvases[3].addEventListener("click", function () {
         "flex";
     if (mobileMode) navBoxVisability(false);
 });
+
+document
+    .getElementById("show-skills-btn")
+    ?.addEventListener("click", function () {
+        const skillsSection = document.getElementById("skills-section");
+        const summarySection = document.getElementById("summary-section");
+        if (skillsSection) skillsSection.style.display = "block";
+        if (summarySection) summarySection.style.display = "none";
+    });
+document
+    .getElementById("show-summary-btn")
+    ?.addEventListener("click", function () {
+        const skillsSection = document.getElementById("skills-section");
+        const summarySection = document.getElementById("summary-section");
+        if (skillsSection) skillsSection.style.display = "none";
+        if (summarySection) summarySection.style.display = "block";
+    });
 
 function hideAllContent() {
     (document.getElementById("welcome-div") as HTMLDivElement).style.display =
@@ -592,57 +609,65 @@ interface Slide {
     img: string;
     title: string;
     url: string;
+    sourceUrl: string;
     description: string;
 }
 
 const slides: Slide[] = [
     {
-        img: "/imgs/Bears.jpg",
-        title: "Bears",
-        url: "/imgs/Bears.jpg",
-        description: "A family of bears in the wild.",
+        img: "/imgs/Snakish.jpg",
+        title: "Snakish",
+        url: "https://justinbanton.ca/Snakish",
+        sourceUrl: "https://github.com/EctoBoi/Snakish",
+        description:
+            "A Tron-snake-ish game where you, the prince, must steal as many crowns from the dragons. Careful, the more crowns you grab the more their rage burns.",
     },
     {
-        img: "/imgs/Deer.jpg",
-        title: "Deer",
-        url: "/imgs/Deer.jpg",
-        description: "A deer wandering through the woods.",
+        img: "/imgs/EmoticonRumble.jpg",
+        title: "EmoticonRumble",
+        url: "https://justinbanton.ca/EmoticonRumble",
+        sourceUrl: "https://github.com/EctoBoi/EmoticonRumble",
+        description:
+            "Watch emoticon fight with dice roll mechanics, and even become one yourself!",
     },
     {
-        img: "/imgs/Forest.jpg",
-        title: "Forest",
-        url: "/imgs/Forest.jpg",
-        description: "A dense and serene forest.",
+        img: "/imgs/OatSoup.jpg",
+        title: "OatSoup",
+        url: "https://justinbanton.ca/OatSoup",
+        sourceUrl: "https://github.com/EctoBoi/OatSoup",
+        description:
+            "A rhythm game where you have to match color and direction. Generate a random sequence or try Tetris Mode!",
     },
     {
-        img: "/imgs/Highlands.jpg",
-        title: "Highlands",
-        url: "/imgs/Highlands.jpg",
-        description: "Rolling highland scenery.",
+        img: "/imgs/TaskBoard.jpg",
+        title: "TaskBoard",
+        url: "",
+        sourceUrl: "https://github.com/EctoBoi/TaskBoard",
+        description:
+            "A shared task board for Hunt: Showdown, allowing multiple players to send their current challenges to a server and have the info simplified and displayed for the whole party.",
     },
     {
-        img: "/imgs/Mountain Range.jpg",
-        title: "Mountain Range",
-        url: "/imgs/Mountain Range.jpg",
-        description: "Flowing mountains with a lake running through.",
+        img: "/imgs/SignMaker.jpg",
+        title: "SignMaker",
+        url: "https://justinbanton.ca/SignMaker",
+        sourceUrl: "https://github.com/EctoBoi/SignMaker",
+        description:
+            "A tool to create sale signage of various sizes. It can autofill info taken from Cabelas.ca using my CabBPSSearch chrome extension.",
     },
     {
-        img: "/imgs/Mountainous Forest.jpg",
-        title: "Mountainous Forest",
-        url: "/imgs/Mountainous Forest.jpg",
-        description: "A forest nestled in mountains.",
+        img: "/imgs/MapGen.jpg",
+        title: "MapGen",
+        url: "https://justinbanton.ca/MapGen",
+        sourceUrl: "https://github.com/EctoBoi/MapGen",
+        description:
+            "Based off Snakish, it generates a chain of rooms of various sizes.",
     },
     {
-        img: "/imgs/Waterfall.jpg",
-        title: "Waterfall",
-        url: "/imgs/Waterfall.jpg",
-        description: "A majestic waterfall.",
-    },
-    {
-        img: "/imgs/Wave.jpg",
-        title: "Wave",
-        url: "/imgs/Wave.jpg",
-        description: "A giant ocean wave.",
+        img: "/imgs/ThisSiteItself.jpg",
+        title: "This Site Itself",
+        url: "https://justinbanton.ca/",
+        sourceUrl: "https://github.com/EctoBoi/PersonalWebsite",
+        description: "Thanks for visiting!",
     },
 ];
 
@@ -707,7 +732,16 @@ function showDetail(slide: Slide) {
       <div class="detail-info">
         <h2>${slide.title}</h2>
         <p>${slide.description}</p>
-        <a href="${slide.url}" target="_blank">View Full Image</a> <br>
+        ${
+            slide.url
+                ? `<a href="${slide.url}" target="_blank">View Project</a> <br>`
+                : ""
+        }
+        ${
+            slide.sourceUrl
+                ? `<a href="${slide.sourceUrl}" target="_blank">View Source Code</a>`
+                : ""
+        }
         <button id="backBtn">Back to Portfolio</button>
       </div>
     </div>
