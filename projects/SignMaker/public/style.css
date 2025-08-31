@@ -1,0 +1,135 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url(RobotoMono-VariableFont_wght.ttf);
+}
+
+#content {
+    min-height: 100vh;
+    width: 90vw;
+    font-family: Roboto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(0.25turn, rgba(255, 0, 0, 0) 0%, #f0fbff 30%, #f0fbff 70%, rgba(255, 0, 0, 0) 100%);
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+}
+
+.formInputDiv {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 4px;
+}
+
+#form p {
+    text-align: right;
+    margin: 0px;
+    margin-top: -2px;
+    width: 160px;
+}
+
+#form input[type='number'] {
+    width: 40px;
+}
+
+#signCanvas {
+    background-color: white;
+}
+
+#fillInfoButton {
+    font-size: 13px;
+    padding: 3px 0px;
+}
+
+#saveToBatch,
+#printBatch,
+#clearBatch {
+    font-size: 13px;
+    padding: 3px;
+    width: 150px;
+}
+
+#saveToBatch {
+    margin-top: 7px;
+}
+
+#clearBatch {
+    width: 120px;
+    background-image: linear-gradient(45deg, #36b0d9 0%, #f55f2e 51%, #ff0000 100%);
+    margin: 40px;
+}
+
+#barcodeDiv {
+    position: absolute;
+    top: -100px;
+}
+
+#batchPreview {
+    background-color: white;
+}
+
+.button-87 {
+    font-family: Roboto;
+    font-size: 20px;
+    width: 200px;
+    margin: 10px;
+    margin-top: 0px;
+    padding: 7px 30px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: #000000;
+    border-radius: 10px;
+    border: 0px;
+    box-shadow: 0px 0px 14px -7px #000000;
+    background-image: linear-gradient(45deg, #7ad6f5 0%, #ffb54d 51%, #ff2a00 100%);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.button-87:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.button-87:active {
+    transform: scale(0.95);
+}
+
+html {
+    --s: 82px;
+    /* control the size */
+    --c1: #eaf2f6;
+    --c2: #f0fbff;
+    --c3: #dfe9ec;
+
+    --_g: var(--c3) 0 120deg, #0000 0;
+    background:
+        conic-gradient(from -60deg at 50% calc(100%/3), var(--_g)),
+        conic-gradient(from 120deg at 50% calc(200%/3), var(--_g)),
+        conic-gradient(from 60deg at calc(200%/3), var(--c3) 60deg, var(--c2) 0 120deg, #0000 0),
+        conic-gradient(from 180deg at calc(100%/3), var(--c1) 60deg, var(--_g)),
+        linear-gradient(90deg, var(--c1) calc(100%/6), var(--c2) 0 50%,
+            var(--c1) 0 calc(500%/6), var(--c2) 0);
+    background-size: calc(1.732*var(--s)) var(--s);
+}

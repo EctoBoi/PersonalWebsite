@@ -12,6 +12,36 @@ body {
 
 #about-div {
     display: none;
+    max-height: 90%;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    padding: 32px;
+    position: relative;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+#about-div button {
+    align-self: center;
+    margin: 0 8px;
+    padding: 10px 15px;
+    background-color: #fff5f5;
+    border: 4px solid #dfd3d3;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s, border 0.2s;
+}
+#about-buttons-div {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+#about-div button:hover {
+    background-color: #f1e9e9;
+    border: 4px solid #d6caca;
 }
 
 #portfolio-div {
@@ -19,10 +49,6 @@ body {
 }
 
 #project-list-div {
-    display: none;
-}
-
-#contact-div {
     display: none;
 }
 
@@ -43,6 +69,11 @@ body {
     user-select: none;
     font-size: 30px;
     position: relative;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    padding: 32px;
 }
 
 #glassbox-content-div {
@@ -76,13 +107,194 @@ body {
     z-index: 1000;
 }
 
-#gallery-div {
-    height: 100%;
+.hidden {
+    display: none !important;
+}
+
+/*===============Portfolio Gallery===============*/
+
+.slideshow-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    max-width: 900px;
+    margin: 20px auto;
+}
+.slide-item {
+    text-align: center;
+}
+.slide-item img {
     width: 100%;
-    margin: 20px;
+    max-height: 600px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.slide-item img:hover {
+    transform: scale(1.05);
+}
+.slide-item a {
+    text-decoration: none !important;
+}
+.caption {
+    margin-top: 8px;
+    font-size: 18px;
+    color: black;
+}
+.dots {
+    margin-top: 15px;
+    text-align: center;
+}
+.dot {
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    margin: 0 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+.dot:hover {
+    background-color: #616161;
+}
+.active {
+    background-color: #333;
+}
+.active:hover {
+    background-color: #333;
+}
+
+.detail-content {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    align-content: center;
+    gap: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    align-items: flex-start;
+}
+.detail-image img {
+    max-width: 600px;
+    border-radius: 8px;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+.detail-image img:hover {
+    transform: scale(1.03);
+}
+.detail-info {
+    flex: 1;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    padding: 32px;
+}
+.detail-info h2 {
+    margin: 0 0 10px;
+    font-size: 24px;
+}
+.detail-info p {
+    margin-bottom: 20px;
+}
+.detail-info a {
+    display: inline-block;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+.detail-info a:hover {
+    color: #0077b5;
+}
+.detail-info button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    border: none;
+    background: #333;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.detail-info button:hover {
+    background: #555;
+}
+
+/*===============Contact Section===============*/
+#contact-div {
+    display: none;
     justify-content: center;
+    gap: 40px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    padding: 32px;
+}
+.contact-item {
+    text-align: center;
+}
+.contact-item img {
+    width: 100px;
+    display: block;
+    margin: 0 auto 8px;
+    transition: transform 0.2s;
+}
+.contact-item img:hover {
+    transform: scale(1.1);
+}
+.contact-item a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+.contact-item a:hover {
+    color: #0077b5;
+}
+
+/*===============Responsive Design===============*/
+@media (max-width: 1000px) {
+    .detail-image img {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 700px) {
+    #about-div {
+        font-size: 17px;
+        padding: 20px;
+    }
+    #about-div button {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+    .slideshow-container {
+        gap: 20px;
+    }
+
+    .detail-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .detail-image img {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    #about-div {
+        font-size: 15px;
+        padding: 10px;
+    }
+    #about-div button {
+        font-size: 14px;
+        padding: 6px 10px;
+        margin: 0 4px;
+    }
+
+    .slideshow-container {
+        grid-template-columns: 1fr;
+    }
 }

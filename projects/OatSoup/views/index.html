@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>replit</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div id="content">
+        <canvas id="myCanvas" width="500" height="500" style="border:1px solid #d3d3d3;"></canvas>
+        <div id="controls">
+            <!-- <div id="control-buttons-box">
+                <button class="red arrow-button" onclick="pressLeft()"></button>
+                <button class="green arrow-button" onclick="pressUp()"></button>
+                <button class="blue arrow-button" onclick="pressRight()"></button>
+        </div>-->
+            <div id="legend-box">
+                <div class='box red'></div>&nbsp;Counterclockwise (Left Arrow)
+                <div class='box green'></div>&nbsp;Cross-Over (Up or Down Arrow)
+                <div class='box blue'></div>&nbsp;Clockwise (Right Arrow)
+            </div>
+            <div style="margin-bottom: 10px;">
+                <button onclick="pause()">Pause (P)</button>
+                <button onclick="restart()">Restart (R)</button>
+            </div>
+            <!-- old difficulties
+            <div style="margin-bottom: 10px;">
+                <button onclick="easyStart()">Easy</button>
+                <button onclick="mediumStart()">Medium</button>
+                <button onclick="hardStart()">Hard</button>
+            </div>
+            -->
+            <div style="margin-bottom: 10px;">
+                Notes:<input id="note-count" type="number" min="0">
+                <button onclick="randomStart()" style="margin-right:5px;">Random!</button>
+
+                Seed:<input id="seed" type="text" size="10">
+                <select name="difficulty" id="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected="selected">Medium</option>
+                    <option value="hard">Hard</option>
+                    <option value="veryhard">Very Hard</option>
+                </select>
+                <button onclick="seededStart()">Generate!</button>
+            </div>
+            <div>
+                <button onclick="tetrisStart()">Tetris Mode!</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>

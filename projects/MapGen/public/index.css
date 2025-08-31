@@ -1,0 +1,20 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    font-family: monospace;
+    background-color: #c2cfd3;
+    margin: 0;
+}
+
+#canvas {
+    display: block;
+    width: 95vmin; /* Responsive square */
+    height: 95vmin;
+    max-width: 95vw;
+    max-height: 95vh;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 10px;
+}
