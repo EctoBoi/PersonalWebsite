@@ -39,6 +39,16 @@ app.route("/SignMaker").get(function (req, res) {
     res.sendFile(process.cwd() + "/projects/SignMaker/views/index.html");
 });
 
+app.use(
+    "/ExistingPixelsGenerator",
+    express.static("projects/ExistingPixelsGenerator/public")
+);
+app.route("/ExistingPixelsGenerator").get(function (req, res) {
+    res.sendFile(
+        process.cwd() + "/projects/ExistingPixelsGenerator/views/index.html"
+    );
+});
+
 app.use(function (req, res, next) {
     res.status(404).type("text").send("Not Found");
 });

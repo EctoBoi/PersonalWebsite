@@ -305,16 +305,32 @@ document
     ?.addEventListener("click", function () {
         const skillsSection = document.getElementById("skills-section");
         const summarySection = document.getElementById("summary-section");
-        if (skillsSection) skillsSection.style.display = "block";
-        if (summarySection) summarySection.style.display = "none";
+        const showSkillsBtn = document.getElementById("show-skills-btn");
+        const showSummaryBtn = document.getElementById("show-summary-btn");
+        if (skillsSection) {
+            skillsSection.style.display = "block";
+            showSummaryBtn?.classList.add("inactive-btn");
+        }
+        if (summarySection) {
+            summarySection.style.display = "none";
+            showSkillsBtn?.classList.remove("inactive-btn");
+        }
     });
 document
     .getElementById("show-summary-btn")
     ?.addEventListener("click", function () {
         const skillsSection = document.getElementById("skills-section");
         const summarySection = document.getElementById("summary-section");
-        if (skillsSection) skillsSection.style.display = "none";
-        if (summarySection) summarySection.style.display = "block";
+        const showSkillsBtn = document.getElementById("show-skills-btn");
+        const showSummaryBtn = document.getElementById("show-summary-btn");
+        if (skillsSection) {
+            skillsSection.style.display = "none";
+            showSummaryBtn?.classList.remove("inactive-btn");
+        }
+        if (summarySection) {
+            summarySection.style.display = "block";
+            showSkillsBtn?.classList.add("inactive-btn");
+        }
     });
 
 function hideAllContent() {
@@ -620,7 +636,7 @@ const slides: Slide[] = [
         url: "https://justinbanton.ca/Snakish",
         sourceUrl: "https://github.com/EctoBoi/Snakish",
         description:
-            "A Tron-snake-ish game where you, the prince, must steal as many crowns from the dragons. Careful, the more crowns you grab the more their rage burns.",
+            "A Tron-snake-ish game where you, the prince, must steal as many crowns from the dragons. Careful, the more crowns you grab the more their rage burns. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/EmoticonRumble.jpg",
@@ -628,7 +644,7 @@ const slides: Slide[] = [
         url: "https://justinbanton.ca/EmoticonRumble",
         sourceUrl: "https://github.com/EctoBoi/EmoticonRumble",
         description:
-            "Watch emoticon fight with dice roll mechanics, and even become one yourself!",
+            "Watch emoticon fight with dice roll mechanics, and even become one yourself! <br><strong>Made using:</strong> jQuery, JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/OatSoup.jpg",
@@ -636,7 +652,7 @@ const slides: Slide[] = [
         url: "https://justinbanton.ca/OatSoup",
         sourceUrl: "https://github.com/EctoBoi/OatSoup",
         description:
-            "A rhythm game where you have to match color and direction. Generate a random sequence or try Tetris Mode!",
+            "A rhythm game where you have to match color and direction. Generate a random sequence or try Tetris Mode! <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/TaskBoard.jpg",
@@ -644,7 +660,7 @@ const slides: Slide[] = [
         url: "",
         sourceUrl: "https://github.com/EctoBoi/TaskBoard",
         description:
-            "A shared task board for Hunt: Showdown, allowing multiple players to send their current challenges to a server and have the info simplified and displayed for the whole party.",
+            "A shared task board for Hunt: Showdown, allowing multiple players to send their current challenges to a server and have the info simplified and displayed for the whole party. <br><strong>Made using:</strong> C# and TSP Server Library",
     },
     {
         img: "/imgs/SignMaker.jpg",
@@ -652,7 +668,23 @@ const slides: Slide[] = [
         url: "https://justinbanton.ca/SignMaker",
         sourceUrl: "https://github.com/EctoBoi/SignMaker",
         description:
-            "A tool to create sale signage of various sizes. It can autofill info taken from Cabelas.ca using my CabBPSSearch chrome extension.",
+            "A tool to create sale signage of various sizes. It can autofill info taken from Cabelas.ca using my CabBPSSearch chrome extension. <br><strong>Made using:</strong> JavaScript, HTML, and CSS",
+    },
+    {
+        img: "/imgs/ExistingPixelsGenerator.jpg",
+        title: "Existing Pixels Generator",
+        url: "https://justinbanton.ca/ExistingPixelsGenerator",
+        sourceUrl: "https://github.com/EctoBoi/ExistingPixelsGenerator",
+        description:
+            "Recrates the second image using the pixels from the first. Can also sort an images pixels by intensity. <br><strong>Made using:</strong> jQuery, JavaScript, HTML Canvas, and CSS",
+    },
+    {
+        img: "/imgs/DavigoMaps.jpg",
+        title: "Davigo Maps",
+        url: "https://mod.io/g/davigo/u/ectoboi",
+        sourceUrl: "",
+        description:
+            "Custom maps for the VR game Davigo, with over eighty thousand unique downloads. <br><strong>Made using:</strong> Blender and Unity",
     },
     {
         img: "/imgs/MapGen.jpg",
@@ -660,14 +692,15 @@ const slides: Slide[] = [
         url: "https://justinbanton.ca/MapGen",
         sourceUrl: "https://github.com/EctoBoi/MapGen",
         description:
-            "Based off Snakish, it generates a chain of rooms of various sizes.",
+            "Based off Snakish, it generates a chain of rooms of various sizes. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/ThisSiteItself.jpg",
         title: "This Site Itself",
         url: "https://justinbanton.ca/",
         sourceUrl: "https://github.com/EctoBoi/PersonalWebsite",
-        description: "Thanks for visiting!",
+        description:
+            "Thanks for visiting! <br><strong>Made using:</strong> TypeScript, Node.js, Express, HTML, and CSS",
     },
 ];
 
@@ -764,6 +797,47 @@ function showDetail(slide: Slide) {
         slideshowEl.classList.remove("hidden");
         dotsEl.classList.remove("hidden");
     });
+
+    const portfolioDiv = document.getElementById(
+        "portfolio-div"
+    ) as HTMLElement | null;
+    if (portfolioDiv) {
+        const onOutsideClick = (e: Event) => {
+            if (detailViewEl.classList.contains("hidden")) return;
+
+            const path: EventTarget[] =
+                // prefer composedPath for Shadow DOM safety
+                typeof (e as any).composedPath === "function"
+                    ? (e as any).composedPath()
+                    : (e as any).path || [];
+
+            const targetNode =
+                (e.target as Node) || (path.length ? (path[0] as Node) : null);
+
+            const clickedInside =
+                (targetNode &&
+                    (portfolioDiv.contains(targetNode) ||
+                        detailViewEl.contains(targetNode))) ||
+                path.some((p) => p === portfolioDiv || p === detailViewEl);
+
+            if (!clickedInside) {
+                backBtn.click();
+            }
+        };
+
+        document.addEventListener("pointerdown", onOutsideClick, {
+            passive: true,
+        });
+
+        // remove listener when returning to portfolio
+        backBtn.addEventListener(
+            "click",
+            () => {
+                document.removeEventListener("pointerdown", onOutsideClick);
+            },
+            { once: true }
+        );
+    }
 }
 
 renderSlides();

@@ -240,19 +240,31 @@ navCanvases[3].addEventListener("click", function () {
     .getElementById("show-skills-btn")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
     const skillsSection = document.getElementById("skills-section");
     const summarySection = document.getElementById("summary-section");
-    if (skillsSection)
+    const showSkillsBtn = document.getElementById("show-skills-btn");
+    const showSummaryBtn = document.getElementById("show-summary-btn");
+    if (skillsSection) {
         skillsSection.style.display = "block";
-    if (summarySection)
+        showSummaryBtn === null || showSummaryBtn === void 0 ? void 0 : showSummaryBtn.classList.add("inactive-btn");
+    }
+    if (summarySection) {
         summarySection.style.display = "none";
+        showSkillsBtn === null || showSkillsBtn === void 0 ? void 0 : showSkillsBtn.classList.remove("inactive-btn");
+    }
 });
 (_b = document
     .getElementById("show-summary-btn")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
     const skillsSection = document.getElementById("skills-section");
     const summarySection = document.getElementById("summary-section");
-    if (skillsSection)
+    const showSkillsBtn = document.getElementById("show-skills-btn");
+    const showSummaryBtn = document.getElementById("show-summary-btn");
+    if (skillsSection) {
         skillsSection.style.display = "none";
-    if (summarySection)
+        showSummaryBtn === null || showSummaryBtn === void 0 ? void 0 : showSummaryBtn.classList.remove("inactive-btn");
+    }
+    if (summarySection) {
         summarySection.style.display = "block";
+        showSkillsBtn === null || showSkillsBtn === void 0 ? void 0 : showSkillsBtn.classList.add("inactive-btn");
+    }
 });
 function hideAllContent() {
     document.getElementById("welcome-div").style.display =
@@ -489,49 +501,63 @@ const slides = [
         title: "Snakish",
         url: "https://justinbanton.ca/Snakish",
         sourceUrl: "https://github.com/EctoBoi/Snakish",
-        description: "A Tron-snake-ish game where you, the prince, must steal as many crowns from the dragons. Careful, the more crowns you grab the more their rage burns.",
+        description: "A Tron-snake-ish game where you, the prince, must steal as many crowns from the dragons. Careful, the more crowns you grab the more their rage burns. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/EmoticonRumble.jpg",
         title: "EmoticonRumble",
         url: "https://justinbanton.ca/EmoticonRumble",
         sourceUrl: "https://github.com/EctoBoi/EmoticonRumble",
-        description: "Watch emoticon fight with dice roll mechanics, and even become one yourself!",
+        description: "Watch emoticon fight with dice roll mechanics, and even become one yourself! <br><strong>Made using:</strong> jQuery, JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/OatSoup.jpg",
         title: "OatSoup",
         url: "https://justinbanton.ca/OatSoup",
         sourceUrl: "https://github.com/EctoBoi/OatSoup",
-        description: "A rhythm game where you have to match color and direction. Generate a random sequence or try Tetris Mode!",
+        description: "A rhythm game where you have to match color and direction. Generate a random sequence or try Tetris Mode! <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/TaskBoard.jpg",
         title: "TaskBoard",
         url: "",
         sourceUrl: "https://github.com/EctoBoi/TaskBoard",
-        description: "A shared task board for Hunt: Showdown, allowing multiple players to send their current challenges to a server and have the info simplified and displayed for the whole party.",
+        description: "A shared task board for Hunt: Showdown, allowing multiple players to send their current challenges to a server and have the info simplified and displayed for the whole party. <br><strong>Made using:</strong> C# and TSP Server Library",
     },
     {
         img: "/imgs/SignMaker.jpg",
         title: "SignMaker",
         url: "https://justinbanton.ca/SignMaker",
         sourceUrl: "https://github.com/EctoBoi/SignMaker",
-        description: "A tool to create sale signage of various sizes. It can autofill info taken from Cabelas.ca using my CabBPSSearch chrome extension.",
+        description: "A tool to create sale signage of various sizes. It can autofill info taken from Cabelas.ca using my CabBPSSearch chrome extension. <br><strong>Made using:</strong> JavaScript, HTML, and CSS",
+    },
+    {
+        img: "/imgs/ExistingPixelsGenerator.jpg",
+        title: "Existing Pixels Generator",
+        url: "https://justinbanton.ca/ExistingPixelsGenerator",
+        sourceUrl: "https://github.com/EctoBoi/ExistingPixelsGenerator",
+        description: "Recrates the second image using the pixels from the first. Can also sort an images pixels by intensity. <br><strong>Made using:</strong> jQuery, JavaScript, HTML Canvas, and CSS",
+    },
+    {
+        img: "/imgs/DavigoMaps.jpg",
+        title: "Davigo Maps",
+        url: "https://mod.io/g/davigo/u/ectoboi",
+        sourceUrl: "",
+        description: "Custom maps for the VR game Davigo, with over eighty thousand unique downloads. <br><strong>Made using:</strong> Blender and Unity",
     },
     {
         img: "/imgs/MapGen.jpg",
         title: "MapGen",
         url: "https://justinbanton.ca/MapGen",
         sourceUrl: "https://github.com/EctoBoi/MapGen",
-        description: "Based off Snakish, it generates a chain of rooms of various sizes.",
+        description: "Based off Snakish, it generates a chain of rooms of various sizes. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/ThisSiteItself.jpg",
         title: "This Site Itself",
         url: "https://justinbanton.ca/",
         sourceUrl: "https://github.com/EctoBoi/PersonalWebsite",
-        description: "Thanks for visiting!",
+        description: "Thanks for visiting! <br><strong>Made using:</strong> TypeScript, Node.js, Express, HTML, and CSS",
     },
 ];
 let currentPage = 0;
@@ -609,5 +635,32 @@ function showDetail(slide) {
         slideshowEl.classList.remove("hidden");
         dotsEl.classList.remove("hidden");
     });
+    const portfolioDiv = document.getElementById("portfolio-div");
+    if (portfolioDiv) {
+        const onOutsideClick = (e) => {
+            if (detailViewEl.classList.contains("hidden"))
+                return;
+            const path = 
+            // prefer composedPath for Shadow DOM safety
+            typeof e.composedPath === "function"
+                ? e.composedPath()
+                : e.path || [];
+            const targetNode = e.target || (path.length ? path[0] : null);
+            const clickedInside = (targetNode &&
+                (portfolioDiv.contains(targetNode) ||
+                    detailViewEl.contains(targetNode))) ||
+                path.some((p) => p === portfolioDiv || p === detailViewEl);
+            if (!clickedInside) {
+                backBtn.click();
+            }
+        };
+        document.addEventListener("pointerdown", onOutsideClick, {
+            passive: true,
+        });
+        // remove listener when returning to portfolio
+        backBtn.addEventListener("click", () => {
+            document.removeEventListener("pointerdown", onOutsideClick);
+        }, { once: true });
+    }
 }
 renderSlides();
