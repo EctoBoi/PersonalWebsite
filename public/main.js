@@ -614,7 +614,7 @@ function showDetail(slide) {
         ? `<a href="${slide.url}" target="_blank">View Project</a> <br>`
         : ""}
         ${slide.sourceUrl
-        ? `<a href="${slide.sourceUrl}" target="_blank">View Source Code</a>`
+        ? `<a href="${slide.sourceUrl}" target="_blank">View Source Code</a> <br>`
         : ""}
         <button id="backBtn">Back to Portfolio</button>
       </div>

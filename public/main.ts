@@ -772,7 +772,7 @@ function showDetail(slide: Slide) {
         }
         ${
             slide.sourceUrl
-                ? `<a href="${slide.sourceUrl}" target="_blank">View Source Code</a>`
+                ? `<a href="${slide.sourceUrl}" target="_blank">View Source Code</a> <br>`
                 : ""
         }
         <button id="backBtn">Back to Portfolio</button>
