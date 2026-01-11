@@ -511,11 +511,11 @@ const slides = [
         description: "Watch emoticon fight with dice roll mechanics, and even become one yourself! <br><strong>Made using:</strong> jQuery, JavaScript, HTML Canvas, and CSS",
     },
     {
-        img: "/imgs/OatSoup.jpg",
-        title: "OatSoup",
-        url: "https://justinbanton.ca/OatSoup",
-        sourceUrl: "https://github.com/EctoBoi/OatSoup",
-        description: "A rhythm game where you have to match color and direction. Generate a random sequence or try Tetris Mode! <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
+        img: "/imgs/SignMaker.jpg",
+        title: "SignMaker",
+        url: "https://justinbanton.ca/SignMaker",
+        sourceUrl: "https://github.com/EctoBoi/SignMaker",
+        description: "A tool to create sale signage of various sizes. It can autofill info taken from Cabelas.ca using my CabBPSSearch chrome extension. <br><strong>Made using:</strong> JavaScript, HTML, and CSS",
     },
     {
         img: "/imgs/TaskBoard.jpg",
@@ -525,11 +525,11 @@ const slides = [
         description: "A shared task board for Hunt: Showdown, allowing multiple players to send their current challenges to a server and have the info simplified and displayed for the whole party. <br><strong>Made using:</strong> C# and TSP Server Library",
     },
     {
-        img: "/imgs/SignMaker.jpg",
-        title: "SignMaker",
-        url: "https://justinbanton.ca/SignMaker",
-        sourceUrl: "https://github.com/EctoBoi/SignMaker",
-        description: "A tool to create sale signage of various sizes. It can autofill info taken from Cabelas.ca using my CabBPSSearch chrome extension. <br><strong>Made using:</strong> JavaScript, HTML, and CSS",
+        img: "/imgs/OatSoup.jpg",
+        title: "OatSoup",
+        url: "https://justinbanton.ca/OatSoup",
+        sourceUrl: "https://github.com/EctoBoi/OatSoup",
+        description: "A rhythm game where you have to match color and direction. Generate a random sequence or try Tetris Mode! <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/ExistingPixelsGenerator.jpg",
