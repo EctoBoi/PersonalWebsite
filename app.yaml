@@ -11,5 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-runtime: nodejs20
+runtime: nodejs22
 env: standard
+automatic_scaling:
+    max_instances: 3
