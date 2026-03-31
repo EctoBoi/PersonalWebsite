@@ -1,21 +1,14 @@
-const glassboxCanvas = document.getElementById(
-    "glassbox-canvas"
-) as HTMLCanvasElement;
-const menuButtonCanvas = document.getElementById(
-    "menu-button-canvas"
-) as HTMLCanvasElement;
-const navCanvases = (document.getElementById("nav-box-div") as HTMLDivElement)
-    .children as HTMLCollectionOf<HTMLCanvasElement>;
+const glassboxCanvas = document.getElementById("glassbox-canvas") as HTMLCanvasElement;
+const menuButtonCanvas = document.getElementById("menu-button-canvas") as HTMLCanvasElement;
+const navCanvases = (document.getElementById("nav-box-div") as HTMLDivElement).children as HTMLCollectionOf<HTMLCanvasElement>;
 const navBox = document.getElementById("nav-box-div") as HTMLDivElement;
-const glassboxContentDiv = document.getElementById(
-    "glassbox-content-div"
-) as HTMLDivElement;
+const glassboxContentDiv = document.getElementById("glassbox-content-div") as HTMLDivElement;
 
 const lineWidth = 6;
-const dColor = "#dfd3d3";
-const lColor = "#fff5f5";
-const lColorHover = "#f1e9e9";
-const fontColor = "black";
+const dColor = "#4e5864";
+const lColor = "#f6f6f7";
+const lColorHover = "#e7e9ea";
+const fontColor = "#181c21";
 const fontName = "Georgia";
 
 let imgDefaultHeight = 130;
@@ -42,7 +35,7 @@ window.addEventListener(
         currentPage = 0;
         renderSlides();
     },
-    true
+    true,
 );
 
 document.body.addEventListener("mousemove", (e) => {
@@ -58,7 +51,7 @@ document.body.addEventListener(
         positionContent(posX, posY);
         positionNav(posX);
     },
-    false
+    false,
 );
 
 function getCursorPosition(e: MouseEvent | null) {
@@ -81,9 +74,7 @@ function getCursorPosition(e: MouseEvent | null) {
 
 //===============Content===============
 function positionContent(posX: number, posY: number) {
-    let glassboxContent = document.getElementById(
-        "glassbox-content-div"
-    ) as HTMLDivElement;
+    let glassboxContent = document.getElementById("glassbox-content-div") as HTMLDivElement;
     let contentSize = 0.9;
     let warpLimiter = 15;
     let xOffset = (posX - glassboxCanvas.width / 2) / warpLimiter;
@@ -91,37 +82,26 @@ function positionContent(posX: number, posY: number) {
 
     glassboxContent.style.width = window.innerWidth * contentSize + "px";
     glassboxContent.style.height = window.innerHeight * contentSize + "px";
-    glassboxContent.style.left =
-        ((1 - contentSize) * window.innerWidth) / 2 + xOffset + "px";
-    glassboxContent.style.top =
-        ((1 - contentSize) * window.innerHeight) / 2 + yOffset + "px";
+    glassboxContent.style.left = ((1 - contentSize) * window.innerWidth) / 2 + xOffset + "px";
+    glassboxContent.style.top = ((1 - contentSize) * window.innerHeight) / 2 + yOffset + "px";
 }
 
-(document.getElementById("welcome-div") as HTMLDivElement).addEventListener(
-    "mouseover",
-    function () {
-        let glassboxContent = document.getElementById(
-            "glassbox-content-div"
-        ) as HTMLDivElement;
-        let randX = Math.floor(
-            Math.random() * (+glassboxContent.clientWidth / 2 - 100)
-        );
-        let randY = Math.floor(
-            Math.random() * (+glassboxContent.clientHeight / 2 - 60)
-        );
+(document.getElementById("welcome-div") as HTMLDivElement).addEventListener("mouseover", function () {
+    let glassboxContent = document.getElementById("glassbox-content-div") as HTMLDivElement;
+    let randX = Math.floor(Math.random() * (+glassboxContent.clientWidth / 2 - 100));
+    let randY = Math.floor(Math.random() * (+glassboxContent.clientHeight / 2 - 60));
 
-        if (Math.random() < 0.5) {
-            this.style.left = randX + "px";
-        } else {
-            this.style.left = -randX + "px";
-        }
-        if (Math.random() < 0.5) {
-            this.style.top = randY + "px";
-        } else {
-            this.style.top = -randY + "px";
-        }
+    if (Math.random() < 0.5) {
+        this.style.left = randX + "px";
+    } else {
+        this.style.left = -randX + "px";
     }
-);
+    if (Math.random() < 0.5) {
+        this.style.top = randY + "px";
+    } else {
+        this.style.top = -randY + "px";
+    }
+});
 
 //===============Glassbox===============
 function setGlassboxSize() {
@@ -189,12 +169,7 @@ function drawGlassbox(posX: number, posY: number, canvas: HTMLCanvasElement) {
     ctx.moveTo(canvas.width + lc, canvas.height - lc);
     ctx.lineTo(centerX, centerY);
     ctx.lineTo(canvas.width - lc, canvas.height + lc);
-    grd = ctx.createLinearGradient(
-        canvas.width,
-        canvas.height,
-        centerX,
-        centerY
-    );
+    grd = ctx.createLinearGradient(canvas.width, canvas.height, centerX, centerY);
     addColorStop(grd);
     ctx.fillStyle = grd;
     ctx.fill();
@@ -212,19 +187,10 @@ function drawGlassbox(posX: number, posY: number, canvas: HTMLCanvasElement) {
     let dist = 0.2;
     ctx.beginPath();
     ctx.moveTo(centerX * dist, centerY * dist);
-    ctx.lineTo(
-        (canvas.width * (2 - dist)) / 2 - xOffset * dist,
-        centerY * dist
-    );
+    ctx.lineTo((canvas.width * (2 - dist)) / 2 - xOffset * dist, centerY * dist);
     //0.15 = 1.025 0.30 = 1.055 fix scaling, stand in: (1 + 0.17 * dist)
-    ctx.lineTo(
-        (canvas.width * (2 - dist)) / 2 - xOffset * dist,
-        ((canvas.height * (2 - dist)) / 2) * (1 + 0.17 * dist) - yOffset * dist
-    );
-    ctx.lineTo(
-        centerX * dist,
-        ((canvas.height * (2 - dist)) / 2) * (1 + 0.17 * dist) - yOffset * dist
-    );
+    ctx.lineTo((canvas.width * (2 - dist)) / 2 - xOffset * dist, ((canvas.height * (2 - dist)) / 2) * (1 + 0.17 * dist) - yOffset * dist);
+    ctx.lineTo(centerX * dist, ((canvas.height * (2 - dist)) / 2) * (1 + 0.17 * dist) - yOffset * dist);
     ctx.closePath();
     ctx.strokeStyle = dColor;
     ctx.lineWidth = 5;
@@ -268,80 +234,67 @@ function positionNav(posX: number) {
     let warpLimiter = 15;
     let xOffset = (posX - glassboxCanvas.width / 2) / warpLimiter;
 
-    navBox.style.left =
-        window.innerWidth / 2 - navBox.clientWidth / 2 + xOffset + "px";
+    navBox.style.left = window.innerWidth / 2 - navBox.clientWidth / 2 + xOffset + "px";
 }
 
 //Nav Clicks
 navCanvases[0].addEventListener("click", function () {
     hideAllContent();
-    (document.getElementById("welcome-div") as HTMLDivElement).style.display =
-        "block";
+    (document.getElementById("welcome-div") as HTMLDivElement).style.display = "block";
     if (mobileMode) navBoxVisability(false);
 });
 /* turned off for temp update*/
 navCanvases[1].addEventListener("click", function () {
     hideAllContent();
-    (document.getElementById("about-div") as HTMLDivElement).style.display =
-        "flex";
+    (document.getElementById("about-div") as HTMLDivElement).style.display = "flex";
     if (mobileMode) navBoxVisability(false);
 });
 navCanvases[2].addEventListener("click", function () {
     hideAllContent();
-    (document.getElementById("portfolio-div") as HTMLDivElement).style.display =
-        "block";
+    (document.getElementById("portfolio-div") as HTMLDivElement).style.display = "block";
     if (mobileMode) navBoxVisability(false);
 });
 
 navCanvases[3].addEventListener("click", function () {
     hideAllContent();
-    (document.getElementById("contact-div") as HTMLDivElement).style.display =
-        "flex";
+    (document.getElementById("contact-div") as HTMLDivElement).style.display = "flex";
     if (mobileMode) navBoxVisability(false);
 });
 
-document
-    .getElementById("show-skills-btn")
-    ?.addEventListener("click", function () {
-        const skillsSection = document.getElementById("skills-section");
-        const summarySection = document.getElementById("summary-section");
-        const showSkillsBtn = document.getElementById("show-skills-btn");
-        const showSummaryBtn = document.getElementById("show-summary-btn");
-        if (skillsSection) {
-            skillsSection.style.display = "block";
-            showSummaryBtn?.classList.add("inactive-btn");
-        }
-        if (summarySection) {
-            summarySection.style.display = "none";
-            showSkillsBtn?.classList.remove("inactive-btn");
-        }
-    });
-document
-    .getElementById("show-summary-btn")
-    ?.addEventListener("click", function () {
-        const skillsSection = document.getElementById("skills-section");
-        const summarySection = document.getElementById("summary-section");
-        const showSkillsBtn = document.getElementById("show-skills-btn");
-        const showSummaryBtn = document.getElementById("show-summary-btn");
-        if (skillsSection) {
-            skillsSection.style.display = "none";
-            showSummaryBtn?.classList.remove("inactive-btn");
-        }
-        if (summarySection) {
-            summarySection.style.display = "block";
-            showSkillsBtn?.classList.add("inactive-btn");
-        }
-    });
+document.getElementById("show-skills-btn")?.addEventListener("click", function () {
+    const skillsSection = document.getElementById("skills-section");
+    const summarySection = document.getElementById("summary-section");
+    const showSkillsBtn = document.getElementById("show-skills-btn");
+    const showSummaryBtn = document.getElementById("show-summary-btn");
+    if (skillsSection) {
+        skillsSection.style.display = "block";
+        showSummaryBtn?.classList.add("inactive-btn");
+    }
+    if (summarySection) {
+        summarySection.style.display = "none";
+        showSkillsBtn?.classList.remove("inactive-btn");
+    }
+});
+document.getElementById("show-summary-btn")?.addEventListener("click", function () {
+    const skillsSection = document.getElementById("skills-section");
+    const summarySection = document.getElementById("summary-section");
+    const showSkillsBtn = document.getElementById("show-skills-btn");
+    const showSummaryBtn = document.getElementById("show-summary-btn");
+    if (skillsSection) {
+        skillsSection.style.display = "none";
+        showSummaryBtn?.classList.remove("inactive-btn");
+    }
+    if (summarySection) {
+        summarySection.style.display = "block";
+        showSkillsBtn?.classList.add("inactive-btn");
+    }
+});
 
 function hideAllContent() {
-    (document.getElementById("welcome-div") as HTMLDivElement).style.display =
-        "none";
-    (document.getElementById("about-div") as HTMLDivElement).style.display =
-        "none";
-    (document.getElementById("portfolio-div") as HTMLDivElement).style.display =
-        "none";
-    (document.getElementById("contact-div") as HTMLDivElement).style.display =
-        "none";
+    (document.getElementById("welcome-div") as HTMLDivElement).style.display = "none";
+    (document.getElementById("about-div") as HTMLDivElement).style.display = "none";
+    (document.getElementById("portfolio-div") as HTMLDivElement).style.display = "none";
+    (document.getElementById("contact-div") as HTMLDivElement).style.display = "none";
 }
 
 function drawNav(posX: number, posY: number) {
@@ -396,10 +349,7 @@ function drawNav0(ctx: CanvasRenderingContext2D, isHovered: boolean) {
         ctx.closePath();
     } else {
         ctx.moveTo(lc, -lc);
-        ctx.lineTo(
-            (ctx.canvas.height + lc) * (ctx.canvas.width / 200),
-            ctx.canvas.height - lc
-        );
+        ctx.lineTo((ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
         ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
         ctx.lineTo(ctx.canvas.width, 0);
     }
@@ -411,15 +361,10 @@ function drawNav0(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     ctx.stroke();
 
     ctx.fillStyle = fontColor;
-    let fontHeight =
-        30 *
-            ((mobileMode ? ctx.canvas.height - lineWidth : ctx.canvas.height) /
-                50) -
-        8;
+    let fontHeight = 30 * ((mobileMode ? ctx.canvas.height - lineWidth : ctx.canvas.height) / 50) - 8;
     let text = "Home";
     ctx.font = fontHeight + "px " + fontName;
-    let canvasTextCenter =
-        ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
+    let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
     let canvasSlopeOffset = (ctx.canvas.height - lc) * (ctx.canvas.width / 600);
     if (mobileMode) canvasSlopeOffset = 0;
     let textPosX = canvasTextCenter + canvasSlopeOffset;
@@ -453,8 +398,7 @@ function drawNav1(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
     let text = "About";
     ctx.font = fontHeight + "px " + fontName;
-    let canvasTextCenter =
-        ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
+    let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
     ctx.fillText(text, canvasTextCenter, fontHeight + 8);
 }
 
@@ -485,8 +429,7 @@ function drawNav2(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
     let text = "Portfolio";
     ctx.font = fontHeight + "px " + fontName;
-    let canvasTextCenter =
-        ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
+    let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
     ctx.fillText(text, canvasTextCenter, fontHeight + 8);
 }
 
@@ -498,20 +441,12 @@ function drawNav3(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     if (mobileMode) {
         ctx.moveTo(lc, 0);
         ctx.lineTo(lc, ctx.canvas.height - lc);
-        ctx.lineTo(
-            ctx.canvas.width -
-                (ctx.canvas.height + lc) * (ctx.canvas.width / 200),
-            ctx.canvas.height - lc
-        );
+        ctx.lineTo(ctx.canvas.width - (ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
         ctx.lineTo(ctx.canvas.width, -lc);
     } else {
         ctx.moveTo(0, 0);
         ctx.lineTo(0, ctx.canvas.height - lc);
-        ctx.lineTo(
-            ctx.canvas.width -
-                (ctx.canvas.height + lc) * (ctx.canvas.width / 200),
-            ctx.canvas.height - lc
-        );
+        ctx.lineTo(ctx.canvas.width - (ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
         ctx.lineTo(ctx.canvas.width - lc, -lc);
     }
 
@@ -525,8 +460,7 @@ function drawNav3(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
     let text = "Contact";
     ctx.font = fontHeight + "px " + fontName;
-    let canvasTextCenter =
-        ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
+    let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
     let canvasSlopeOffset = (ctx.canvas.height - lc) * (ctx.canvas.width / 600);
     if (mobileMode) canvasSlopeOffset = 0;
     let textPosX = canvasTextCenter - canvasSlopeOffset;
@@ -544,12 +478,7 @@ function drawMenuButton(posX: number, posY: number) {
     let lc = lineWidth / 2; //lineCenter
 
     ctx.beginPath();
-    ctx.rect(
-        lc,
-        lc,
-        menuButtonCanvas.width - lineWidth,
-        menuButtonCanvas.height - lineWidth
-    );
+    ctx.rect(lc, lc, menuButtonCanvas.width - lineWidth, menuButtonCanvas.height - lineWidth);
     ctx.closePath();
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
@@ -574,18 +503,12 @@ function drawMenuButton(posX: number, posY: number) {
 
         ctx.beginPath();
         ctx.moveTo(lineWidth * 1.5, ctx.canvas.height - lineWidth * 2);
-        ctx.lineTo(
-            ctx.canvas.width - lineWidth * 1.5,
-            ctx.canvas.height - lineWidth * 2
-        );
+        ctx.lineTo(ctx.canvas.width - lineWidth * 1.5, ctx.canvas.height - lineWidth * 2);
         ctx.stroke();
     } else {
         ctx.beginPath();
         ctx.moveTo(lineWidth * 1.5, lineWidth * 1.5);
-        ctx.lineTo(
-            ctx.canvas.width - lineWidth * 1.5,
-            ctx.canvas.height - lineWidth * 1.5
-        );
+        ctx.lineTo(ctx.canvas.width - lineWidth * 1.5, ctx.canvas.height - lineWidth * 1.5);
         ctx.stroke();
 
         ctx.beginPath();
@@ -609,9 +532,7 @@ if (mobileMode) {
 }
 
 function menuButtonVisability(visible: boolean) {
-    let menuButtonDiv = document.getElementById(
-        "menu-button-div"
-    ) as HTMLDivElement;
+    let menuButtonDiv = document.getElementById("menu-button-div") as HTMLDivElement;
     if (visible) {
         menuButtonDiv.style.visibility = "visible";
     } else {
@@ -683,24 +604,21 @@ const slides: Slide[] = [
         title: "Davigo Maps",
         url: "https://mod.io/g/davigo/u/ectoboi",
         sourceUrl: "",
-        description:
-            "Custom maps for the VR game Davigo, with over eighty thousand unique downloads. <br><strong>Made using:</strong> Blender and Unity",
+        description: "Custom maps for the VR game Davigo, with over eighty thousand unique downloads. <br><strong>Made using:</strong> Blender and Unity",
     },
     {
         img: "/imgs/MapGen.jpg",
         title: "MapGen",
         url: "https://justinbanton.ca/MapGen",
         sourceUrl: "https://github.com/EctoBoi/MapGen",
-        description:
-            "Based off Snakish, it generates a chain of rooms of various sizes. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
+        description: "Based off Snakish, it generates a chain of rooms of various sizes. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/ThisSiteItself.jpg",
         title: "This Site Itself",
         url: "https://justinbanton.ca/",
         sourceUrl: "https://github.com/EctoBoi/PersonalWebsite",
-        description:
-            "Thanks for visiting! <br><strong>Made using:</strong> TypeScript, Node.js, Express, HTML, and CSS",
+        description: "Thanks for visiting! <br><strong>Made using:</strong> TypeScript, Node.js, Express, HTML, and CSS",
     },
 ];
 
@@ -765,16 +683,8 @@ function showDetail(slide: Slide) {
       <div class="detail-info">
         <h2>${slide.title}</h2>
         <p>${slide.description}</p>
-        ${
-            slide.url
-                ? `<a href="${slide.url}" target="_blank">View Project</a> <br>`
-                : ""
-        }
-        ${
-            slide.sourceUrl
-                ? `<a href="${slide.sourceUrl}" target="_blank">View Source Code</a> <br>`
-                : ""
-        }
+        ${slide.url ? `<a href="${slide.url}" target="_blank">View Project</a> <br>` : ""}
+        ${slide.sourceUrl ? `<a href="${slide.sourceUrl}" target="_blank">View Source Code</a> <br>` : ""}
         <button id="backBtn">Back to Portfolio</button>
       </div>
     </div>
@@ -798,26 +708,19 @@ function showDetail(slide: Slide) {
         dotsEl.classList.remove("hidden");
     });
 
-    const portfolioDiv = document.getElementById(
-        "portfolio-div"
-    ) as HTMLElement | null;
+    const portfolioDiv = document.getElementById("portfolio-div") as HTMLElement | null;
     if (portfolioDiv) {
         const onOutsideClick = (e: Event) => {
             if (detailViewEl.classList.contains("hidden")) return;
 
             const path: EventTarget[] =
                 // prefer composedPath for Shadow DOM safety
-                typeof (e as any).composedPath === "function"
-                    ? (e as any).composedPath()
-                    : (e as any).path || [];
+                typeof (e as any).composedPath === "function" ? (e as any).composedPath() : (e as any).path || [];
 
-            const targetNode =
-                (e.target as Node) || (path.length ? (path[0] as Node) : null);
+            const targetNode = (e.target as Node) || (path.length ? (path[0] as Node) : null);
 
             const clickedInside =
-                (targetNode &&
-                    (portfolioDiv.contains(targetNode) ||
-                        detailViewEl.contains(targetNode))) ||
+                (targetNode && (portfolioDiv.contains(targetNode) || detailViewEl.contains(targetNode))) ||
                 path.some((p) => p === portfolioDiv || p === detailViewEl);
 
             if (!clickedInside) {
@@ -835,7 +738,7 @@ function showDetail(slide: Slide) {
             () => {
                 document.removeEventListener("pointerdown", onOutsideClick);
             },
-            { once: true }
+            { once: true },
         );
     }
 }

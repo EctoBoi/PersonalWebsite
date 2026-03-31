@@ -2,15 +2,14 @@
 var _a, _b;
 const glassboxCanvas = document.getElementById("glassbox-canvas");
 const menuButtonCanvas = document.getElementById("menu-button-canvas");
-const navCanvases = document.getElementById("nav-box-div")
-    .children;
+const navCanvases = document.getElementById("nav-box-div").children;
 const navBox = document.getElementById("nav-box-div");
 const glassboxContentDiv = document.getElementById("glassbox-content-div");
 const lineWidth = 6;
-const dColor = "#dfd3d3";
-const lColor = "#fff5f5";
-const lColorHover = "#f1e9e9";
-const fontColor = "black";
+const dColor = "#4e5864";
+const lColor = "#f6f6f7";
+const lColorHover = "#e7e9ea";
+const fontColor = "#181c21";
 const fontName = "Georgia";
 let imgDefaultHeight = 130;
 let imgDefaultWidth = 200;
@@ -65,10 +64,8 @@ function positionContent(posX, posY) {
     let yOffset = (posY - glassboxCanvas.height / 2) / warpLimiter;
     glassboxContent.style.width = window.innerWidth * contentSize + "px";
     glassboxContent.style.height = window.innerHeight * contentSize + "px";
-    glassboxContent.style.left =
-        ((1 - contentSize) * window.innerWidth) / 2 + xOffset + "px";
-    glassboxContent.style.top =
-        ((1 - contentSize) * window.innerHeight) / 2 + yOffset + "px";
+    glassboxContent.style.left = ((1 - contentSize) * window.innerWidth) / 2 + xOffset + "px";
+    glassboxContent.style.top = ((1 - contentSize) * window.innerHeight) / 2 + yOffset + "px";
 }
 document.getElementById("welcome-div").addEventListener("mouseover", function () {
     let glassboxContent = document.getElementById("glassbox-content-div");
@@ -203,41 +200,35 @@ function setNavSize() {
 function positionNav(posX) {
     let warpLimiter = 15;
     let xOffset = (posX - glassboxCanvas.width / 2) / warpLimiter;
-    navBox.style.left =
-        window.innerWidth / 2 - navBox.clientWidth / 2 + xOffset + "px";
+    navBox.style.left = window.innerWidth / 2 - navBox.clientWidth / 2 + xOffset + "px";
 }
 //Nav Clicks
 navCanvases[0].addEventListener("click", function () {
     hideAllContent();
-    document.getElementById("welcome-div").style.display =
-        "block";
+    document.getElementById("welcome-div").style.display = "block";
     if (mobileMode)
         navBoxVisability(false);
 });
 /* turned off for temp update*/
 navCanvases[1].addEventListener("click", function () {
     hideAllContent();
-    document.getElementById("about-div").style.display =
-        "flex";
+    document.getElementById("about-div").style.display = "flex";
     if (mobileMode)
         navBoxVisability(false);
 });
 navCanvases[2].addEventListener("click", function () {
     hideAllContent();
-    document.getElementById("portfolio-div").style.display =
-        "block";
+    document.getElementById("portfolio-div").style.display = "block";
     if (mobileMode)
         navBoxVisability(false);
 });
 navCanvases[3].addEventListener("click", function () {
     hideAllContent();
-    document.getElementById("contact-div").style.display =
-        "flex";
+    document.getElementById("contact-div").style.display = "flex";
     if (mobileMode)
         navBoxVisability(false);
 });
-(_a = document
-    .getElementById("show-skills-btn")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
+(_a = document.getElementById("show-skills-btn")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
     const skillsSection = document.getElementById("skills-section");
     const summarySection = document.getElementById("summary-section");
     const showSkillsBtn = document.getElementById("show-skills-btn");
@@ -251,8 +242,7 @@ navCanvases[3].addEventListener("click", function () {
         showSkillsBtn === null || showSkillsBtn === void 0 ? void 0 : showSkillsBtn.classList.remove("inactive-btn");
     }
 });
-(_b = document
-    .getElementById("show-summary-btn")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
+(_b = document.getElementById("show-summary-btn")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
     const skillsSection = document.getElementById("skills-section");
     const summarySection = document.getElementById("summary-section");
     const showSkillsBtn = document.getElementById("show-skills-btn");
@@ -267,14 +257,10 @@ navCanvases[3].addEventListener("click", function () {
     }
 });
 function hideAllContent() {
-    document.getElementById("welcome-div").style.display =
-        "none";
-    document.getElementById("about-div").style.display =
-        "none";
-    document.getElementById("portfolio-div").style.display =
-        "none";
-    document.getElementById("contact-div").style.display =
-        "none";
+    document.getElementById("welcome-div").style.display = "none";
+    document.getElementById("about-div").style.display = "none";
+    document.getElementById("portfolio-div").style.display = "none";
+    document.getElementById("contact-div").style.display = "none";
 }
 function drawNav(posX, posY) {
     let ctx0 = navCanvases[0].getContext("2d"), ctx1 = navCanvases[1].getContext("2d"), ctx2 = navCanvases[2].getContext("2d"), ctx3 = navCanvases[3].getContext("2d");
@@ -327,10 +313,7 @@ function drawNav0(ctx, isHovered) {
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = fontColor;
-    let fontHeight = 30 *
-        ((mobileMode ? ctx.canvas.height - lineWidth : ctx.canvas.height) /
-            50) -
-        8;
+    let fontHeight = 30 * ((mobileMode ? ctx.canvas.height - lineWidth : ctx.canvas.height) / 50) - 8;
     let text = "Home";
     ctx.font = fontHeight + "px " + fontName;
     let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
@@ -403,15 +386,13 @@ function drawNav3(ctx, isHovered) {
     if (mobileMode) {
         ctx.moveTo(lc, 0);
         ctx.lineTo(lc, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width -
-            (ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - (ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
         ctx.lineTo(ctx.canvas.width, -lc);
     }
     else {
         ctx.moveTo(0, 0);
         ctx.lineTo(0, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width -
-            (ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
+        ctx.lineTo(ctx.canvas.width - (ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
         ctx.lineTo(ctx.canvas.width - lc, -lc);
     }
     ctx.strokeStyle = dColor;
@@ -610,12 +591,8 @@ function showDetail(slide) {
       <div class="detail-info">
         <h2>${slide.title}</h2>
         <p>${slide.description}</p>
-        ${slide.url
-        ? `<a href="${slide.url}" target="_blank">View Project</a> <br>`
-        : ""}
-        ${slide.sourceUrl
-        ? `<a href="${slide.sourceUrl}" target="_blank">View Source Code</a> <br>`
-        : ""}
+        ${slide.url ? `<a href="${slide.url}" target="_blank">View Project</a> <br>` : ""}
+        ${slide.sourceUrl ? `<a href="${slide.sourceUrl}" target="_blank">View Source Code</a> <br>` : ""}
         <button id="backBtn">Back to Portfolio</button>
       </div>
     </div>
@@ -642,13 +619,9 @@ function showDetail(slide) {
                 return;
             const path = 
             // prefer composedPath for Shadow DOM safety
-            typeof e.composedPath === "function"
-                ? e.composedPath()
-                : e.path || [];
+            typeof e.composedPath === "function" ? e.composedPath() : e.path || [];
             const targetNode = e.target || (path.length ? path[0] : null);
-            const clickedInside = (targetNode &&
-                (portfolioDiv.contains(targetNode) ||
-                    detailViewEl.contains(targetNode))) ||
+            const clickedInside = (targetNode && (portfolioDiv.contains(targetNode) || detailViewEl.contains(targetNode))) ||
                 path.some((p) => p === portfolioDiv || p === detailViewEl);
             if (!clickedInside) {
                 backBtn.click();
