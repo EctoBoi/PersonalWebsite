@@ -10,7 +10,7 @@
 body {
     margin: 0;
     font-size: 20px;
-    font-family: Georgia;
+    font-family: "Noto Sans", sans-serif;
     overflow: hidden;
     color: var(--fontColor);
 }
@@ -19,8 +19,8 @@ body {
     display: none;
     max-width: 1000px;
     max-height: 90%;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
     padding: 32px;
@@ -28,30 +28,6 @@ body {
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-}
-#about-div button {
-    align-self: center;
-    margin: 0 8px;
-    padding: 10px 15px;
-    background-color: var(--lColor);
-    border: 4px solid var(--dColor);
-    border-radius: 8px;
-    font-size: 18px;
-    cursor: pointer;
-    transition:
-        background 0.2s,
-        border 0.2s;
-}
-#about-buttons-div {
-    display: flex;
-    justify-content: center;
-}
-#about-div button:hover {
-    background-color: #e7e9ea;
-    border: 4px solid var(--dColorHover);
-}
-.inactive-btn {
-    border: 4px dotted var(--dColor) !important;
 }
 
 #portfolio-div {
@@ -66,6 +42,7 @@ body {
     user-select: none;
     font-size: 30px;
     position: relative;
+    text-align: center;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     border-radius: 16px;
@@ -137,7 +114,6 @@ body {
 }
 .caption {
     margin-top: 8px;
-    font-size: 18px;
     color: black;
 }
 .dots {
@@ -258,17 +234,12 @@ body {
 }
 
 @media (max-width: 700px) {
-    body {
-        font-size: 16px;
+    #welcome-div {
+        font-size: 26px;
     }
-
     #about-div {
         font-size: 17px;
         padding: 20px;
-    }
-    #about-div button {
-        font-size: 16px;
-        padding: 8px 12px;
     }
     .slideshow-container {
         gap: 20px;
@@ -282,9 +253,6 @@ body {
     .detail-info p {
         margin: 10px;
     }
-    .detail-info h2 {
-        font-size: 20px;
-    }
     .detail-info button {
         margin-top: 5px;
     }
@@ -295,16 +263,22 @@ body {
 
 @media (max-width: 500px) {
     #about-div {
-        font-size: 15px;
         padding: 10px;
-    }
-    #about-div button {
-        font-size: 14px;
-        padding: 6px 10px;
-        margin: 0 4px;
     }
 
     .slideshow-container {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-height: 860px) {
+    .slide-item img {
+        max-height: clamp(180px, 30vh, 600px);
+    }
+}
+
+@media (max-height: 720px) {
+    .slideshow-container {
+        gap: 20px;
     }
 }

@@ -1,5 +1,4 @@
 "use strict";
-var _a, _b;
 const glassboxCanvas = document.getElementById("glassbox-canvas");
 const menuButtonCanvas = document.getElementById("menu-button-canvas");
 const navCanvases = document.getElementById("nav-box-div").children;
@@ -9,19 +8,35 @@ const lineWidth = 6;
 const dColor = "#4e5864";
 const lColor = "#f6f6f7";
 const lColorHover = "#e7e9ea";
+const lColorActivePage = "#d1d5d8";
 const fontColor = "#181c21";
-const fontName = "Georgia";
-let imgDefaultHeight = 130;
-let imgDefaultWidth = 200;
+const fontName = "Noto Sans";
+let activePage = 0;
+let lastPosX = 0;
+let lastPosY = 0;
+let homeIcon = new Image();
+homeIcon.src = "/imgs/HomeIcon.png";
+homeIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
+let contactIcon = new Image();
+contactIcon.src = "/imgs/ContactIcon.png";
+contactIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
+let aboutIcon = new Image();
+aboutIcon.src = "/imgs/AboutIcon.png";
+aboutIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
+let portfolioIcon = new Image();
+portfolioIcon.src = "/imgs/PortfolioIcon.png";
+portfolioIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
 const mobileMaxWidth = 500;
-let mobileMode = window.screen.width <= mobileMaxWidth;
-mobileMode = window.innerWidth <= mobileMaxWidth;
+function isTouchDevice() {
+    // Check if device doesn't support hover
+    return !window.matchMedia("(hover:hover)").matches || !window.matchMedia("(pointer:fine)").matches;
+}
+let mobileMode = window.innerWidth <= mobileMaxWidth || isTouchDevice();
 setGlassboxSize();
 setNavSize();
 getCursorPosition(null);
 window.addEventListener("resize", function () {
-    mobileMode = window.screen.width <= mobileMaxWidth;
-    mobileMode = window.innerWidth <= mobileMaxWidth;
+    mobileMode = window.innerWidth <= mobileMaxWidth || isTouchDevice();
     setGlassboxSize();
     setNavSize();
     getCursorPosition(null);
@@ -34,6 +49,8 @@ document.body.addEventListener("mousemove", (e) => {
 document.body.addEventListener("touchmove", (e) => {
     let posX = e.touches[0].clientX;
     let posY = e.touches[0].clientY;
+    lastPosX = posX;
+    lastPosY = posY;
     drawGlassbox(posX, posY, glassboxCanvas);
     positionContent(posX, posY);
     positionNav(posX);
@@ -49,19 +66,22 @@ function getCursorPosition(e) {
         posX = glassboxCanvas.width / 2;
         posY = glassboxCanvas.height / 2;
     }
+    lastPosX = posX;
+    lastPosY = posY;
     drawGlassbox(posX, posY, glassboxCanvas);
     positionContent(posX, posY);
     positionNav(posX);
     drawNav(posX, posY);
-    drawMenuButton(posX, posY);
 }
-//===============Content===============
+//╔══════════════════════════════════════╗
+//║           CONTENT POSITIONING        ║
+//╚══════════════════════════════════════╝
 function positionContent(posX, posY) {
     let glassboxContent = document.getElementById("glassbox-content-div");
     let contentSize = 0.9;
     let warpLimiter = 15;
-    let xOffset = (posX - glassboxCanvas.width / 2) / warpLimiter;
-    let yOffset = (posY - glassboxCanvas.height / 2) / warpLimiter;
+    let xOffset = mobileMode ? 0 : (posX - glassboxCanvas.width / 2) / warpLimiter;
+    let yOffset = mobileMode ? 0 : (posY - glassboxCanvas.height / 2) / warpLimiter;
     glassboxContent.style.width = window.innerWidth * contentSize + "px";
     glassboxContent.style.height = window.innerHeight * contentSize + "px";
     glassboxContent.style.left = ((1 - contentSize) * window.innerWidth) / 2 + xOffset + "px";
@@ -69,8 +89,8 @@ function positionContent(posX, posY) {
 }
 document.getElementById("welcome-div").addEventListener("mouseover", function () {
     let glassboxContent = document.getElementById("glassbox-content-div");
-    let randX = Math.floor(Math.random() * (+glassboxContent.clientWidth / 2 - 100));
-    let randY = Math.floor(Math.random() * (+glassboxContent.clientHeight / 2 - 60));
+    let randX = Math.floor(Math.random() * (+glassboxContent.clientWidth / 3 - 100));
+    let randY = Math.floor(Math.random() * (+glassboxContent.clientHeight / 3 - 60));
     if (Math.random() < 0.5) {
         this.style.left = randX + "px";
     }
@@ -83,8 +103,22 @@ document.getElementById("welcome-div").addEventListener("mouseover", function ()
     else {
         this.style.top = -randY + "px";
     }
+    this.style.transition = "transform 0.2s ease";
+    this.style.transform = "scale(1.2)";
+    setTimeout(() => {
+        this.style.transform = "scale(1)";
+    }, 200);
 });
-//===============Glassbox===============
+document.getElementById("welcome-div").addEventListener("mousemove", function (e) {
+    const rect = this.getBoundingClientRect();
+    const isStillOver = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+    if (isStillOver) {
+        this.dispatchEvent(new Event("mouseover"));
+    }
+});
+//╔══════════════════════════════════════╗
+//║            GLASSBOX DRAWING          ║
+//╚══════════════════════════════════════╝
 function setGlassboxSize() {
     glassboxCanvas.width = window.innerWidth;
     glassboxCanvas.height = window.innerHeight;
@@ -167,20 +201,12 @@ function drawGlassbox(posX, posY, canvas) {
     ctx.lineWidth = 5;
     ctx.stroke();
 }
-//===============Navigation===============
+//╔══════════════════════════════════════╗
+//║          NAVIGATION CONTROLS         ║
+//╚══════════════════════════════════════╝
 function setNavSize() {
-    menuButtonVisability(mobileMode);
-    navBoxVisability(!mobileMode);
     let navWidth = 90;
-    if (!mobileMode) {
-        50 + (1 - document.body.clientWidth / 1920) * 100;
-        navBox.style.flexDirection = "row";
-        navBox.style.top = "0px";
-    }
-    else {
-        navBox.style.flexDirection = "column";
-        navBox.style.top = "55px";
-    }
+    navBox.style.flexDirection = "row";
     if (navWidth > 100)
         navWidth = 100;
     navBox.style.width = navWidth + "%";
@@ -188,73 +214,40 @@ function setNavSize() {
     let canvasHeight = 35 + Math.round(window.innerHeight * 0.02);
     for (let i = 0; i < navCanvases.length; i++) {
         let canvas = navCanvases.item(i);
-        canvas.width = mobileMode ? navBox.clientWidth : canvasWidth;
+        canvas.width = canvasWidth;
         canvas.height = canvasHeight;
-        if (i == 0 && mobileMode) {
-            canvas.height = canvasHeight + lineWidth;
-        }
     }
     drawNav(window.innerWidth / 2, window.innerHeight / 2);
-    drawMenuButton(window.innerWidth / 2, window.innerHeight / 2);
 }
 function positionNav(posX) {
     let warpLimiter = 15;
-    let xOffset = (posX - glassboxCanvas.width / 2) / warpLimiter;
+    let xOffset = mobileMode ? 0 : (posX - glassboxCanvas.width / 2) / warpLimiter;
     navBox.style.left = window.innerWidth / 2 - navBox.clientWidth / 2 + xOffset + "px";
 }
 //Nav Clicks
 navCanvases[0].addEventListener("click", function () {
     hideAllContent();
+    activePage = 0;
     document.getElementById("welcome-div").style.display = "block";
-    if (mobileMode)
-        navBoxVisability(false);
+    getCursorPosition({ clientX: lastPosX, clientY: lastPosY });
 });
-/* turned off for temp update*/
 navCanvases[1].addEventListener("click", function () {
     hideAllContent();
+    activePage = 1;
     document.getElementById("about-div").style.display = "flex";
-    if (mobileMode)
-        navBoxVisability(false);
+    getCursorPosition({ clientX: lastPosX, clientY: lastPosY });
 });
 navCanvases[2].addEventListener("click", function () {
     hideAllContent();
+    activePage = 2;
     document.getElementById("portfolio-div").style.display = "block";
-    if (mobileMode)
-        navBoxVisability(false);
+    getCursorPosition({ clientX: lastPosX, clientY: lastPosY });
 });
 navCanvases[3].addEventListener("click", function () {
     hideAllContent();
+    activePage = 3;
     document.getElementById("contact-div").style.display = "flex";
-    if (mobileMode)
-        navBoxVisability(false);
-});
-(_a = document.getElementById("show-skills-btn")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
-    const skillsSection = document.getElementById("skills-section");
-    const summarySection = document.getElementById("summary-section");
-    const showSkillsBtn = document.getElementById("show-skills-btn");
-    const showSummaryBtn = document.getElementById("show-summary-btn");
-    if (skillsSection) {
-        skillsSection.style.display = "block";
-        showSummaryBtn === null || showSummaryBtn === void 0 ? void 0 : showSummaryBtn.classList.add("inactive-btn");
-    }
-    if (summarySection) {
-        summarySection.style.display = "none";
-        showSkillsBtn === null || showSkillsBtn === void 0 ? void 0 : showSkillsBtn.classList.remove("inactive-btn");
-    }
-});
-(_b = document.getElementById("show-summary-btn")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
-    const skillsSection = document.getElementById("skills-section");
-    const summarySection = document.getElementById("summary-section");
-    const showSkillsBtn = document.getElementById("show-skills-btn");
-    const showSummaryBtn = document.getElementById("show-summary-btn");
-    if (skillsSection) {
-        skillsSection.style.display = "none";
-        showSummaryBtn === null || showSummaryBtn === void 0 ? void 0 : showSummaryBtn.classList.remove("inactive-btn");
-    }
-    if (summarySection) {
-        summarySection.style.display = "block";
-        showSkillsBtn === null || showSkillsBtn === void 0 ? void 0 : showSkillsBtn.classList.add("inactive-btn");
-    }
+    getCursorPosition({ clientX: lastPosX, clientY: lastPosY });
 });
 function hideAllContent() {
     document.getElementById("welcome-div").style.display = "none";
@@ -294,186 +287,150 @@ function drawNav0(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     let lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
-    if (mobileMode) {
-        ctx.lineTo(lc, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width - lc, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width - lc, lc);
-        ctx.lineTo((ctx.canvas.height + lc) * (ctx.canvas.width / 200), lc);
-        ctx.closePath();
-    }
-    else {
-        ctx.moveTo(lc, -lc);
-        ctx.lineTo((ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width, 0);
-    }
+    ctx.moveTo(lc, -lc);
+    let slopeOffset = (ctx.canvas.height + lc) * (ctx.canvas.width / 200);
+    ctx.lineTo(slopeOffset, ctx.canvas.height - lc);
+    ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
+    ctx.lineTo(ctx.canvas.width, 0);
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
-    ctx.fillStyle = isHovered ? lColorHover : lColor;
+    if (activePage === 0)
+        ctx.fillStyle = lColorActivePage;
+    else
+        ctx.fillStyle = isHovered ? lColorHover : lColor;
     ctx.fill();
     ctx.stroke();
-    ctx.fillStyle = fontColor;
-    let fontHeight = 30 * ((mobileMode ? ctx.canvas.height - lineWidth : ctx.canvas.height) / 50) - 8;
-    let text = "Home";
+    let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
     ctx.font = fontHeight + "px " + fontName;
-    let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
-    let canvasSlopeOffset = (ctx.canvas.height - lc) * (ctx.canvas.width / 600);
-    if (mobileMode)
-        canvasSlopeOffset = 0;
-    let textPosX = canvasTextCenter + canvasSlopeOffset;
-    ctx.fillText(text, textPosX, fontHeight + (mobileMode ? 8 + lineWidth : 8));
+    let text = "Home";
+    let iconSize = ctx.canvas.height * 0.7;
+    let textWidth = ctx.measureText(text).width;
+    let iconX = (ctx.canvas.width - (iconSize + textWidth) + slopeOffset / 2) / 2;
+    let iconY = (ctx.canvas.height - iconSize) / 2 - 3;
+    if (window.innerWidth <= 830) {
+        if (homeIcon.complete) {
+            ctx.drawImage(homeIcon, (ctx.canvas.width - iconSize) / 2 + 10, iconY, iconSize, iconSize);
+        }
+    }
+    else {
+        if (homeIcon.complete) {
+            ctx.drawImage(homeIcon, iconX, iconY, iconSize, iconSize);
+        }
+        ctx.fillStyle = fontColor;
+        let textPosX = iconX + iconSize + 8;
+        ctx.fillText(text, textPosX, fontHeight + 8);
+    }
 }
 function drawNav1(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     let lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
-    if (mobileMode) {
-        ctx.moveTo(lc, 0);
-        ctx.lineTo(lc, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width - lc, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width - lc, 0);
-    }
-    else {
-        ctx.moveTo(0, 0);
-        ctx.lineTo(0, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width, 0);
-    }
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, ctx.canvas.height - lc);
+    ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
+    ctx.lineTo(ctx.canvas.width, 0);
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
-    ctx.fillStyle = isHovered ? lColorHover : lColor;
+    if (activePage === 1)
+        ctx.fillStyle = lColorActivePage;
+    else
+        ctx.fillStyle = isHovered ? lColorHover : lColor;
     ctx.fill();
     ctx.stroke();
-    ctx.fillStyle = fontColor;
     let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
-    let text = "About";
     ctx.font = fontHeight + "px " + fontName;
-    let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
-    ctx.fillText(text, canvasTextCenter, fontHeight + 8);
+    let text = "About";
+    let iconSize = ctx.canvas.height * 0.7;
+    let textWidth = ctx.measureText(text).width;
+    let iconX = (ctx.canvas.width - iconSize - 8 - textWidth) / 2;
+    let iconY = (ctx.canvas.height - iconSize) / 2 - 3;
+    if (window.innerWidth <= 830) {
+        if (aboutIcon.complete) {
+            ctx.drawImage(aboutIcon, (ctx.canvas.width - iconSize) / 2, iconY, iconSize, iconSize);
+        }
+    }
+    else {
+        if (aboutIcon.complete) {
+            ctx.drawImage(aboutIcon, iconX, iconY, iconSize, iconSize);
+        }
+        ctx.fillStyle = fontColor;
+        let textPosX = iconX + iconSize + 8;
+        ctx.fillText(text, textPosX, fontHeight + 8);
+    }
 }
 function drawNav2(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     let lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
-    if (mobileMode) {
-        ctx.moveTo(lc, 0);
-        ctx.lineTo(lc, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width - lc, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width - lc, 0);
-    }
-    else {
-        ctx.moveTo(0, 0);
-        ctx.lineTo(0, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width, 0);
-    }
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, ctx.canvas.height - lc);
+    ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
+    ctx.lineTo(ctx.canvas.width, 0);
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
-    ctx.fillStyle = isHovered ? lColorHover : lColor;
+    if (activePage === 2)
+        ctx.fillStyle = lColorActivePage;
+    else
+        ctx.fillStyle = isHovered ? lColorHover : lColor;
     ctx.fill();
     ctx.stroke();
-    ctx.fillStyle = fontColor;
     let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
-    let text = "Portfolio";
     ctx.font = fontHeight + "px " + fontName;
-    let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
-    ctx.fillText(text, canvasTextCenter, fontHeight + 8);
+    let text = "Portfolio";
+    let iconSize = ctx.canvas.height * 0.7;
+    let textWidth = ctx.measureText(text).width;
+    let iconX = (ctx.canvas.width - iconSize - 8 - textWidth) / 2;
+    let iconY = (ctx.canvas.height - iconSize) / 2 - 3;
+    if (window.innerWidth <= 830) {
+        if (portfolioIcon.complete) {
+            ctx.drawImage(portfolioIcon, (ctx.canvas.width - iconSize) / 2, iconY, iconSize, iconSize);
+        }
+    }
+    else {
+        if (portfolioIcon.complete) {
+            ctx.drawImage(portfolioIcon, iconX, iconY, iconSize, iconSize);
+        }
+        ctx.fillStyle = fontColor;
+        let textPosX = iconX + iconSize + 8;
+        ctx.fillText(text, textPosX, fontHeight + 8);
+    }
 }
 function drawNav3(ctx, isHovered) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     let lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
-    if (mobileMode) {
-        ctx.moveTo(lc, 0);
-        ctx.lineTo(lc, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width - (ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width, -lc);
-    }
-    else {
-        ctx.moveTo(0, 0);
-        ctx.lineTo(0, ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width - (ctx.canvas.height + lc) * (ctx.canvas.width / 200), ctx.canvas.height - lc);
-        ctx.lineTo(ctx.canvas.width - lc, -lc);
-    }
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, ctx.canvas.height - lc);
+    let slopeOffset = (ctx.canvas.height + lc) * (ctx.canvas.width / 200);
+    ctx.lineTo(ctx.canvas.width - slopeOffset, ctx.canvas.height - lc);
+    ctx.lineTo(ctx.canvas.width - lc, -lc);
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
-    ctx.fillStyle = isHovered ? lColorHover : lColor;
+    if (activePage === 3)
+        ctx.fillStyle = lColorActivePage;
+    else
+        ctx.fillStyle = isHovered ? lColorHover : lColor;
     ctx.fill();
     ctx.stroke();
-    ctx.fillStyle = fontColor;
     let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
-    let text = "Contact";
     ctx.font = fontHeight + "px " + fontName;
-    let canvasTextCenter = ctx.canvas.width / 2 - ctx.measureText(text).width / 2;
-    let canvasSlopeOffset = (ctx.canvas.height - lc) * (ctx.canvas.width / 600);
-    if (mobileMode)
-        canvasSlopeOffset = 0;
-    let textPosX = canvasTextCenter - canvasSlopeOffset;
-    ctx.fillText(text, textPosX, fontHeight + 8);
-}
-//Menu Button
-function drawMenuButton(posX, posY) {
-    menuButtonCanvas.height = 45;
-    menuButtonCanvas.width = 45;
-    let ctx = menuButtonCanvas.getContext("2d");
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    let lc = lineWidth / 2; //lineCenter
-    ctx.beginPath();
-    ctx.rect(lc, lc, menuButtonCanvas.width - lineWidth, menuButtonCanvas.height - lineWidth);
-    ctx.closePath();
-    ctx.strokeStyle = dColor;
-    ctx.lineWidth = lineWidth;
-    let rect = menuButtonCanvas.getBoundingClientRect();
-    let x = posX - rect.left;
-    let y = posY - rect.top;
-    let isHovered = ctx.isPointInPath(x, y);
-    ctx.fillStyle = isHovered ? lColorHover : lColor;
-    ctx.fill();
-    ctx.stroke();
-    if (navBox.style.visibility == "hidden") {
-        ctx.beginPath();
-        ctx.moveTo(lineWidth * 1.5, lineWidth * 2);
-        ctx.lineTo(ctx.canvas.width - lineWidth * 1.5, lineWidth * 2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(lineWidth * 1.5, ctx.canvas.height / 2);
-        ctx.lineTo(ctx.canvas.width - lineWidth * 1.5, ctx.canvas.height / 2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(lineWidth * 1.5, ctx.canvas.height - lineWidth * 2);
-        ctx.lineTo(ctx.canvas.width - lineWidth * 1.5, ctx.canvas.height - lineWidth * 2);
-        ctx.stroke();
+    let text = "Contact";
+    let iconSize = ctx.canvas.height * 0.7;
+    let textWidth = ctx.measureText(text).width;
+    let iconX = (ctx.canvas.width - (iconSize + textWidth)) / 2 - slopeOffset / 2;
+    let iconY = (ctx.canvas.height - iconSize) / 2 - 3;
+    if (window.innerWidth <= 830) {
+        if (contactIcon.complete) {
+            ctx.drawImage(contactIcon, (ctx.canvas.width - iconSize) / 2 - 10, iconY, iconSize, iconSize);
+        }
     }
     else {
-        ctx.beginPath();
-        ctx.moveTo(lineWidth * 1.5, lineWidth * 1.5);
-        ctx.lineTo(ctx.canvas.width - lineWidth * 1.5, ctx.canvas.height - lineWidth * 1.5);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(lineWidth * 1.5, ctx.canvas.height - lineWidth * 1.5);
-        ctx.lineTo(ctx.canvas.width - lineWidth * 1.5, lineWidth * 1.5);
-        ctx.stroke();
-    }
-}
-menuButtonCanvas.addEventListener("click", function () {
-    if (navBox.style.visibility == "hidden") {
-        navBoxVisability(true);
-    }
-    else {
-        navBoxVisability(false);
-    }
-    drawMenuButton(window.innerWidth / 2, window.innerHeight / 2);
-});
-if (mobileMode) {
-    menuButtonCanvas.click();
-}
-function menuButtonVisability(visible) {
-    let menuButtonDiv = document.getElementById("menu-button-div");
-    if (visible) {
-        menuButtonDiv.style.visibility = "visible";
-    }
-    else {
-        menuButtonDiv.style.visibility = "hidden";
+        if (contactIcon.complete) {
+            ctx.drawImage(contactIcon, iconX, iconY, iconSize, iconSize);
+        }
+        ctx.fillStyle = fontColor;
+        let textPosX = iconX + iconSize + 8;
+        ctx.fillText(text, textPosX, fontHeight + 8);
     }
 }
 const slides = [
@@ -546,7 +503,7 @@ const slideshowEl = document.getElementById("slideshow");
 const dotsEl = document.getElementById("dots");
 const detailViewEl = document.getElementById("detail-view");
 function renderSlides() {
-    let itemsPerPage = mobileMode ? 2 : 4;
+    let itemsPerPage = window.innerWidth <= mobileMaxWidth ? 2 : 4;
     slideshowEl.innerHTML = "";
     const start = currentPage * itemsPerPage;
     const end = start + itemsPerPage;
