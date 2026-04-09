@@ -2,6 +2,13 @@
 const glassboxCanvas = document.getElementById("glassbox-canvas");
 const navCanvases = document.getElementById("nav-box-div").children;
 const navBox = document.getElementById("nav-box-div");
+// Set actual pixel dimensions
+let dpr = window.devicePixelRatio || 1;
+let ctx = glassboxCanvas.getContext("2d");
+let cWidth = window.innerWidth;
+let cHeight = window.innerHeight;
+let navButtonWidth;
+let navButtonHeight;
 const lineWidth = 6;
 const dColor = "#4e5864";
 const lColor = "#f6f6f7";
@@ -32,17 +39,21 @@ function isTouchDevice() {
 let mobileMode = window.innerWidth <= mobileMaxWidth || isTouchDevice();
 setGlassboxSize();
 setNavSize();
-getCursorPosition(null);
+repositionFromMouse(null);
 window.addEventListener("resize", function () {
     mobileMode = window.innerWidth <= mobileMaxWidth || isTouchDevice();
     setGlassboxSize();
     setNavSize();
-    getCursorPosition(null);
+    repositionFromMouse(null);
     currentPage = 0;
     renderSlides();
 }, true);
+const resizeObserver = new ResizeObserver(() => {
+    dpr = window.devicePixelRatio || 1;
+});
+resizeObserver.observe(glassboxCanvas);
 document.body.addEventListener("mousemove", (e) => {
-    getCursorPosition(e);
+    repositionFromMouse(e);
 });
 document.body.addEventListener("touchmove", (e) => {
     let posX = e.touches[0].clientX;
@@ -53,7 +64,7 @@ document.body.addEventListener("touchmove", (e) => {
     positionContent(posX, posY);
     positionNav(posX);
 }, false);
-function getCursorPosition(e) {
+function repositionFromMouse(e) {
     let posX;
     let posY;
     if (e) {
@@ -61,15 +72,16 @@ function getCursorPosition(e) {
         posY = e.clientY;
     }
     else {
-        posX = glassboxCanvas.width / 2;
-        posY = glassboxCanvas.height / 2;
+        posX = cWidth / 2;
+        posY = cHeight / 2;
     }
     lastPosX = posX;
     lastPosY = posY;
+    console.log(`Mouse position: (${cWidth / 2 - posX}, ${cHeight / 2 - posY})`);
     drawGlassbox(posX, posY, glassboxCanvas);
+    drawNav(posX, posY);
     positionContent(posX, posY);
     positionNav(posX);
-    drawNav(posX, posY);
 }
 //╔══════════════════════════════════════╗
 //║           CONTENT POSITIONING        ║
@@ -78,12 +90,12 @@ function positionContent(posX, posY) {
     let glassboxContent = document.getElementById("glassbox-content-div");
     let contentSize = 0.9;
     let warpLimiter = 15;
-    let xOffset = mobileMode ? 0 : (posX - glassboxCanvas.width / 2) / warpLimiter;
-    let yOffset = mobileMode ? 0 : (posY - glassboxCanvas.height / 2) / warpLimiter;
-    glassboxContent.style.width = window.innerWidth * contentSize + "px";
-    glassboxContent.style.height = window.innerHeight * contentSize + "px";
-    glassboxContent.style.left = ((1 - contentSize) * window.innerWidth) / 2 + xOffset + "px";
-    glassboxContent.style.top = ((1 - contentSize) * window.innerHeight) / 2 + yOffset + "px";
+    let xOffset = mobileMode ? 0 : (posX - cWidth / 2) / warpLimiter;
+    let yOffset = mobileMode ? 0 : (posY - cHeight / 2) / warpLimiter;
+    glassboxContent.style.width = cWidth * contentSize + "px";
+    glassboxContent.style.height = cHeight * contentSize + "px";
+    glassboxContent.style.left = ((1 - contentSize) * cWidth) / 2 + xOffset + "px";
+    glassboxContent.style.top = ((1 - contentSize) * cHeight) / 2 + yOffset + "px";
 }
 document.getElementById("welcome-div").addEventListener("mouseover", function () {
     let glassboxContent = document.getElementById("glassbox-content-div");
@@ -118,18 +130,22 @@ document.getElementById("welcome-div").addEventListener("mousemove", function (e
 //║            GLASSBOX DRAWING          ║
 //╚══════════════════════════════════════╝
 function setGlassboxSize() {
-    glassboxCanvas.width = window.innerWidth;
-    glassboxCanvas.height = window.innerHeight;
+    cWidth = window.innerWidth;
+    cHeight = window.innerHeight;
+    glassboxCanvas.width = cWidth * dpr;
+    glassboxCanvas.height = cHeight * dpr;
+    glassboxCanvas.style.width = cWidth + "px";
+    glassboxCanvas.style.height = cHeight + "px";
+    ctx.scale(dpr, dpr);
 }
 function drawGlassbox(posX, posY, canvas) {
-    let ctx = canvas.getContext("2d");
     let warpLimiter = 2;
-    let xOffset = (posX - canvas.width / 2) / warpLimiter;
-    let yOffset = (posY - canvas.height / 2) / warpLimiter;
-    let centerX = canvas.width / 2 - xOffset;
-    let centerY = (canvas.height / 2) * 1.3 - yOffset;
+    let xOffset = (posX - cWidth / 2) / warpLimiter;
+    let yOffset = (posY - cHeight / 2) / warpLimiter;
+    let centerX = cWidth / 2 - xOffset;
+    let centerY = (cHeight / 2) * 1.3 - yOffset;
     ctx.beginPath();
-    ctx.rect(0, 0, canvas.width, canvas.height);
+    ctx.rect(0, 0, cWidth, cHeight);
     ctx.fillStyle = lColor;
     ctx.fill();
     let lc = lineWidth / 2; //lineCenter
@@ -149,20 +165,20 @@ function drawGlassbox(posX, posY, canvas) {
     ctx.fillStyle = grd;
     ctx.fill();
     ctx.beginPath();
-    ctx.moveTo(canvas.width - lc, -lc);
+    ctx.moveTo(cWidth - lc, -lc);
     ctx.lineTo(centerX, centerY);
-    ctx.lineTo(canvas.width + lc, +lc);
-    grd = ctx.createLinearGradient(canvas.width, 0, centerX, centerY);
+    ctx.lineTo(cWidth + lc, +lc);
+    grd = ctx.createLinearGradient(cWidth, 0, centerX, centerY);
     addColorStop(grd);
     ctx.fillStyle = grd;
     ctx.fill();
     /*
     //floor for hallway look
      ctx.beginPath()
-     ctx.moveTo(-lc, canvas.height-lc)
+     ctx.moveTo(-lc, cHeight-lc)
      ctx.lineTo(centerX, centerY)
-     ctx.lineTo(canvas.width+lc, canvas.height-lc)
-     grd = ctx.createLinearGradient(canvas.width/2, canvas.height, canvas.width/2, centerY)
+     ctx.lineTo(cWidth+lc, cHeight-lc)
+     grd = ctx.createLinearGradient(cWidth/2, cHeight, cWidth/2, centerY)
      grd.addColorStop(0, dColor)
      grd.addColorStop(0.4, dColor)
      grd.addColorStop(0.8, lColor)
@@ -171,18 +187,18 @@ function drawGlassbox(posX, posY, canvas) {
      ctx.fill()
      */
     ctx.beginPath();
-    ctx.moveTo(canvas.width + lc, canvas.height - lc);
+    ctx.moveTo(cWidth + lc, cHeight - lc);
     ctx.lineTo(centerX, centerY);
-    ctx.lineTo(canvas.width - lc, canvas.height + lc);
-    grd = ctx.createLinearGradient(canvas.width, canvas.height, centerX, centerY);
+    ctx.lineTo(cWidth - lc, cHeight + lc);
+    grd = ctx.createLinearGradient(cWidth, cHeight, centerX, centerY);
     addColorStop(grd);
     ctx.fillStyle = grd;
     ctx.fill();
     ctx.beginPath();
-    ctx.moveTo(lc, canvas.height + lc);
+    ctx.moveTo(lc, cHeight + lc);
     ctx.lineTo(centerX, centerY);
-    ctx.lineTo(-lc, canvas.height - lc);
-    grd = ctx.createLinearGradient(0, canvas.height, centerX, centerY);
+    ctx.lineTo(-lc, cHeight - lc);
+    grd = ctx.createLinearGradient(0, cHeight, centerX, centerY);
     addColorStop(grd);
     ctx.fillStyle = grd;
     ctx.fill();
@@ -190,10 +206,10 @@ function drawGlassbox(posX, posY, canvas) {
     let dist = 0.2;
     ctx.beginPath();
     ctx.moveTo(centerX * dist, centerY * dist);
-    ctx.lineTo((canvas.width * (2 - dist)) / 2 - xOffset * dist, centerY * dist);
+    ctx.lineTo((cWidth * (2 - dist)) / 2 - xOffset * dist, centerY * dist);
     //0.15 = 1.025 0.30 = 1.055 fix scaling, stand in: (1 + 0.17 * dist)
-    ctx.lineTo((canvas.width * (2 - dist)) / 2 - xOffset * dist, ((canvas.height * (2 - dist)) / 2) * (1 + 0.17 * dist) - yOffset * dist);
-    ctx.lineTo(centerX * dist, ((canvas.height * (2 - dist)) / 2) * (1 + 0.17 * dist) - yOffset * dist);
+    ctx.lineTo((cWidth * (2 - dist)) / 2 - xOffset * dist, ((cHeight * (2 - dist)) / 2) * (1 + 0.17 * dist) - yOffset * dist);
+    ctx.lineTo(centerX * dist, ((cHeight * (2 - dist)) / 2) * (1 + 0.17 * dist) - yOffset * dist);
     ctx.closePath();
     ctx.strokeStyle = dColor;
     ctx.lineWidth = 5;
@@ -203,23 +219,22 @@ function drawGlassbox(posX, posY, canvas) {
 //║          NAVIGATION CONTROLS         ║
 //╚══════════════════════════════════════╝
 function setNavSize() {
-    let navWidth = 90;
-    navBox.style.flexDirection = "row";
-    if (navWidth > 100)
-        navWidth = 100;
-    navBox.style.width = navWidth + "%";
-    let canvasWidth = Math.floor(navBox.clientWidth / 4) - 1;
-    let canvasHeight = 35 + Math.round(window.innerHeight * 0.02);
+    navButtonWidth = Math.floor(navBox.clientWidth / 4) - 1;
+    navButtonHeight = 35 + Math.round(window.innerHeight * 0.02);
     for (let i = 0; i < navCanvases.length; i++) {
         let canvas = navCanvases.item(i);
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
+        canvas.width = navButtonWidth * dpr;
+        canvas.height = navButtonHeight * dpr;
+        canvas.style.width = navButtonWidth + "px";
+        canvas.style.height = navButtonHeight + "px";
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
     }
     drawNav(window.innerWidth / 2, window.innerHeight / 2);
 }
 function positionNav(posX) {
     let warpLimiter = 15;
-    let xOffset = mobileMode ? 0 : (posX - glassboxCanvas.width / 2) / warpLimiter;
+    let xOffset = mobileMode ? 0 : (posX - cWidth / 2) / warpLimiter;
     navBox.style.left = window.innerWidth / 2 - navBox.clientWidth / 2 + xOffset + "px";
 }
 //Nav Clicks
@@ -227,25 +242,25 @@ navCanvases[0].addEventListener("click", function () {
     hideAllContent();
     activePage = 0;
     document.getElementById("welcome-div").style.display = "block";
-    getCursorPosition({ clientX: lastPosX, clientY: lastPosY });
+    repositionFromMouse({ clientX: lastPosX, clientY: lastPosY });
 });
 navCanvases[1].addEventListener("click", function () {
     hideAllContent();
     activePage = 1;
     document.getElementById("about-div").style.display = "flex";
-    getCursorPosition({ clientX: lastPosX, clientY: lastPosY });
+    repositionFromMouse({ clientX: lastPosX, clientY: lastPosY });
 });
 navCanvases[2].addEventListener("click", function () {
     hideAllContent();
     activePage = 2;
     document.getElementById("portfolio-div").style.display = "block";
-    getCursorPosition({ clientX: lastPosX, clientY: lastPosY });
+    repositionFromMouse({ clientX: lastPosX, clientY: lastPosY });
 });
 navCanvases[3].addEventListener("click", function () {
     hideAllContent();
     activePage = 3;
     document.getElementById("contact-div").style.display = "flex";
-    getCursorPosition({ clientX: lastPosX, clientY: lastPosY });
+    repositionFromMouse({ clientX: lastPosX, clientY: lastPosY });
 });
 function hideAllContent() {
     document.getElementById("welcome-div").style.display = "none";
@@ -273,23 +288,15 @@ function drawNav(posX, posY) {
     isHovered = ctx3.isPointInPath(x, y);
     drawNav3(ctx3, isHovered);
 }
-function navBoxVisability(visible) {
-    if (visible) {
-        navBox.style.visibility = "visible";
-    }
-    else {
-        navBox.style.visibility = "hidden";
-    }
-}
 function drawNav0(ctx, isHovered) {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.clearRect(0, 0, navButtonWidth, navButtonHeight);
     let lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
     ctx.moveTo(lc, -lc);
-    let slopeOffset = (ctx.canvas.height + lc) * (ctx.canvas.width / 200);
-    ctx.lineTo(slopeOffset, ctx.canvas.height - lc);
-    ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
-    ctx.lineTo(ctx.canvas.width, 0);
+    let slopeOffset = (navButtonHeight + lc) * (navButtonWidth / 200);
+    ctx.lineTo(slopeOffset, navButtonHeight - lc);
+    ctx.lineTo(navButtonWidth, navButtonHeight - lc);
+    ctx.lineTo(navButtonWidth, 0);
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
     if (activePage === 0)
@@ -298,16 +305,16 @@ function drawNav0(ctx, isHovered) {
         ctx.fillStyle = isHovered ? lColorHover : lColor;
     ctx.fill();
     ctx.stroke();
-    let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
+    let fontHeight = 30 * (navButtonHeight / 50) - 8;
     ctx.font = fontHeight + "px " + fontName;
     let text = "Home";
-    let iconSize = ctx.canvas.height * 0.7;
+    let iconSize = navButtonHeight * 0.7;
     let textWidth = ctx.measureText(text).width;
-    let iconX = (ctx.canvas.width - (iconSize + textWidth) + slopeOffset / 2) / 2;
-    let iconY = (ctx.canvas.height - iconSize) / 2 - 3;
+    let iconX = (navButtonWidth - (iconSize + textWidth) + slopeOffset / 2) / 2;
+    let iconY = (navButtonHeight - iconSize) / 2 - 3;
     if (window.innerWidth <= 830) {
         if (homeIcon.complete) {
-            ctx.drawImage(homeIcon, (ctx.canvas.width - iconSize) / 2 + 10, iconY, iconSize, iconSize);
+            ctx.drawImage(homeIcon, (navButtonWidth - iconSize) / 2 + 10, iconY, iconSize, iconSize);
         }
     }
     else {
@@ -320,13 +327,13 @@ function drawNav0(ctx, isHovered) {
     }
 }
 function drawNav1(ctx, isHovered) {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.clearRect(0, 0, navButtonWidth, navButtonHeight);
     let lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(0, ctx.canvas.height - lc);
-    ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
-    ctx.lineTo(ctx.canvas.width, 0);
+    ctx.lineTo(0, navButtonHeight - lc);
+    ctx.lineTo(navButtonWidth, navButtonHeight - lc);
+    ctx.lineTo(navButtonWidth, 0);
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
     if (activePage === 1)
@@ -335,16 +342,16 @@ function drawNav1(ctx, isHovered) {
         ctx.fillStyle = isHovered ? lColorHover : lColor;
     ctx.fill();
     ctx.stroke();
-    let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
+    let fontHeight = 30 * (navButtonHeight / 50) - 8;
     ctx.font = fontHeight + "px " + fontName;
     let text = "About";
-    let iconSize = ctx.canvas.height * 0.7;
+    let iconSize = navButtonHeight * 0.7;
     let textWidth = ctx.measureText(text).width;
-    let iconX = (ctx.canvas.width - iconSize - 8 - textWidth) / 2;
-    let iconY = (ctx.canvas.height - iconSize) / 2 - 3;
+    let iconX = (navButtonWidth - iconSize - 8 - textWidth) / 2;
+    let iconY = (navButtonHeight - iconSize) / 2 - 3;
     if (window.innerWidth <= 830) {
         if (aboutIcon.complete) {
-            ctx.drawImage(aboutIcon, (ctx.canvas.width - iconSize) / 2, iconY, iconSize, iconSize);
+            ctx.drawImage(aboutIcon, (navButtonWidth - iconSize) / 2, iconY, iconSize, iconSize);
         }
     }
     else {
@@ -357,13 +364,13 @@ function drawNav1(ctx, isHovered) {
     }
 }
 function drawNav2(ctx, isHovered) {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.clearRect(0, 0, navButtonWidth, navButtonHeight);
     let lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(0, ctx.canvas.height - lc);
-    ctx.lineTo(ctx.canvas.width, ctx.canvas.height - lc);
-    ctx.lineTo(ctx.canvas.width, 0);
+    ctx.lineTo(0, navButtonHeight - lc);
+    ctx.lineTo(navButtonWidth, navButtonHeight - lc);
+    ctx.lineTo(navButtonWidth, 0);
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
     if (activePage === 2)
@@ -372,16 +379,16 @@ function drawNav2(ctx, isHovered) {
         ctx.fillStyle = isHovered ? lColorHover : lColor;
     ctx.fill();
     ctx.stroke();
-    let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
+    let fontHeight = 30 * (navButtonHeight / 50) - 8;
     ctx.font = fontHeight + "px " + fontName;
     let text = "Portfolio";
-    let iconSize = ctx.canvas.height * 0.7;
+    let iconSize = navButtonHeight * 0.7;
     let textWidth = ctx.measureText(text).width;
-    let iconX = (ctx.canvas.width - iconSize - 8 - textWidth) / 2;
-    let iconY = (ctx.canvas.height - iconSize) / 2 - 3;
+    let iconX = (navButtonWidth - iconSize - 8 - textWidth) / 2;
+    let iconY = (navButtonHeight - iconSize) / 2 - 3;
     if (window.innerWidth <= 830) {
         if (portfolioIcon.complete) {
-            ctx.drawImage(portfolioIcon, (ctx.canvas.width - iconSize) / 2, iconY, iconSize, iconSize);
+            ctx.drawImage(portfolioIcon, (navButtonWidth - iconSize) / 2, iconY, iconSize, iconSize);
         }
     }
     else {
@@ -394,14 +401,14 @@ function drawNav2(ctx, isHovered) {
     }
 }
 function drawNav3(ctx, isHovered) {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.clearRect(0, 0, navButtonWidth, navButtonHeight);
     let lc = lineWidth / 2; //lineCenter
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(0, ctx.canvas.height - lc);
-    let slopeOffset = (ctx.canvas.height + lc) * (ctx.canvas.width / 200);
-    ctx.lineTo(ctx.canvas.width - slopeOffset, ctx.canvas.height - lc);
-    ctx.lineTo(ctx.canvas.width - lc, -lc);
+    ctx.lineTo(0, navButtonHeight - lc);
+    let slopeOffset = (navButtonHeight + lc) * (navButtonWidth / 200);
+    ctx.lineTo(navButtonWidth - slopeOffset, navButtonHeight - lc);
+    ctx.lineTo(navButtonWidth - lc, -lc);
     ctx.strokeStyle = dColor;
     ctx.lineWidth = lineWidth;
     if (activePage === 3)
@@ -410,16 +417,16 @@ function drawNav3(ctx, isHovered) {
         ctx.fillStyle = isHovered ? lColorHover : lColor;
     ctx.fill();
     ctx.stroke();
-    let fontHeight = 30 * (ctx.canvas.height / 50) - 8;
+    let fontHeight = 30 * (navButtonHeight / 50) - 8;
     ctx.font = fontHeight + "px " + fontName;
     let text = "Contact";
-    let iconSize = ctx.canvas.height * 0.7;
+    let iconSize = navButtonHeight * 0.7;
     let textWidth = ctx.measureText(text).width;
-    let iconX = (ctx.canvas.width - (iconSize + textWidth)) / 2 - slopeOffset / 2;
-    let iconY = (ctx.canvas.height - iconSize) / 2 - 3;
+    let iconX = (navButtonWidth - (iconSize + textWidth)) / 2 - slopeOffset / 2;
+    let iconY = (navButtonHeight - iconSize) / 2 - 3;
     if (window.innerWidth <= 830) {
         if (contactIcon.complete) {
-            ctx.drawImage(contactIcon, (ctx.canvas.width - iconSize) / 2 - 10, iconY, iconSize, iconSize);
+            ctx.drawImage(contactIcon, (navButtonWidth - iconSize) / 2 - 10, iconY, iconSize, iconSize);
         }
     }
     else {
