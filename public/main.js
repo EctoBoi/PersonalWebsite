@@ -1,9 +1,7 @@
 "use strict";
 const glassboxCanvas = document.getElementById("glassbox-canvas");
-const menuButtonCanvas = document.getElementById("menu-button-canvas");
 const navCanvases = document.getElementById("nav-box-div").children;
 const navBox = document.getElementById("nav-box-div");
-const glassboxContentDiv = document.getElementById("glassbox-content-div");
 const lineWidth = 6;
 const dColor = "#4e5864";
 const lColor = "#f6f6f7";
@@ -433,6 +431,11 @@ function drawNav3(ctx, isHovered) {
         ctx.fillText(text, textPosX, fontHeight + 8);
     }
 }
+/// <reference path="./portfolioGallery.ts" />
+/// <reference path="./EmailJS.ts" />
+//╔══════════════════════════════════════╗
+//║       PORTFOLIO GALLERY SYSTEM       ║
+//╚══════════════════════════════════════╝
 const slides = [
     {
         img: "/imgs/Snakish.jpg",
@@ -554,7 +557,6 @@ function showDetail(slide) {
       </div>
     </div>
   `;
-    // When img clicked, open slide.url (if exists)
     const detailImg = document.getElementById("detail-img");
     if (slide.url) {
         detailImg.style.cursor = "pointer";
@@ -574,9 +576,7 @@ function showDetail(slide) {
         const onOutsideClick = (e) => {
             if (detailViewEl.classList.contains("hidden"))
                 return;
-            const path = 
-            // prefer composedPath for Shadow DOM safety
-            typeof e.composedPath === "function" ? e.composedPath() : e.path || [];
+            const path = typeof e.composedPath === "function" ? e.composedPath() : e.path || [];
             const targetNode = e.target || (path.length ? path[0] : null);
             const clickedInside = (targetNode && (portfolioDiv.contains(targetNode) || detailViewEl.contains(targetNode))) ||
                 path.some((p) => p === portfolioDiv || p === detailViewEl);
@@ -587,10 +587,24 @@ function showDetail(slide) {
         document.addEventListener("pointerdown", onOutsideClick, {
             passive: true,
         });
-        // remove listener when returning to portfolio
         backBtn.addEventListener("click", () => {
             document.removeEventListener("pointerdown", onOutsideClick);
         }, { once: true });
     }
 }
 renderSlides();
+emailjs.init("OLlfkDqoVQTLkMaX0");
+const contactForm = document.getElementById("contact-form");
+contactForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    emailjs
+        .sendForm("service_fix1jce", "template_qrxob25", this)
+        .then(() => {
+        alert("Message sent!");
+        this.reset();
+    })
+        .catch((error) => {
+        alert("Something went wrong. Please try again.");
+        console.error(error);
+    });
+});

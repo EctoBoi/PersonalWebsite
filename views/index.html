@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
         <title>Justin Banton</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
         <link href="style.css" rel="stylesheet" type="text/css" />
         <link rel="icon" type="image/png" href="/imgs/birbcircle.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -62,18 +63,27 @@
             </div>
 
             <div id="contact-div">
-                <div class="contact-item">
-                    <a href="https://www.linkedin.com/in/jbanton/" target="_blank">
-                        <img src="/imgs/linkedin.png" alt="LinkedIn" />
-                        <div>LinkedIn</div>
-                    </a>
-                </div>
+                <form id="contact-form">
+                    <input type="text" name="title" value="Portfolio Contact" hidden />
+                    <input type="text" name="from_name" placeholder="Name" required />
+                    <input type="email" name="from_email" placeholder="Email" required />
+                    <textarea name="message" placeholder="Message..." required></textarea>
+                    <button type="submit">Send</button>
+                </form>
+                <div id="contact-sites">
+                    <div class="contact-item">
+                        <a href="https://www.linkedin.com/in/jbanton/" target="_blank">
+                            <img src="/imgs/linkedin.png" alt="LinkedIn" />
+                            <div>LinkedIn</div>
+                        </a>
+                    </div>
 
-                <div class="contact-item">
-                    <a href="https://github.com/EctoBoi/" target="_blank">
-                        <img src="/imgs/github.png" alt="GitHub" />
-                        <div>GitHub</div>
-                    </a>
+                    <div class="contact-item">
+                        <a href="https://github.com/EctoBoi/" target="_blank">
+                            <img src="/imgs/github.png" alt="GitHub" />
+                            <div>GitHub</div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
