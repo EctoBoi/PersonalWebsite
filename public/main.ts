@@ -100,7 +100,6 @@ function repositionFromMouse(e: MouseEvent | null) {
     lastPosX = posX;
     lastPosY = posY;
 
-    console.log(`Mouse position: (${cWidth / 2 - posX}, ${cHeight / 2 - posY})`);
     drawGlassbox(posX, posY, glassboxCanvas);
     drawNav(posX, posY);
     positionContent(posX, posY);
@@ -292,8 +291,10 @@ function positionNav(posX: number) {
 navCanvases[0].addEventListener("click", function () {
     hideAllContent();
     activePage = 0;
-    (document.getElementById("welcome-div") as HTMLDivElement).style.display = "block";
+    let welcomeDiv = document.getElementById("welcome-div") as HTMLDivElement;
+    welcomeDiv.style.display = "block";
     repositionFromMouse({ clientX: lastPosX, clientY: lastPosY } as MouseEvent);
+    welcomeDiv.dispatchEvent(new Event("mouseover"));
 });
 navCanvases[1].addEventListener("click", function () {
     hideAllContent();
