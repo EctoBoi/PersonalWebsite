@@ -12,9 +12,25 @@
     --shadow: 0 0.35rem 1.5rem rgba(0, 0, 0, 0.4);
 }
 
+html,
 body {
     margin: 0;
-    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    min-height: 100%;
+    overflow: hidden;
+}
+
+#viewport-ref {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100dvh;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+body {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
     font-family: "Noto Sans", sans-serif;
     color: var(--fontColor);
 }
@@ -32,6 +48,17 @@ body {
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
+    margin: 10vw;
+    font-size: clamp(.9rem, 2.5vw, 1.25rem);
+}
+#summary-section p{
+    margin: 0;
+    margin-bottom: var(--space-sm);
+}
+#skills-section ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 1rem;
 }
 
 #portfolio-div {
@@ -308,6 +335,11 @@ body {
     .detail-image img {
         max-width: min(90vw, 600px);
         max-height: 35vh;
+    }
+}
+@media(max-aspect-ratio: 1/1.5) {
+    #about-div {
+        margin: 0;
     }
 }
 

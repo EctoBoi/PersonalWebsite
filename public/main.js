@@ -2,6 +2,7 @@
 let glassboxCanvas;
 let navCanvases;
 let navBox;
+let viewportRef;
 // Set actual pixel dimensions
 let dpr = window.devicePixelRatio || 1;
 let ctx;
@@ -29,32 +30,35 @@ function isTouchDevice() {
     return !window.matchMedia("(hover:hover)").matches || !window.matchMedia("(pointer:fine)").matches;
 }
 let mobileMode = isTouchDevice();
+function resize() {
+    mobileMode = isTouchDevice();
+    setGlassboxSize();
+    setNavSize();
+    repositionFromMouse(null);
+    currentPage = 0;
+    renderSlides();
+}
 window.addEventListener("DOMContentLoaded", () => {
     glassboxCanvas = document.getElementById("glassbox-canvas");
     navCanvases = document.getElementById("nav-box-div").children;
     navBox = document.getElementById("nav-box-div");
     ctx = glassboxCanvas.getContext("2d");
+    viewportRef = document.getElementById("viewport-ref");
     homeIcon.src = "/imgs/HomeIcon.png";
-    homeIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
+    homeIcon.onload = () => drawNav(viewportRef.clientWidth / 2, viewportRef.clientHeight / 2);
     contactIcon.src = "/imgs/ContactIcon.png";
-    contactIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
+    contactIcon.onload = () => drawNav(viewportRef.clientWidth / 2, viewportRef.clientHeight / 2);
     aboutIcon.src = "/imgs/AboutIcon.png";
-    aboutIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
+    aboutIcon.onload = () => drawNav(viewportRef.clientWidth / 2, viewportRef.clientHeight / 2);
     portfolioIcon.src = "/imgs/PortfolioIcon.png";
-    portfolioIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
-    setGlassboxSize();
-    setNavSize();
-    repositionFromMouse(null);
+    portfolioIcon.onload = () => drawNav(viewportRef.clientWidth / 2, viewportRef.clientHeight / 2);
+    resize();
     window.addEventListener("resize", function () {
-        mobileMode = isTouchDevice();
-        setGlassboxSize();
-        setNavSize();
-        repositionFromMouse(null);
-        currentPage = 0;
-        renderSlides();
+        resize();
     }, true);
     const resizeObserver = new ResizeObserver(() => {
         dpr = window.devicePixelRatio || 1;
+        resize();
     });
     resizeObserver.observe(glassboxCanvas);
     document.body.addEventListener("mousemove", (e) => {
@@ -66,6 +70,7 @@ window.addEventListener("DOMContentLoaded", () => {
         lastPosX = posX;
         lastPosY = posY;
         drawGlassbox(posX, posY, glassboxCanvas);
+        drawNav(posX, posY);
         positionContent(posX, posY);
         positionNav(posX);
     }, false);
@@ -97,10 +102,14 @@ window.addEventListener("DOMContentLoaded", () => {
     });
     document.getElementById("welcome-div").addEventListener("mouseover", function () {
         let glassboxContent = document.getElementById("glassbox-content-div");
-        let randX = Math.floor(Math.random() * (glassboxContent.clientWidth * 0.18));
-        let randY = Math.floor(Math.random() * (glassboxContent.clientHeight * 0.14));
-        this.style.left = (Math.random() < 0.5 ? randX : -randX) + "px";
-        this.style.top = (Math.random() < 0.5 ? randY : -randY) + "px";
+        let randX = Math.floor(Math.random() * (glassboxContent.clientWidth * 0.35));
+        let randY = Math.floor(Math.random() * (glassboxContent.clientHeight * 0.35));
+        const maxOffsetX = Math.max(0, (glassboxContent.clientWidth - this.clientWidth) / 2);
+        const maxOffsetY = Math.max(0, (glassboxContent.clientHeight - this.clientHeight) / 2);
+        let targetLeft = (Math.random() < 0.5 ? randX : -randX);
+        let targetTop = (Math.random() < 0.5 ? randY : -randY);
+        this.style.left = Math.max(-maxOffsetX, Math.min(maxOffsetX, targetLeft)) + "px";
+        this.style.top = Math.max(-maxOffsetY, Math.min(maxOffsetY, targetTop)) + "px";
         this.style.transition = "transform 0.2s ease";
         this.style.transform = "scale(1.2)";
         setTimeout(() => {
@@ -151,9 +160,9 @@ function positionContent(posX, posY) {
 //║            GLASSBOX DRAWING          ║
 //╚══════════════════════════════════════╝
 function setGlassboxSize() {
-    cWidth = window.innerWidth;
-    cHeight = window.innerHeight;
-    navBoxWidth = window.innerWidth * 0.9;
+    cWidth = viewportRef.clientWidth;
+    cHeight = viewportRef.clientHeight;
+    navBoxWidth = cWidth * 0.9;
     glassboxCanvas.width = cWidth * dpr;
     glassboxCanvas.height = cHeight * dpr;
     glassboxCanvas.style.width = cWidth + "px";
@@ -241,9 +250,9 @@ function drawGlassbox(posX, posY, canvas) {
 //║          NAVIGATION CONTROLS         ║
 //╚══════════════════════════════════════╝
 function setNavSize() {
-    navBoxWidth = window.innerWidth * 0.9;
+    navBoxWidth = viewportRef.clientWidth * 0.9;
     navButtonWidth = Math.floor(navBoxWidth / 4) - 1;
-    navButtonHeight = Math.round(Math.max(48, window.innerHeight * 0.06));
+    navButtonHeight = Math.round(Math.max(48, viewportRef.clientHeight * 0.06));
     lineWidth = Math.max(3, Math.round(navButtonHeight * 0.08));
     for (let i = 0; i < navCanvases.length; i++) {
         let canvas = navCanvases.item(i);
@@ -254,12 +263,12 @@ function setNavSize() {
         const ctx = canvas.getContext("2d");
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
-    drawNav(window.innerWidth / 2, window.innerHeight / 2);
+    drawNav(viewportRef.clientWidth / 2, viewportRef.clientHeight / 2);
 }
 function positionNav(posX) {
     let warpLimiter = 15;
     let xOffset = mobileMode ? 0 : (posX - cWidth / 2) / warpLimiter;
-    navBox.style.left = window.innerWidth / 2 - navBoxWidth / 2 + xOffset + "px";
+    navBox.style.left = viewportRef.clientWidth / 2 - navBoxWidth / 2 + xOffset + "px";
 }
 function hideAllContent() {
     document.getElementById("welcome-div").style.display = "none";
