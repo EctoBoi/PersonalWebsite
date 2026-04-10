@@ -1,17 +1,17 @@
-const glassboxCanvas = document.getElementById("glassbox-canvas") as HTMLCanvasElement;
-const navCanvases = (document.getElementById("nav-box-div") as HTMLDivElement).children as HTMLCollectionOf<HTMLCanvasElement>;
-const navBox = document.getElementById("nav-box-div") as HTMLDivElement;
+let glassboxCanvas: HTMLCanvasElement;
+let navCanvases: HTMLCollectionOf<HTMLCanvasElement>;
+let navBox: HTMLDivElement;
 
 // Set actual pixel dimensions
 let dpr = window.devicePixelRatio || 1;
-let ctx = glassboxCanvas.getContext("2d") as CanvasRenderingContext2D;
+let ctx: CanvasRenderingContext2D;
 let cWidth = window.innerWidth;
 let cHeight = window.innerHeight;
 
 let navButtonWidth: number;
 let navButtonHeight: number;
-
-const lineWidth = 6;
+let navBoxWidth: number;
+let lineWidth = 0;
 const dColor = "#4e5864";
 const lColor = "#f6f6f7";
 const lColorHover = "#e7e9ea";
@@ -25,67 +25,125 @@ let lastPosX = 0;
 let lastPosY = 0;
 
 let homeIcon = new Image();
-homeIcon.src = "/imgs/HomeIcon.png";
-homeIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
 let contactIcon = new Image();
-contactIcon.src = "/imgs/ContactIcon.png";
-contactIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
 let aboutIcon = new Image();
-aboutIcon.src = "/imgs/AboutIcon.png";
-aboutIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
 let portfolioIcon = new Image();
-portfolioIcon.src = "/imgs/PortfolioIcon.png";
-portfolioIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
 
-const mobileMaxWidth = 500;
 function isTouchDevice(): boolean {
     // Check if device doesn't support hover
     return !window.matchMedia("(hover:hover)").matches || !window.matchMedia("(pointer:fine)").matches;
 }
-let mobileMode = window.innerWidth <= mobileMaxWidth || isTouchDevice();
+let mobileMode = isTouchDevice();
 
-setGlassboxSize();
-setNavSize();
-repositionFromMouse(null);
+window.addEventListener("DOMContentLoaded", () => {
+    glassboxCanvas = document.getElementById("glassbox-canvas") as HTMLCanvasElement;
+    navCanvases = (document.getElementById("nav-box-div") as HTMLDivElement).children as HTMLCollectionOf<HTMLCanvasElement>;
+    navBox = document.getElementById("nav-box-div") as HTMLDivElement;
+    ctx = glassboxCanvas.getContext("2d") as CanvasRenderingContext2D;
 
-window.addEventListener(
-    "resize",
-    function () {
-        mobileMode = window.innerWidth <= mobileMaxWidth || isTouchDevice();
+    homeIcon.src = "/imgs/HomeIcon.png";
+    homeIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
+    contactIcon.src = "/imgs/ContactIcon.png";
+    contactIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
+    aboutIcon.src = "/imgs/AboutIcon.png";
+    aboutIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
+    portfolioIcon.src = "/imgs/PortfolioIcon.png";
+    portfolioIcon.onload = () => drawNav(window.innerWidth / 2, window.innerHeight / 2);
 
-        setGlassboxSize();
-        setNavSize();
-        repositionFromMouse(null);
+    setGlassboxSize();
+    setNavSize();
+    repositionFromMouse(null);
 
-        currentPage = 0;
-        renderSlides();
-    },
-    true,
-);
+    window.addEventListener(
+        "resize",
+        function () {
+            mobileMode = isTouchDevice();
 
-const resizeObserver = new ResizeObserver(() => {
-    dpr = window.devicePixelRatio || 1;
+            setGlassboxSize();
+            setNavSize();
+            repositionFromMouse(null);
+
+            currentPage = 0;
+            renderSlides();
+        },
+        true,
+    );
+
+    const resizeObserver = new ResizeObserver(() => {
+        dpr = window.devicePixelRatio || 1;
+    });
+
+    resizeObserver.observe(glassboxCanvas);
+
+    document.body.addEventListener("mousemove", (e) => {
+        repositionFromMouse(e);
+    });
+
+    document.body.addEventListener(
+        "touchmove",
+        (e) => {
+            let posX = e.touches[0].clientX;
+            let posY = e.touches[0].clientY;
+            lastPosX = posX;
+            lastPosY = posY;
+            drawGlassbox(posX, posY, glassboxCanvas);
+            positionContent(posX, posY);
+            positionNav(posX);
+        },
+        false,
+    );
+
+    navCanvases[0].addEventListener("click", function () {
+        hideAllContent();
+        activePage = 0;
+        let welcomeDiv = document.getElementById("welcome-div") as HTMLDivElement;
+        welcomeDiv.style.display = "block";
+        repositionFromMouse({ clientX: lastPosX, clientY: lastPosY } as MouseEvent);
+        welcomeDiv.dispatchEvent(new Event("mouseover"));
+    });
+    navCanvases[1].addEventListener("click", function () {
+        hideAllContent();
+        activePage = 1;
+        (document.getElementById("about-div") as HTMLDivElement).style.display = "flex";
+        repositionFromMouse({ clientX: lastPosX, clientY: lastPosY } as MouseEvent);
+    });
+    navCanvases[2].addEventListener("click", function () {
+        hideAllContent();
+        activePage = 2;
+        (document.getElementById("portfolio-div") as HTMLDivElement).style.display = "block";
+        repositionFromMouse({ clientX: lastPosX, clientY: lastPosY } as MouseEvent);
+    });
+    navCanvases[3].addEventListener("click", function () {
+        hideAllContent();
+        activePage = 3;
+        (document.getElementById("contact-div") as HTMLDivElement).style.display = "flex";
+        repositionFromMouse({ clientX: lastPosX, clientY: lastPosY } as MouseEvent);
+    });
+
+    (document.getElementById("welcome-div") as HTMLDivElement).addEventListener("mouseover", function () {
+        let glassboxContent = document.getElementById("glassbox-content-div") as HTMLDivElement;
+        let randX = Math.floor(Math.random() * (glassboxContent.clientWidth * 0.18));
+        let randY = Math.floor(Math.random() * (glassboxContent.clientHeight * 0.14));
+
+        this.style.left = (Math.random() < 0.5 ? randX : -randX) + "px";
+        this.style.top = (Math.random() < 0.5 ? randY : -randY) + "px";
+
+        this.style.transition = "transform 0.2s ease";
+        this.style.transform = "scale(1.2)";
+        setTimeout(() => {
+            this.style.transform = "scale(1)";
+        }, 200);
+    });
+
+    (document.getElementById("welcome-div") as HTMLDivElement).addEventListener("mousemove", function (e) {
+        const rect = this.getBoundingClientRect();
+        const isStillOver = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+
+        if (isStillOver) {
+            this.dispatchEvent(new Event("mouseover"));
+        }
+    });
 });
-
-resizeObserver.observe(glassboxCanvas);
-
-document.body.addEventListener("mousemove", (e) => {
-    repositionFromMouse(e);
-});
-
-document.body.addEventListener(
-    "touchmove",
-    (e) => {
-        let posX = e.touches[0].clientX;
-        let posY = e.touches[0].clientY;
-        lastPosX = posX;
-        lastPosY = posY;
-        drawGlassbox(posX, posY, glassboxCanvas);
-        positionContent(posX, posY);
-        positionNav(posX);
-    },
-    false,
-);
 
 function repositionFromMouse(e: MouseEvent | null) {
     let posX: number;
@@ -122,44 +180,13 @@ function positionContent(posX: number, posY: number) {
     glassboxContent.style.top = ((1 - contentSize) * cHeight) / 2 + yOffset + "px";
 }
 
-(document.getElementById("welcome-div") as HTMLDivElement).addEventListener("mouseover", function () {
-    let glassboxContent = document.getElementById("glassbox-content-div") as HTMLDivElement;
-    let randX = Math.floor(Math.random() * (+glassboxContent.clientWidth / 3 - 100));
-    let randY = Math.floor(Math.random() * (+glassboxContent.clientHeight / 3 - 60));
-
-    if (Math.random() < 0.5) {
-        this.style.left = randX + "px";
-    } else {
-        this.style.left = -randX + "px";
-    }
-    if (Math.random() < 0.5) {
-        this.style.top = randY + "px";
-    } else {
-        this.style.top = -randY + "px";
-    }
-
-    this.style.transition = "transform 0.2s ease";
-    this.style.transform = "scale(1.2)";
-    setTimeout(() => {
-        this.style.transform = "scale(1)";
-    }, 200);
-});
-
-(document.getElementById("welcome-div") as HTMLDivElement).addEventListener("mousemove", function (e) {
-    const rect = this.getBoundingClientRect();
-    const isStillOver = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
-
-    if (isStillOver) {
-        this.dispatchEvent(new Event("mouseover"));
-    }
-});
-
 //╔══════════════════════════════════════╗
 //║            GLASSBOX DRAWING          ║
 //╚══════════════════════════════════════╝
 function setGlassboxSize() {
     cWidth = window.innerWidth;
     cHeight = window.innerHeight;
+    navBoxWidth = window.innerWidth * 0.9;
 
     glassboxCanvas.width = cWidth * dpr;
     glassboxCanvas.height = cHeight * dpr;
@@ -167,7 +194,7 @@ function setGlassboxSize() {
     glassboxCanvas.style.width = cWidth + "px";
     glassboxCanvas.style.height = cHeight + "px";
 
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
 function drawGlassbox(posX: number, posY: number, canvas: HTMLCanvasElement) {
@@ -261,8 +288,10 @@ function drawGlassbox(posX: number, posY: number, canvas: HTMLCanvasElement) {
 //║          NAVIGATION CONTROLS         ║
 //╚══════════════════════════════════════╝
 function setNavSize() {
-    navButtonWidth = Math.floor(navBox.clientWidth / 4) - 1;
-    navButtonHeight = 35 + Math.round(window.innerHeight * 0.02);
+    navBoxWidth = window.innerWidth * 0.9;
+    navButtonWidth = Math.floor(navBoxWidth / 4) - 1;
+    navButtonHeight = Math.round(Math.max(48, window.innerHeight * 0.06));
+    lineWidth = Math.max(3, Math.round(navButtonHeight * 0.08));
 
     for (let i = 0; i < navCanvases.length; i++) {
         let canvas = navCanvases.item(i) as HTMLCanvasElement;
@@ -274,7 +303,7 @@ function setNavSize() {
         canvas.style.height = navButtonHeight + "px";
 
         const ctx = canvas.getContext("2d")!;
-        ctx.scale(dpr, dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     drawNav(window.innerWidth / 2, window.innerHeight / 2);
@@ -284,36 +313,8 @@ function positionNav(posX: number) {
     let warpLimiter = 15;
     let xOffset = mobileMode ? 0 : (posX - cWidth / 2) / warpLimiter;
 
-    navBox.style.left = window.innerWidth / 2 - navBox.clientWidth / 2 + xOffset + "px";
+    navBox.style.left = window.innerWidth / 2 - navBoxWidth / 2 + xOffset + "px";
 }
-
-//Nav Clicks
-navCanvases[0].addEventListener("click", function () {
-    hideAllContent();
-    activePage = 0;
-    let welcomeDiv = document.getElementById("welcome-div") as HTMLDivElement;
-    welcomeDiv.style.display = "block";
-    repositionFromMouse({ clientX: lastPosX, clientY: lastPosY } as MouseEvent);
-    welcomeDiv.dispatchEvent(new Event("mouseover"));
-});
-navCanvases[1].addEventListener("click", function () {
-    hideAllContent();
-    activePage = 1;
-    (document.getElementById("about-div") as HTMLDivElement).style.display = "flex";
-    repositionFromMouse({ clientX: lastPosX, clientY: lastPosY } as MouseEvent);
-});
-navCanvases[2].addEventListener("click", function () {
-    hideAllContent();
-    activePage = 2;
-    (document.getElementById("portfolio-div") as HTMLDivElement).style.display = "block";
-    repositionFromMouse({ clientX: lastPosX, clientY: lastPosY } as MouseEvent);
-});
-navCanvases[3].addEventListener("click", function () {
-    hideAllContent();
-    activePage = 3;
-    (document.getElementById("contact-div") as HTMLDivElement).style.display = "flex";
-    repositionFromMouse({ clientX: lastPosX, clientY: lastPosY } as MouseEvent);
-});
 
 function hideAllContent() {
     (document.getElementById("welcome-div") as HTMLDivElement).style.display = "none";
@@ -353,13 +354,15 @@ function drawNav(posX: number, posY: number) {
     drawNav3(ctx3, isHovered);
 }
 
+let hideNavText = false;
+
 function drawNav0(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     ctx.clearRect(0, 0, navButtonWidth, navButtonHeight);
     let lc = lineWidth / 2; //lineCenter
 
     ctx.beginPath();
     ctx.moveTo(lc, -lc);
-    let slopeOffset = (navButtonHeight + lc) * (navButtonWidth / 200);
+    let slopeOffset = navButtonWidth * 0.3;
     ctx.lineTo(slopeOffset, navButtonHeight - lc);
     ctx.lineTo(navButtonWidth, navButtonHeight - lc);
     ctx.lineTo(navButtonWidth, 0);
@@ -371,25 +374,27 @@ function drawNav0(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     ctx.fill();
     ctx.stroke();
 
-    let fontHeight = 30 * (navButtonHeight / 50) - 8;
+    let fontHeight = Math.max(12, Math.round(navButtonHeight * 0.4));
     ctx.font = fontHeight + "px " + fontName;
     let text = "Home";
-    let iconSize = navButtonHeight * 0.7;
+    let iconSize = navButtonHeight * 0.6;
     let textWidth = ctx.measureText(text).width;
-    let iconX = (navButtonWidth - (iconSize + textWidth) + slopeOffset / 2) / 2;
-    let iconY = (navButtonHeight - iconSize) / 2 - 3;
+    let gap = navButtonWidth * 0.04;
 
-    if (window.innerWidth <= 830) {
+    let iconX = navButtonWidth / 2 - (iconSize + textWidth + gap) / 2 + slopeOffset / 3;
+    let iconY = navButtonHeight / 2 - iconSize / 2 - lc;
+
+    if (hideNavText) {
         if (homeIcon.complete) {
-            ctx.drawImage(homeIcon, (navButtonWidth - iconSize) / 2 + 10, iconY, iconSize, iconSize);
+            ctx.drawImage(homeIcon, (navButtonWidth - iconSize) / 2 + slopeOffset / 3, iconY, iconSize, iconSize);
         }
     } else {
         if (homeIcon.complete) {
             ctx.drawImage(homeIcon, iconX, iconY, iconSize, iconSize);
         }
         ctx.fillStyle = fontColor;
-        let textPosX = iconX + iconSize + 8;
-        ctx.fillText(text, textPosX, fontHeight + 8);
+        let textPosX = iconX + iconSize + gap;
+        ctx.fillText(text, textPosX, navButtonHeight / 2 + fontHeight / 2 - lineWidth);
     }
 }
 
@@ -410,15 +415,17 @@ function drawNav1(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     ctx.fill();
     ctx.stroke();
 
-    let fontHeight = 30 * (navButtonHeight / 50) - 8;
+    let fontHeight = Math.max(12, Math.round(navButtonHeight * 0.4));
     ctx.font = fontHeight + "px " + fontName;
     let text = "About";
-    let iconSize = navButtonHeight * 0.7;
+    let iconSize = navButtonHeight * 0.6;
     let textWidth = ctx.measureText(text).width;
-    let iconX = (navButtonWidth - iconSize - 8 - textWidth) / 2;
-    let iconY = (navButtonHeight - iconSize) / 2 - 3;
+    let gap = navButtonWidth * 0.04;
 
-    if (window.innerWidth <= 830) {
+    let iconX = navButtonWidth / 2 - (iconSize + textWidth + gap) / 2;
+    let iconY = navButtonHeight / 2 - iconSize / 2 - lc;
+
+    if (hideNavText) {
         if (aboutIcon.complete) {
             ctx.drawImage(aboutIcon, (navButtonWidth - iconSize) / 2, iconY, iconSize, iconSize);
         }
@@ -427,8 +434,8 @@ function drawNav1(ctx: CanvasRenderingContext2D, isHovered: boolean) {
             ctx.drawImage(aboutIcon, iconX, iconY, iconSize, iconSize);
         }
         ctx.fillStyle = fontColor;
-        let textPosX = iconX + iconSize + 8;
-        ctx.fillText(text, textPosX, fontHeight + 8);
+        let textPosX = iconX + iconSize + gap;
+        ctx.fillText(text, textPosX, navButtonHeight / 2 + fontHeight / 2 - lineWidth);
     }
 }
 
@@ -449,15 +456,17 @@ function drawNav2(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     ctx.fill();
     ctx.stroke();
 
-    let fontHeight = 30 * (navButtonHeight / 50) - 8;
+    let fontHeight = Math.max(12, Math.round(navButtonHeight * 0.4));
     ctx.font = fontHeight + "px " + fontName;
     let text = "Portfolio";
-    let iconSize = navButtonHeight * 0.7;
+    let iconSize = navButtonHeight * 0.6;
     let textWidth = ctx.measureText(text).width;
-    let iconX = (navButtonWidth - iconSize - 8 - textWidth) / 2;
-    let iconY = (navButtonHeight - iconSize) / 2 - 3;
+    let gap = navButtonWidth * 0.04;
 
-    if (window.innerWidth <= 830) {
+    let iconX = navButtonWidth / 2 - (iconSize + textWidth + gap) / 2;
+    let iconY = navButtonHeight / 2 - iconSize / 2 - lc;
+
+    if (hideNavText) {
         if (portfolioIcon.complete) {
             ctx.drawImage(portfolioIcon, (navButtonWidth - iconSize) / 2, iconY, iconSize, iconSize);
         }
@@ -466,8 +475,8 @@ function drawNav2(ctx: CanvasRenderingContext2D, isHovered: boolean) {
             ctx.drawImage(portfolioIcon, iconX, iconY, iconSize, iconSize);
         }
         ctx.fillStyle = fontColor;
-        let textPosX = iconX + iconSize + 8;
-        ctx.fillText(text, textPosX, fontHeight + 8);
+        let textPosX = iconX + iconSize + gap;
+        ctx.fillText(text, textPosX, navButtonHeight / 2 + fontHeight / 2 - lineWidth);
     }
 }
 
@@ -478,7 +487,7 @@ function drawNav3(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(0, navButtonHeight - lc);
-    let slopeOffset = (navButtonHeight + lc) * (navButtonWidth / 200);
+    let slopeOffset = navButtonWidth * 0.3;
     ctx.lineTo(navButtonWidth - slopeOffset, navButtonHeight - lc);
     ctx.lineTo(navButtonWidth - lc, -lc);
 
@@ -489,25 +498,29 @@ function drawNav3(ctx: CanvasRenderingContext2D, isHovered: boolean) {
     ctx.fill();
     ctx.stroke();
 
-    let fontHeight = 30 * (navButtonHeight / 50) - 8;
+    let fontHeight = Math.max(12, Math.round(navButtonHeight * 0.4));
     ctx.font = fontHeight + "px " + fontName;
     let text = "Contact";
-    let iconSize = navButtonHeight * 0.7;
+    let iconSize = navButtonHeight * 0.6;
     let textWidth = ctx.measureText(text).width;
-    let iconX = (navButtonWidth - (iconSize + textWidth)) / 2 - slopeOffset / 2;
-    let iconY = (navButtonHeight - iconSize) / 2 - 3;
+    let gap = navButtonWidth * 0.04;
 
-    if (window.innerWidth <= 830) {
+    let iconX = navButtonWidth / 2 - (iconSize + textWidth + gap) / 2 - slopeOffset / 3;
+    let iconY = navButtonHeight / 2 - iconSize / 2 - lc;
+
+    if (iconSize + textWidth + gap + slopeOffset > navButtonWidth) {
+        hideNavText = true;
         if (contactIcon.complete) {
-            ctx.drawImage(contactIcon, (navButtonWidth - iconSize) / 2 - 10, iconY, iconSize, iconSize);
+            ctx.drawImage(contactIcon, (navButtonWidth - iconSize) / 2 - slopeOffset / 3, iconY, iconSize, iconSize);
         }
     } else {
+        hideNavText = false;
         if (contactIcon.complete) {
             ctx.drawImage(contactIcon, iconX, iconY, iconSize, iconSize);
         }
         ctx.fillStyle = fontColor;
-        let textPosX = iconX + iconSize + 8;
-        ctx.fillText(text, textPosX, fontHeight + 8);
+        let textPosX = iconX + iconSize + gap;
+        ctx.fillText(text, textPosX, navButtonHeight / 2 + fontHeight / 2 - lineWidth);
     }
 }
 

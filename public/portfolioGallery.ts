@@ -89,7 +89,7 @@ const dotsEl = document.getElementById("dots") as HTMLDivElement;
 const detailViewEl = document.getElementById("detail-view") as HTMLDivElement;
 
 function renderSlides() {
-    let itemsPerPage = window.innerWidth <= mobileMaxWidth ? 2 : 4;
+    let itemsPerPage = window.innerWidth < window.innerHeight ? 2 : 4;
 
     slideshowEl.innerHTML = "";
     const start = currentPage * itemsPerPage;
