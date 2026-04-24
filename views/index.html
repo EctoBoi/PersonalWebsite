@@ -11,6 +11,7 @@
         <link rel="icon" type="image/png" href="/imgs/birbcircle.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
     </head>
 
@@ -34,14 +35,93 @@
                     </p>
                 </div>
                 <div id="skills-section">
-                    <ul>
-                        <li><strong>Languages:</strong> JavaScript (ES6+), TypeScript, Python, PHP, HTML5, CSS3/SASS, SQL, C#, Java, XML</li>
-                        <li><strong>Frameworks & Libraries:</strong> React, Node.js, Express, Bootstrap, TensorFlow.js, Phaser.js, D3.js, jQuery, Mongoose</li>
-                        <li><strong>Tooling:</strong> Git/GitHub, Figma, REST/JSON, SASS, Linux, Unity, AutoHotkey, Adobe Photoshop, Adobe Illustrator</li>
-                        <li><strong>Platforms:</strong> Google Cloud Platform, MongoDB, MySQL, Microsoft 365</li>
-                        <li><strong>Familiar with:</strong> Azure, Docker, CI/CD pipelines (YAML)</li>
-                        <li><strong>Certifications:</strong> Full Stack Web Development - freeCodeCamp (1,000+ hours; MERN stack)</li>
-                    </ul>
+                    <div class="skills-grid">
+                        <article class="skill-card">
+                            <h3>Languages</h3>
+                            <ul class="skill-chip-list">
+                                <li class="skill-chip"><i class="fa-brands fa-js" aria-hidden="true"></i><span>JavaScript (ES6+)</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-code" aria-hidden="true"></i><span>TypeScript</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-python" aria-hidden="true"></i><span>Python</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-php" aria-hidden="true"></i><span>PHP</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-html5" aria-hidden="true"></i><span>HTML5</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-css3-alt" aria-hidden="true"></i><span>CSS3 / SASS</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-database" aria-hidden="true"></i><span>SQL</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-hashtag" aria-hidden="true"></i><span>C#</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-java" aria-hidden="true"></i><span>Java</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-code-branch" aria-hidden="true"></i><span>XML</span></li>
+                            </ul>
+                        </article>
+
+                        <article class="skill-card">
+                            <h3>Frameworks &amp; Libraries</h3>
+                            <ul class="skill-chip-list">
+                                <li class="skill-chip"><i class="fa-brands fa-react" aria-hidden="true"></i><span>React</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-forward" aria-hidden="true"></i><span>Next.js</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-node-js" aria-hidden="true"></i><span>Node.js</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-server" aria-hidden="true"></i><span>Express</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-bootstrap" aria-hidden="true"></i><span>Bootstrap</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-wind" aria-hidden="true"></i><span>Tailwind</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-plug" aria-hidden="true"></i><span>WebSocket</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-brain" aria-hidden="true"></i><span>TensorFlow.js</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><span>Phaser.js</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>D3.js</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i><span>jQuery</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-leaf" aria-hidden="true"></i><span>Mongoose</span></li>
+                            </ul>
+                        </article>
+
+                        <article class="skill-card">
+                            <h3>Tooling</h3>
+                            <ul class="skill-chip-list">
+                                <li class="skill-chip"><i class="fa-brands fa-git-alt" aria-hidden="true"></i><span>Git / GitHub</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>Prisma</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-figma" aria-hidden="true"></i><span>Figma</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-arrows-left-right-to-line" aria-hidden="true"></i><span>REST / JSON</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-sass" aria-hidden="true"></i><span>SASS</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-linux" aria-hidden="true"></i><span>Linux</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-unity" aria-hidden="true"></i><span>Unity</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-keyboard" aria-hidden="true"></i><span>AutoHotkey</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-image" aria-hidden="true"></i><span>Adobe Photoshop</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-pen-ruler" aria-hidden="true"></i><span>Adobe Illustrator</span></li>
+                            </ul>
+                        </article>
+
+                        <article class="skill-card">
+                            <h3>Platforms</h3>
+                            <ul class="skill-chip-list">
+                                <li class="skill-chip"><i class="fa-brands fa-google" aria-hidden="true"></i><span>Google Cloud Platform</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span>Supabase</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-leaf" aria-hidden="true"></i><span>MongoDB</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-database" aria-hidden="true"></i><span>MySQL</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-server" aria-hidden="true"></i><span>PostgreSQL</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-microsoft" aria-hidden="true"></i><span>Microsoft 365</span></li>
+                            </ul>
+                        </article>
+
+                        <article class="skill-card">
+                            <h3>Familiar With</h3>
+                            <ul class="skill-chip-list">
+                                <li class="skill-chip"><i class="fa-brands fa-microsoft" aria-hidden="true"></i><span>Azure</span></li>
+                                <li class="skill-chip"><i class="fa-brands fa-docker" aria-hidden="true"></i><span>Docker</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-gears" aria-hidden="true"></i><span>CI / CD Pipelines</span></li>
+                                <li class="skill-chip"><i class="fa-solid fa-file-code" aria-hidden="true"></i><span>YAML</span></li>
+                            </ul>
+                        </article>
+
+                        <article class="skill-card">
+                            <h3>Certification</h3>
+                            <ul class="skill-chip-list skill-chip-list--single">
+                                <li class="skill-chip skill-chip--accent">
+                                    <i class="fa-solid fa-award" aria-hidden="true"></i>
+                                    <span>Full Stack Web Development, freeCodeCamp</span>
+                                </li>
+                                <li class="skill-chip">
+                                    <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                    <span>1,000+ hours, MERN stack</span>
+                                </li>
+                            </ul>
+                        </article>
+                    </div>
                 </div>
             </div>
 

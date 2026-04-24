@@ -37,28 +37,120 @@ body {
 
 #about-div {
     display: none;
-    max-width: min(90vw, 900px);
-    max-height: 90vh;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    width: min(100%, 1220px);
+    max-width: 100%;
+    max-height: 100%;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
     padding: var(--space-md);
     position: relative;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: center;
-    margin: 10vw;
-    font-size: clamp(.9rem, 2.5vw, 1.25rem);
+    margin: 0;
+    font-size: clamp(.9rem, 2.5vw, 1.34rem);
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
 }
 #summary-section p{
     margin: 0;
     margin-bottom: var(--space-sm);
 }
-#skills-section ul {
+
+#summary-section {
+    width: 100%;
+    height: 100%;
+    text-align: justify;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#skills-section {
+    width: 100%;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.85rem, 1.7vw, 1.2rem);
+}
+
+.skill-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: clamp(0.95rem, 1.6vw, 1.1rem);
+    border-radius: calc(var(--card-radius) * 0.9);
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(24, 28, 33, 0.12);
+    box-shadow: 0 0.2rem 0.9rem rgba(0, 0, 0, 0.12);
+}
+
+.skill-card h3 {
+    margin: 0;
+    font-size: clamp(1rem, 1.5vw, 1.1rem);
+}
+
+.skill-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
     list-style: none;
     margin: 0;
-    padding-left: 1rem;
+    padding: 0;
+}
+
+.skill-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(24, 28, 33, 0.08);
+    border: 1px solid rgba(24, 28, 33, 0.08);
+    font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+    line-height: 1.2;
+}
+
+.skill-chip i {
+    color: var(--dColorHover);
+    font-size: 0.95em;
+}
+
+.skill-chip--accent {
+    background: rgba(78, 88, 100, 0.15);
+    border-color: rgba(78, 88, 100, 0.2);
+}
+
+.skill-chip-list--single {
+    align-content: flex-start;
+}
+
+@media (min-width: 70rem) and (min-aspect-ratio: 4/3) {
+    #about-div {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: clamp(1rem, 2vw, 1.75rem);
+    }
+
+    #summary-section {
+        flex: 0 0 min(18rem, 32%);
+    }
+
+    #skills-section {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    #summary-section p {
+        margin-bottom: 0;
+    }
 }
 
 #portfolio-div {
@@ -74,8 +166,8 @@ body {
     font-size: 1.75rem;
     position: relative;
     text-align: center;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
     padding: var(--space-md);
@@ -87,6 +179,8 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    box-sizing: border-box;
+    padding: clamp(0.85rem, 1.8vw, 1.5rem);
 }
 
 #glassbox-canvas {
@@ -187,8 +281,8 @@ body {
 }
 .detail-info {
     flex: 1;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
     padding: var(--space-md);
@@ -232,8 +326,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: clamp(1rem, 2vw, 2rem);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
     padding: var(--space-md);
@@ -321,6 +415,10 @@ body {
 
 /*===============Responsive Design===============*/
 @media (orientation: portrait), (max-aspect-ratio: 1/1) {
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+
     .slideshow-container {
         grid-template-columns: 1fr;
         gap: clamp(0.85rem, 4vw, 1.6rem);

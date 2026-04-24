@@ -460,6 +460,20 @@ function drawNav3(ctx, isHovered) {
 //╚══════════════════════════════════════╝
 const slides = [
     {
+        img: "/imgs/going-once.jpg",
+        title: "Going Once",
+        url: "https://goingonce.vercel.app",
+        sourceUrl: "https://github.com/EctoBoi/going-once",
+        description: "A multiplayer auction simulator where players buy, sell, and flip items through short-lived bid wars while AI-driven NPCs keep the economy alive. <br><strong>Made using:</strong> Next.js, Prisma, Supabase, and TypeScript",
+    },
+    {
+        img: "/imgs/lithomancy.jpg",
+        title: "Lithomancy",
+        url: "https://lithomancy.up.railway.app",
+        sourceUrl: "https://github.com/EctoBoi/lithomancy",
+        description: "Browser-based online 1v1 dueling game. Cast spells, concoct potions, and harness charms, a wizardly reimagining of rock paper scissors. <br><strong>Made using:</strong> WebSocket, Tailwind, and TypeScript",
+    },
+    {
         img: "/imgs/Snakish.jpg",
         title: "Snakish",
         url: "https://justinbanton.ca/Snakish",
