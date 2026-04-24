@@ -106,8 +106,8 @@ window.addEventListener("DOMContentLoaded", () => {
         let randY = Math.floor(Math.random() * (glassboxContent.clientHeight * 0.35));
         const maxOffsetX = Math.max(0, (glassboxContent.clientWidth - this.clientWidth) / 2);
         const maxOffsetY = Math.max(0, (glassboxContent.clientHeight - this.clientHeight) / 2);
-        let targetLeft = (Math.random() < 0.5 ? randX : -randX);
-        let targetTop = (Math.random() < 0.5 ? randY : -randY);
+        let targetLeft = Math.random() < 0.5 ? randX : -randX;
+        let targetTop = Math.random() < 0.5 ? randY : -randY;
         this.style.left = Math.max(-maxOffsetX, Math.min(maxOffsetX, targetLeft)) + "px";
         this.style.top = Math.max(-maxOffsetY, Math.min(maxOffsetY, targetTop)) + "px";
         this.style.transition = "transform 0.2s ease";
@@ -150,7 +150,7 @@ function positionContent(posX, posY) {
     let contentSize = 0.9;
     let warpLimiter = 15;
     let xOffset = mobileMode ? 0 : (posX - cWidth / 2) / warpLimiter;
-    let yOffset = mobileMode ? 0 : (posY - cHeight / 2) / warpLimiter;
+    let yOffset = mobileMode ? cHeight * 0.03 : (posY - cHeight / 2) / warpLimiter;
     glassboxContent.style.width = cWidth * contentSize + "px";
     glassboxContent.style.height = cHeight * contentSize + "px";
     glassboxContent.style.left = ((1 - contentSize) * cWidth) / 2 + xOffset + "px";
@@ -474,20 +474,6 @@ const slides = [
         description: "Browser-based online 1v1 dueling game. Cast spells, concoct potions, and harness charms, a wizardly reimagining of rock paper scissors. <br><strong>Made using:</strong> WebSocket, Tailwind, and TypeScript",
     },
     {
-        img: "/imgs/Snakish.jpg",
-        title: "Snakish",
-        url: "https://justinbanton.ca/Snakish",
-        sourceUrl: "https://github.com/EctoBoi/Snakish",
-        description: "A Tron-snake-ish game where you, the prince, must steal as many crowns from the dragons. Careful, the more crowns you grab the more their rage burns. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
-    },
-    {
-        img: "/imgs/EmoticonRumble.jpg",
-        title: "EmoticonRumble",
-        url: "https://justinbanton.ca/EmoticonRumble",
-        sourceUrl: "https://github.com/EctoBoi/EmoticonRumble",
-        description: "Watch emoticon fight with dice roll mechanics, and even become one yourself! <br><strong>Made using:</strong> jQuery, JavaScript, HTML Canvas, and CSS",
-    },
-    {
         img: "/imgs/SignMaker.jpg",
         title: "SignMaker",
         url: "https://justinbanton.ca/SignMaker",
@@ -500,6 +486,20 @@ const slides = [
         url: "",
         sourceUrl: "https://github.com/EctoBoi/TaskBoard",
         description: "A shared task board for Hunt: Showdown, allowing multiple players to send their current challenges to a server and have the info simplified and displayed for the whole party. <br><strong>Made using:</strong> C# and TSP Server Library",
+    },
+    {
+        img: "/imgs/Snakish.jpg",
+        title: "Snakish",
+        url: "https://justinbanton.ca/Snakish",
+        sourceUrl: "https://github.com/EctoBoi/Snakish",
+        description: "A Tron-snake-ish game where you, the prince, must steal as many crowns from the dragons. Careful, the more crowns you grab the more their rage burns. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
+    },
+    {
+        img: "/imgs/EmoticonRumble.jpg",
+        title: "EmoticonRumble",
+        url: "https://justinbanton.ca/EmoticonRumble",
+        sourceUrl: "https://github.com/EctoBoi/EmoticonRumble",
+        description: "Watch emoticon fight with dice roll mechanics, and even become one yourself! <br><strong>Made using:</strong> jQuery, JavaScript, HTML Canvas, and CSS",
     },
     {
         img: "/imgs/OatSoup.jpg",

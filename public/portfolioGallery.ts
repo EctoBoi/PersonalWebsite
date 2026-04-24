@@ -28,22 +28,6 @@ const slides: Slide[] = [
             "Browser-based online 1v1 dueling game. Cast spells, concoct potions, and harness charms, a wizardly reimagining of rock paper scissors. <br><strong>Made using:</strong> WebSocket, Tailwind, and TypeScript",
     },
     {
-        img: "/imgs/Snakish.jpg",
-        title: "Snakish",
-        url: "https://justinbanton.ca/Snakish",
-        sourceUrl: "https://github.com/EctoBoi/Snakish",
-        description:
-            "A Tron-snake-ish game where you, the prince, must steal as many crowns from the dragons. Careful, the more crowns you grab the more their rage burns. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
-    },
-    {
-        img: "/imgs/EmoticonRumble.jpg",
-        title: "EmoticonRumble",
-        url: "https://justinbanton.ca/EmoticonRumble",
-        sourceUrl: "https://github.com/EctoBoi/EmoticonRumble",
-        description:
-            "Watch emoticon fight with dice roll mechanics, and even become one yourself! <br><strong>Made using:</strong> jQuery, JavaScript, HTML Canvas, and CSS",
-    },
-    {
         img: "/imgs/SignMaker.jpg",
         title: "SignMaker",
         url: "https://justinbanton.ca/SignMaker",
@@ -59,6 +43,23 @@ const slides: Slide[] = [
         description:
             "A shared task board for Hunt: Showdown, allowing multiple players to send their current challenges to a server and have the info simplified and displayed for the whole party. <br><strong>Made using:</strong> C# and TSP Server Library",
     },
+    {
+        img: "/imgs/Snakish.jpg",
+        title: "Snakish",
+        url: "https://justinbanton.ca/Snakish",
+        sourceUrl: "https://github.com/EctoBoi/Snakish",
+        description:
+            "A Tron-snake-ish game where you, the prince, must steal as many crowns from the dragons. Careful, the more crowns you grab the more their rage burns. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
+    },
+    {
+        img: "/imgs/EmoticonRumble.jpg",
+        title: "EmoticonRumble",
+        url: "https://justinbanton.ca/EmoticonRumble",
+        sourceUrl: "https://github.com/EctoBoi/EmoticonRumble",
+        description:
+            "Watch emoticon fight with dice roll mechanics, and even become one yourself! <br><strong>Made using:</strong> jQuery, JavaScript, HTML Canvas, and CSS",
+    },
+
     {
         img: "/imgs/OatSoup.jpg",
         title: "OatSoup",

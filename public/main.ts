@@ -133,8 +133,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
         const maxOffsetX = Math.max(0, (glassboxContent.clientWidth - this.clientWidth) / 2);
         const maxOffsetY = Math.max(0, (glassboxContent.clientHeight - this.clientHeight) / 2);
-        let targetLeft = (Math.random() < 0.5 ? randX : -randX);
-        let targetTop = (Math.random() < 0.5 ? randY : -randY);
+        let targetLeft = Math.random() < 0.5 ? randX : -randX;
+        let targetTop = Math.random() < 0.5 ? randY : -randY;
 
         this.style.left = Math.max(-maxOffsetX, Math.min(maxOffsetX, targetLeft)) + "px";
         this.style.top = Math.max(-maxOffsetY, Math.min(maxOffsetY, targetTop)) + "px";
@@ -183,7 +183,7 @@ function positionContent(posX: number, posY: number) {
     let contentSize = 0.9;
     let warpLimiter = 15;
     let xOffset = mobileMode ? 0 : (posX - cWidth / 2) / warpLimiter;
-    let yOffset = mobileMode ? 0 : (posY - cHeight / 2) / warpLimiter;
+    let yOffset = mobileMode ? cHeight * 0.03 : (posY - cHeight / 2) / warpLimiter;
 
     glassboxContent.style.width = cWidth * contentSize + "px";
     glassboxContent.style.height = cHeight * contentSize + "px";
