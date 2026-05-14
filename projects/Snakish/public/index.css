@@ -3,19 +3,34 @@ body {
     align-items: center;
     flex-direction: column;
     font-family: monospace;
-    background-color: #c2cfd3;
+    background-color: #060614;
+    color: #aabbdd;
 }
 
 #buttons {
     display: flex;
     flex-direction: row;
+    margin-top: 8px;
 }
 #buttons button {
     margin-right: 10px;
+    background: #1a1a3a;
+    color: #aabbdd;
+    border: 1px solid #334477;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+#buttons button:hover {
+    background: #223;
 }
 
-#canvas {
-    margin-bottom: 10px;
+#renderer-container {
+    margin-bottom: 0;
+    display: block;
+    width: 1100px;
+    height: 660px;
+}
+#renderer-container canvas {
     display: block;
 }
 

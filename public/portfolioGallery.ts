@@ -84,13 +84,6 @@ const slides: Slide[] = [
         description: "Custom maps for the VR game Davigo, with over eighty thousand unique downloads. <br><strong>Made using:</strong> Blender and Unity",
     },
     {
-        img: "/imgs/MapGen.jpg",
-        title: "MapGen",
-        url: "https://justinbanton.ca/MapGen",
-        sourceUrl: "https://github.com/EctoBoi/MapGen",
-        description: "Based off Snakish, it generates a chain of rooms of various sizes. <br><strong>Made using:</strong> JavaScript, HTML Canvas, and CSS",
-    },
-    {
         img: "/imgs/ThisSiteItself.jpg",
         title: "This Site Itself",
         url: "https://justinbanton.ca/",
