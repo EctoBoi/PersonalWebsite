@@ -511,7 +511,7 @@ const slides = [
     },
     {
         img: "/imgs/EmoticonRumble.jpg",
-        title: "EmoticonRumble",
+        title: "Emoticon Rumble",
         url: "https://justinbanton.ca/EmoticonRumble",
         sourceUrl: "https://github.com/EctoBoi/EmoticonRumble",
         description: "Watch emoticon fight with dice roll mechanics, and even become one yourself! <br><strong>Made using:</strong> jQuery, JavaScript, HTML Canvas, and CSS",

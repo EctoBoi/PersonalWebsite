@@ -53,7 +53,7 @@ const slides: Slide[] = [
     },
     {
         img: "/imgs/EmoticonRumble.jpg",
-        title: "EmoticonRumble",
+        title: "Emoticon Rumble",
         url: "https://justinbanton.ca/EmoticonRumble",
         sourceUrl: "https://github.com/EctoBoi/EmoticonRumble",
         description:
