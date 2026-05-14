@@ -466,6 +466,10 @@ function drawBoard() {
                     const g = tailPool[tailIdx++];
                     g.visible = true;
                     g.position.set(x, 0, y);
+                    // Sporadic per-cell spin: varying speed, direction, and phase based on position
+                    const _spd = 0.0005 + ((x * 3 + y * 5) % 7) * 0.0001;
+                    const _dir = (x * 7 + y * 11) % 2 === 0 ? 1 : -1;
+                    g.rotation.y = now * _spd * _dir + x * 1.7 + y * 2.3;
                 }
             } else if (cell === tokenChar) {
                 const tBob = Math.sin(now * 0.0028) * 0.22 + 0.18;
