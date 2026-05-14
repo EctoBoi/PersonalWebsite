@@ -39,8 +39,8 @@ body {
     display: flex;
     width: min(100%, 1220px);
     max-width: 100%;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
     padding: var(--space-md);
@@ -134,8 +134,8 @@ body {
     flex-direction: column;
     align-items: center;
     max-width: 100%;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
     padding: var(--space-md);
@@ -148,7 +148,7 @@ body {
     position: relative;
     text-align: center;
     backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(7px);
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
     padding: var(--space-md);
@@ -316,8 +316,8 @@ body {
 }
 .detail-info {
     flex: 1;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
     padding: var(--space-md);
@@ -361,8 +361,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: clamp(1rem, 2vw, 2rem);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
     padding: var(--space-md);
