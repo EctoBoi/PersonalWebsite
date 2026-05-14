@@ -40,7 +40,7 @@ function resize() {
 }
 window.addEventListener("DOMContentLoaded", () => {
     glassboxCanvas = document.getElementById("glassbox-canvas");
-    navCanvases = document.getElementById("nav-box-div").children;
+    navCanvases = document.getElementById("nav-box-div").getElementsByTagName("canvas");
     navBox = document.getElementById("nav-box-div");
     ctx = glassboxCanvas.getContext("2d");
     viewportRef = document.getElementById("viewport-ref");
@@ -280,6 +280,10 @@ function setNavSize() {
         const ctx = canvas.getContext("2d");
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
+    const backdrop = document.getElementById("nav-backdrop");
+    backdrop.style.left = navButtonWidth / 2 + "px";
+    backdrop.style.width = navButtonWidth * 3 + "px";
+    backdrop.style.height = navButtonHeight + "px";
     drawNav(viewportRef.clientWidth / 2, viewportRef.clientHeight / 2);
 }
 function positionNav(posX) {

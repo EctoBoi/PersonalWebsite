@@ -183,6 +183,14 @@ body {
     z-index: 1000;
 }
 
+#nav-backdrop {
+    position: absolute;
+    top: 0;
+    background-color: #4e5864;
+    pointer-events: none;
+    z-index: -1;
+}
+
 .hidden {
     display: none !important;
 }

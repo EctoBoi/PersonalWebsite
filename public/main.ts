@@ -49,7 +49,7 @@ function resize() {
 
 window.addEventListener("DOMContentLoaded", () => {
     glassboxCanvas = document.getElementById("glassbox-canvas") as HTMLCanvasElement;
-    navCanvases = (document.getElementById("nav-box-div") as HTMLDivElement).children as HTMLCollectionOf<HTMLCanvasElement>;
+    navCanvases = (document.getElementById("nav-box-div") as HTMLDivElement).getElementsByTagName("canvas") as HTMLCollectionOf<HTMLCanvasElement>;
     navBox = document.getElementById("nav-box-div") as HTMLDivElement;
     ctx = glassboxCanvas.getContext("2d") as CanvasRenderingContext2D;
     viewportRef = document.getElementById("viewport-ref") as HTMLDivElement;
@@ -335,6 +335,11 @@ function setNavSize() {
         const ctx = canvas.getContext("2d")!;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
+
+    const backdrop = document.getElementById("nav-backdrop") as HTMLDivElement;
+    backdrop.style.left = navButtonWidth / 2 + "px";
+    backdrop.style.width = navButtonWidth * 3 + "px";
+    backdrop.style.height = navButtonHeight + "px";
 
     drawNav(viewportRef.clientWidth / 2, viewportRef.clientHeight / 2);
 }
