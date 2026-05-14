@@ -459,6 +459,7 @@ function drawBoard() {
                     const g = headPool[headIdx++];
                     g.visible = true;
                     g.position.set(x, 0, y);
+                    g.rotation.y = Math.atan2(playerPos[1] - x, playerPos[0] - y);
                 }
             } else if (cell === snakeTailChar) {
                 if (tailIdx < tailPool.length) {
