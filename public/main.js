@@ -75,37 +75,52 @@ window.addEventListener("DOMContentLoaded", () => {
         positionNav(posX);
     }, false);
     navCanvases[0].addEventListener("click", function () {
-        hideAllContent();
         activePage = 0;
-        let welcomeDiv = document.getElementById("welcome-div");
-        welcomeDiv.style.display = "block";
-        repositionFromMouse({ clientX: lastPosX, clientY: lastPosY });
-        welcomeDiv.dispatchEvent(new Event("mouseover"));
+        document.getElementById("section-home").scrollIntoView({ behavior: "smooth", block: "start" });
+        drawNav(lastPosX, lastPosY);
     });
     navCanvases[1].addEventListener("click", function () {
-        hideAllContent();
         activePage = 1;
-        document.getElementById("about-div").style.display = "flex";
-        repositionFromMouse({ clientX: lastPosX, clientY: lastPosY });
+        document.getElementById("section-about").scrollIntoView({ behavior: "smooth", block: "start" });
+        drawNav(lastPosX, lastPosY);
     });
     navCanvases[2].addEventListener("click", function () {
-        hideAllContent();
         activePage = 2;
-        document.getElementById("portfolio-div").style.display = "block";
-        repositionFromMouse({ clientX: lastPosX, clientY: lastPosY });
+        document.getElementById("section-portfolio").scrollIntoView({ behavior: "smooth", block: "start" });
+        drawNav(lastPosX, lastPosY);
     });
     navCanvases[3].addEventListener("click", function () {
-        hideAllContent();
         activePage = 3;
-        document.getElementById("contact-div").style.display = "flex";
-        repositionFromMouse({ clientX: lastPosX, clientY: lastPosY });
+        document.getElementById("section-contact").scrollIntoView({ behavior: "smooth", block: "start" });
+        drawNav(lastPosX, lastPosY);
+    });
+    // Update active nav as user scrolls through sections
+    const glassboxContent = document.getElementById("glassbox-content-div");
+    const sectionPageMap = {
+        "section-home": 0,
+        "section-about": 1,
+        "section-portfolio": 2,
+        "section-contact": 3,
+    };
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                activePage = sectionPageMap[entry.target.id];
+                drawNav(lastPosX, lastPosY);
+            }
+        });
+    }, { root: null, threshold: 0.3 });
+    ["section-home", "section-about", "section-portfolio", "section-contact"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el)
+            sectionObserver.observe(el);
     });
     document.getElementById("welcome-div").addEventListener("mouseover", function () {
-        let glassboxContent = document.getElementById("glassbox-content-div");
-        let randX = Math.floor(Math.random() * (glassboxContent.clientWidth * 0.35));
-        let randY = Math.floor(Math.random() * (glassboxContent.clientHeight * 0.35));
-        const maxOffsetX = Math.max(0, (glassboxContent.clientWidth - this.clientWidth) / 2);
-        const maxOffsetY = Math.max(0, (glassboxContent.clientHeight - this.clientHeight) / 2);
+        let section = document.getElementById("section-home");
+        let randX = Math.floor(Math.random() * (section.clientWidth * 0.35));
+        let randY = Math.floor(Math.random() * (section.clientHeight * 0.35));
+        const maxOffsetX = Math.max(0, (section.clientWidth - this.clientWidth) / 2);
+        const maxOffsetY = Math.max(0, (section.clientHeight - this.clientHeight) / 2);
         let targetLeft = Math.random() < 0.5 ? randX : -randX;
         let targetTop = Math.random() < 0.5 ? randY : -randY;
         this.style.left = Math.max(-maxOffsetX, Math.min(maxOffsetX, targetLeft)) + "px";
@@ -150,11 +165,13 @@ function positionContent(posX, posY) {
     let contentSize = 0.9;
     let warpLimiter = 15;
     let xOffset = mobileMode ? 0 : (posX - cWidth / 2) / warpLimiter;
-    let yOffset = mobileMode ? cHeight * 0.03 : (posY - cHeight / 2) / warpLimiter;
+    let yOffset = mobileMode ? 0 : (posY - cHeight / 2) / warpLimiter;
     glassboxContent.style.width = cWidth * contentSize + "px";
-    glassboxContent.style.height = cHeight * contentSize + "px";
-    glassboxContent.style.left = ((1 - contentSize) * cWidth) / 2 + xOffset + "px";
-    glassboxContent.style.top = ((1 - contentSize) * cHeight) / 2 + yOffset + "px";
+    glassboxContent.style.transform = "translateX(" + xOffset + "px) translateY(" + yOffset + "px)";
+    // Reserve space under the nav bar so sections align correctly when scrolled to
+    const navPad = navButtonHeight + "px";
+    glassboxContent.style.paddingTop = navPad;
+    document.documentElement.style.setProperty("--nav-height", navPad);
 }
 //╔══════════════════════════════════════╗
 //║            GLASSBOX DRAWING          ║
@@ -269,12 +286,6 @@ function positionNav(posX) {
     let warpLimiter = 15;
     let xOffset = mobileMode ? 0 : (posX - cWidth / 2) / warpLimiter;
     navBox.style.left = viewportRef.clientWidth / 2 - navBoxWidth / 2 + xOffset + "px";
-}
-function hideAllContent() {
-    document.getElementById("welcome-div").style.display = "none";
-    document.getElementById("about-div").style.display = "none";
-    document.getElementById("portfolio-div").style.display = "none";
-    document.getElementById("contact-div").style.display = "none";
 }
 function drawNav(posX, posY) {
     let ctx0 = navCanvases[0].getContext("2d"), ctx1 = navCanvases[1].getContext("2d"), ctx2 = navCanvases[2].getContext("2d"), ctx3 = navCanvases[3].getContext("2d");
@@ -577,6 +588,7 @@ function renderDots(itemsPerPage) {
     }
 }
 function showDetail(slide) {
+    detailViewEl.style.minHeight = slideshowEl.offsetHeight + dotsEl.offsetHeight + "px";
     slideshowEl.classList.add("hidden");
     dotsEl.classList.add("hidden");
     detailViewEl.innerHTML = `

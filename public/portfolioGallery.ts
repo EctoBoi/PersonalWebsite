@@ -149,6 +149,7 @@ function renderDots(itemsPerPage: number) {
 }
 
 function showDetail(slide: Slide) {
+    detailViewEl.style.minHeight = slideshowEl.offsetHeight + dotsEl.offsetHeight + "px";
     slideshowEl.classList.add("hidden");
     dotsEl.classList.add("hidden");
 
