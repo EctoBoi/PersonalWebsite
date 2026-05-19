@@ -46,7 +46,7 @@ camera.lookAt(ROWS / 2 - 1, -6, COLS / 2);
 scene.add(new THREE.AmbientLight(0x080c1a, 0.9));
 
 // Dramatic central overhead — bright middle, dark borders via falloff
-const centerLight = new THREE.PointLight(0xfff0d8, 5.0, 30, 1.8);
+const centerLight = new THREE.PointLight(0xfff0d8, 8.0, 30, 1.8);
 centerLight.position.set(ROWS / 2, 10, COLS / 2);
 scene.add(centerLight);
 
