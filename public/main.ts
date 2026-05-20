@@ -24,6 +24,27 @@ let activePage = 0;
 
 let lastPosX = 0;
 let lastPosY = 0;
+let lastResizeWidth = 0;
+
+// ── Mobile dust particle system ──────────────────────────────────────────────
+interface DustParticle {
+    baseX: number;
+    baseY: number;
+    x: number;
+    y: number;
+    offsetX: number; // tap-push displacement
+    offsetY: number;
+    radius: number;
+    alpha: number;
+    wobblePhase: number;
+    wobbleSpeed: number;
+    wobbleAmp: number;
+}
+
+let dustParticles: DustParticle[] = [];
+let dustAnimFrame: number | null = null;
+let dustLastScrollY = 0;
+let dustScrollOffset = 0; // accumulated Y lag from scrolling
 
 let homeIcon = new Image();
 let contactIcon = new Image();
@@ -39,9 +60,22 @@ let mobileMode = isTouchDevice();
 function resize() {
     mobileMode = isTouchDevice();
 
+    if (mobileMode && viewportRef && viewportRef.clientWidth === lastResizeWidth) {
+        return;
+    }
+    lastResizeWidth = viewportRef ? viewportRef.clientWidth : 0;
+
     setGlassboxSize();
     setNavSize();
-    repositionFromMouse(null);
+
+    startDustAnimation();
+    if (mobileMode) {
+        positionContent(cWidth / 2, cHeight / 2);
+        positionNav(cWidth / 2);
+    } else {
+        positionContent(lastPosX || cWidth / 2, lastPosY || cHeight / 2);
+        positionNav(lastPosX || cWidth / 2);
+    }
 
     currentPage = 0;
     renderSlides();
@@ -84,6 +118,22 @@ window.addEventListener("DOMContentLoaded", () => {
         repositionFromMouse(e);
     });
 
+    document.body.addEventListener("click", (e) => {
+        if (!mobileMode && dustParticles.length > 0) {
+            applyDustTap(e.clientX, e.clientY);
+        }
+    });
+
+    document.body.addEventListener(
+        "touchstart",
+        (e) => {
+            if (mobileMode && dustParticles.length > 0) {
+                applyDustTap(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        },
+        { passive: true },
+    );
+
     document.body.addEventListener(
         "touchmove",
         (e) => {
@@ -91,7 +141,6 @@ window.addEventListener("DOMContentLoaded", () => {
             let posY = e.touches[0].clientY;
             lastPosX = posX;
             lastPosY = posY;
-            drawGlassbox(posX, posY, glassboxCanvas);
             drawNav(posX, posY);
             positionContent(posX, posY);
             positionNav(posX);
@@ -187,7 +236,6 @@ function repositionFromMouse(e: MouseEvent | null) {
     lastPosX = posX;
     lastPosY = posY;
 
-    drawGlassbox(posX, posY, glassboxCanvas);
     drawNav(posX, posY);
     positionContent(posX, posY);
     positionNav(posX);
@@ -209,6 +257,135 @@ function positionContent(posX: number, posY: number) {
     const navPad = navButtonHeight + "px";
     glassboxContent.style.paddingTop = navPad;
     document.documentElement.style.setProperty("--nav-height", navPad);
+}
+
+//╔══════════════════════════════════════╗
+//║        MOBILE DUST PARTICLES         ║
+//╚══════════════════════════════════════╝
+function initDustParticles() {
+    dustParticles = [];
+    const count = 60;
+    for (let i = 0; i < count; i++) {
+        const x = cWidth * 0.05 + Math.random() * cWidth * 0.9;
+        const y = cHeight * 0.05 + Math.random() * cHeight * 0.9;
+        const depth = 0.1 + Math.random() * 0.8;
+        dustParticles.push({
+            baseX: x,
+            baseY: y,
+            x,
+            y,
+            offsetX: 0,
+            offsetY: 0,
+            radius: depth * 3 + 1,
+            alpha: depth,
+            wobblePhase: Math.random() * Math.PI * 2,
+            wobbleSpeed: 0.0012 + Math.random() * 0.0018,
+            wobbleAmp: 1 + Math.random() * 100,
+        });
+    }
+    dustLastScrollY = window.scrollY;
+    dustScrollOffset = 0;
+}
+
+function startDustAnimation() {
+    stopDustAnimation();
+    initDustParticles();
+    dustAnimFrame = requestAnimationFrame(dustLoop);
+}
+
+function stopDustAnimation() {
+    if (dustAnimFrame !== null) {
+        cancelAnimationFrame(dustAnimFrame);
+        dustAnimFrame = null;
+    }
+}
+
+function dustLoop() {
+    const currentScrollY = window.scrollY;
+    const scrollDelta = currentScrollY - dustLastScrollY;
+    dustLastScrollY = currentScrollY;
+
+    // Accumulate scroll lag then slowly decay it back to 0
+    dustScrollOffset += scrollDelta * -0.5;
+    dustScrollOffset *= 0.965; // bleeds off gradually each frame
+
+    // Lerp factor: how fast particles chase their target
+    const lerp = 0.01;
+
+    for (const p of dustParticles) {
+        // Decay tap-push offset the same way scroll offset decays
+        p.offsetX *= 0.965;
+        p.offsetY *= 0.965;
+
+        p.wobblePhase += p.wobbleSpeed;
+        const wobbleX = Math.sin(p.wobblePhase) * p.wobbleAmp;
+        const wobbleY = Math.cos(p.wobblePhase * 0.63) * p.wobbleAmp * 0.6;
+
+        // Desktop: gently repel particles near the cursor
+        let hoverOffX = 0;
+        let hoverOffY = 0;
+        if (!mobileMode) {
+            const mdx = p.baseX + wobbleX - lastPosX;
+            const mdy = p.baseY + wobbleY - lastPosY;
+            const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+            const repelRadius = 110;
+            if (mdist < repelRadius && mdist > 0) {
+                const strength = (1 - mdist / repelRadius) * 45;
+                hoverOffX = (mdx / mdist) * strength;
+                hoverOffY = (mdy / mdist) * strength;
+            }
+        }
+
+        // Desktop: parallax shift based on cursor distance from centre
+        const cursorOffX = mobileMode ? 0 : (lastPosX - cWidth / 2) / 15;
+        const cursorOffY = mobileMode ? 0 : (lastPosY - cHeight / 2) / 15;
+
+        // Target is base position + wobble drift + scroll lag + tap push + hover repel + cursor parallax
+        const targetX = p.baseX + wobbleX + p.offsetX + hoverOffX + cursorOffX;
+        const targetY = p.baseY + wobbleY + dustScrollOffset + p.offsetY + hoverOffY + cursorOffY;
+
+        // Pure lerp — smooth catch-up, zero bounce
+        p.x += (targetX - p.x) * lerp;
+        p.y += (targetY - p.y) * lerp;
+    }
+
+    drawDustCanvas();
+    dustAnimFrame = requestAnimationFrame(dustLoop);
+}
+
+function applyDustTap(tapX: number, tapY: number) {
+    const impactRadius = 140;
+    const maxPush = 500;
+    for (const p of dustParticles) {
+        const dx = p.baseX - tapX;
+        const dy = p.baseY - tapY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < impactRadius && dist > 0) {
+            const strength = (1 - dist / impactRadius) * maxPush;
+            p.offsetX += (dx / dist) * strength;
+            p.offsetY += (dy / dist) * strength;
+        }
+    }
+}
+
+function drawDustCanvas() {
+    // Desktop uses cursor position; mobile uses screen centre
+    const gbX = mobileMode ? cWidth / 2 : lastPosX;
+    const gbY = mobileMode ? cHeight / 2 : lastPosY;
+    drawGlassbox(gbX, gbY, glassboxCanvas);
+
+    // Overlay blurry dust specks using radial gradients
+    for (const p of dustParticles) {
+        const r = p.radius * 3.5;
+        const grad = ctx.createRadialGradient(p.x, p.y, r * 0.4, p.x, p.y, r);
+        grad.addColorStop(0, `rgba(78, 88, 100, ${p.alpha})`);
+        grad.addColorStop(0.45, `rgba(78, 88, 100, ${p.alpha * 0.35})`);
+        grad.addColorStop(1, `rgba(78, 88, 100, 0)`);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+    }
 }
 
 //╔══════════════════════════════════════╗

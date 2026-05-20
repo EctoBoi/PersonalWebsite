@@ -24,7 +24,7 @@ body {
     top: 0;
     left: 0;
     width: 100dvw;
-    height: 100dvh;
+    height: 100lvh;
     pointer-events: none;
     visibility: hidden;
 }
@@ -33,6 +33,7 @@ body {
     font-size: clamp(1rem, 2.5vw, 1.25rem);
     font-family: "Noto Sans", sans-serif;
     color: var(--fontColor);
+    background-color: #f6f6f7;
 }
 
 #about-div {
@@ -213,12 +214,12 @@ body {
 
 #scroll-down-arrow {
     position: absolute;
-    bottom: 1.5rem;
+    bottom: 6rem;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1.75rem;
+    font-size: 2.5rem;
     color: var(--dColor);
-    opacity: 0.7;
+    opacity: 0.9;
     animation: bounce-down 1.6s ease-in-out infinite;
     cursor: pointer;
     user-select: none;

@@ -6,9 +6,11 @@
     "main": "app.js",
     "scripts": {
         "transpile": "tsc -p tsconfig.json -w",
-        "start": "node app.js"
+        "start": "node app.js",
+        "tunnel": "npx ngrok http 8080"
     },
     "dependencies": {
+        "@ngrok/ngrok": "^1.7.0",
         "express": "^4.18.2"
     },
     "keywords": [
