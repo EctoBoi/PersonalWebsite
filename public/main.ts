@@ -264,7 +264,8 @@ function positionContent(posX: number, posY: number) {
 //╚══════════════════════════════════════╝
 function initDustParticles() {
     dustParticles = [];
-    const count = 60;
+    let count = 80;
+    if (mobileMode) count = 40;
     for (let i = 0; i < count; i++) {
         const x = cWidth * 0.05 + Math.random() * cWidth * 0.9;
         const y = cHeight * 0.05 + Math.random() * cHeight * 0.9;
@@ -276,7 +277,7 @@ function initDustParticles() {
             y,
             offsetX: 0,
             offsetY: 0,
-            radius: depth * 3 + 1,
+            radius: depth * 4 + 1,
             alpha: depth,
             wobblePhase: Math.random() * Math.PI * 2,
             wobbleSpeed: 0.0012 + Math.random() * 0.0018,
@@ -374,15 +375,24 @@ function drawDustCanvas() {
     const gbY = mobileMode ? cHeight / 2 : lastPosY;
     drawGlassbox(gbX, gbY, glassboxCanvas);
 
-    // Overlay blurry dust specks using radial gradients
+    // Overlay blurry stars using radial gradients
     for (const p of dustParticles) {
         const r = p.radius * 3.5;
-        const grad = ctx.createRadialGradient(p.x, p.y, r * 0.4, p.x, p.y, r);
+        const innerR = r * 0.25;
+        const grad = ctx.createRadialGradient(p.x, p.y, innerR * 0.1, p.x, p.y, r);
         grad.addColorStop(0, `rgba(78, 88, 100, ${p.alpha})`);
         grad.addColorStop(0.45, `rgba(78, 88, 100, ${p.alpha * 0.35})`);
         grad.addColorStop(1, `rgba(78, 88, 100, 0)`);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        for (let i = 0; i < 8; i++) {
+            const angle = (i * Math.PI) / 4 - Math.PI / 2;
+            const rad = i % 2 === 0 ? r : innerR;
+            const px = p.x + Math.cos(angle) * rad;
+            const py = p.y + Math.sin(angle) * rad;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
         ctx.fillStyle = grad;
         ctx.fill();
     }
@@ -516,7 +526,8 @@ function setNavSize() {
     const backdrop = document.getElementById("nav-backdrop") as HTMLDivElement;
     backdrop.style.left = navButtonWidth / 2 + "px";
     backdrop.style.width = navButtonWidth * 3 + "px";
-    backdrop.style.height = navButtonHeight + "px";
+    backdrop.style.height = navButtonHeight - lineWidth + "px";
+    backdrop.style.backgroundColor = dColor;
 
     drawNav(viewportRef.clientWidth / 2, viewportRef.clientHeight / 2);
 }
