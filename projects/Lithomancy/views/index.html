@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lithomancy</title>
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="favicon.ico" />
+        <meta name="theme-color" content="#0f172a" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Spectral:wght@400;500;600&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body
+        class="min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_20%_15%,rgba(125,95,163,0.25),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(212,175,106,0.15),transparent_35%),linear-gradient(180deg,#0a0510_0%,#1a0d2e_35%,#09050f_100%)] text-arcane-ink font-body"
+    >
+        <button
+            id="combo-open"
+            class="fixed left-3 top-3 z-30 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-arcane-gold/60 bg-arcane-panel/95 text-arcane-gold transition hover:border-arcane-gold hover:bg-arcane-panelLight"
+            type="button"
+            aria-label="Show reference"
+            title="Show combos &amp; effects"
+        >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="2" y="2" width="14" height="14" rx="2" stroke="#c8a96e" stroke-width="1.5" />
+                <line x1="5" y1="6" x2="13" y2="6" stroke="#c8a96e" stroke-width="1.5" stroke-linecap="round" />
+                <line x1="5" y1="9" x2="13" y2="9" stroke="#c8a96e" stroke-width="1.5" stroke-linecap="round" />
+                <line x1="5" y1="12" x2="10" y2="12" stroke="#c8a96e" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+        </button>
+        <div id="combo-overlay-wrap" class="fixed left-3 top-3 z-20 hidden rounded-2xl border border-arcane-gold/40 bg-arcane-panel/98 p-2 shadow-glow">
+            <canvas id="combo-overlay" width="280" height="390" class="block rounded-xl border border-arcane-purple/50 bg-black/40"></canvas>
+            <button
+                id="combo-close"
+                class="absolute left-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-arcane-gold/60 bg-arcane-panel text-arcane-gold transition hover:border-arcane-gold hover:bg-arcane-panelLight"
+                type="button"
+                aria-label="Close reference"
+                title="Hide"
+            >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <line x1="2" y1="2" x2="12" y2="12" stroke="#c8a96e" stroke-width="2" stroke-linecap="round" />
+                    <line x1="12" y1="2" x2="2" y2="12" stroke="#c8a96e" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+            <button
+                id="btn-leave-match"
+                class="mt-2 hidden w-full rounded-xl border border-red-800/60 bg-arcane-panel/80 px-3 py-2 font-title text-xs tracking-[0.10em] text-red-400 transition hover:border-red-600 hover:bg-red-950/40"
+                type="button"
+            >
+                Leave Match
+            </button>
+        </div>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center pb-10 pt-8 sm:px-6 md:pt-6">
+            <h1 class="font-title text-[clamp(1.5rem,6vw,3rem)] tracking-[0.22em] text-arcane-gold drop-shadow-[0_0_25px_rgba(212,175,106,0.3)]">
+                ✦LITHOMANCY✦
+            </h1>
+            <div id="code-display-wrap" class="relative my-4 hidden w-full max-w-md">
+                <button
+                    id="btn-back-room"
+                    class="absolute left-0 top-1/2 -translate-y-1/2 rounded-xl border border-arcane-gold/70 bg-arcane-panel/80 px-4 py-3 font-title text-sm tracking-[0.08em] text-arcane-gold transition hover:bg-arcane-panelLight hover:border-arcane-gold"
+                    type="button"
+                >
+                    Back
+                </button>
+                <div
+                    id="code-display"
+                    class="mx-auto w-fit cursor-pointer rounded-xl border-2 border-arcane-gold/70 bg-arcane-panel/80 px-6 py-3 text-center font-title text-[clamp(1rem,3vw,2rem)] tracking-[0.34em] text-arcane-gold transition hover:bg-arcane-panelLight hover:border-arcane-gold"
+                    title="Click to copy room code"
+                ></div>
+            </div>
+            <div id="status-bar" class="min-h-6 text-center text-sm text-arcane-purple">Create or join a room.</div>
+            <section
+                id="main-menu"
+                class="flex w-full max-w-xl flex-col items-center gap-3 rounded-2xl border border-arcane-purple/50 bg-[radial-gradient(circle_at_80%_80%,rgba(212,175,106,0.05),transparent_42%)] p-5 shadow-glow"
+            >
+                <button
+                    id="btn-create"
+                    class="w-full rounded-xl border border-arcane-gold/70 bg-arcane-panel/80 px-5 py-3 font-title tracking-[0.12em] text-arcane-gold transition hover:bg-arcane-panelLight hover:border-arcane-gold"
+                >
+                    Create Room
+                </button>
+                <div class="sep text-xs tracking-[0.18em] text-arcane-purple/70">— OR JOIN WITH A CODE —</div>
+                <input
+                    id="join-input"
+                    type="text"
+                    maxlength="6"
+                    placeholder="XXXXXX"
+                    class="w-full rounded-xl border border-arcane-purple/50 bg-arcane-panel/60 px-4 py-3 text-center text-lg tracking-[0.25em] text-arcane-ink outline-none transition focus:border-arcane-gold focus:border-arcane-gold"
+                />
+                <button
+                    id="btn-join"
+                    class="w-full rounded-xl border border-arcane-gold/70 bg-arcane-panel/80 px-5 py-3 font-title tracking-[0.12em] text-arcane-gold transition hover:bg-arcane-panelLight hover:border-arcane-gold"
+                >
+                    Join Room
+                </button>
+
+                <details id="how-to-play" class="mt-2 w-full">
+                    <summary
+                        class="cursor-pointer select-none text-center font-title text-sm tracking-[0.14em] text-arcane-gold transition hover:text-arcane-goldDark"
+                    >
+                        ◈ How to Play ◈
+                    </summary>
+                    <div class="rules mt-3 rounded-xl border border-arcane-purple/40 bg-arcane-panel/70 px-4 py-3 text-sm leading-7 text-arcane-purpleLight">
+                        <p><strong>Goal:</strong> Control <em>4 consecutive turrets</em> on the tower of 8 to win.</p>
+                        <hr class="rule-sep my-2 border-arcane-purple/30" />
+                        <p>
+                            <strong>Each turn:</strong> Both players are dealt 5 stones. Each stone shows either a <em>Shape</em> (▲ ◻ ⬟ ⬡ ⯃) or a
+                            <em>Star</em> (4 5 8 9 10 points). You may then recast (reroll) any stones once.
+                        </p>
+                        <hr class="rule-sep my-2 border-arcane-purple/30" />
+                        <p><strong>Hand Types</strong> (shapes vs stars):</p>
+                        <ul class="list-inside list-disc space-y-1">
+                            <li>✨ <strong>Spell</strong> — 3 shapes + 2 stars. Power = <em>sum of the 2 stars points</em>.</li>
+                            <li>⚗️ <strong>Potion</strong> — 4 shapes + 1 star. Potency = <em>the star's points</em>.</li>
+                            <li>🔮 <strong>Charm</strong> — 4 stars + 1 shape. Rating = <em>sides on the shape</em>.</li>
+                            <li>💨 <strong>Bungle</strong> — 2 shapes + 3 stars, 5 shapes, or 5 stars. Loses to everything.</li>
+                        </ul>
+                        <hr class="rule-sep my-2 border-arcane-purple/30" />
+                        <p><strong>Cycle:</strong> ✨ Spell beats ⚗️ Potion · ⚗️ Potion beats 🔮 Charm · 🔮 Charm beats ✨ Spell</p>
+                        <p>Higher value wins ties of the same type.</p>
+                        <hr class="rule-sep my-2 border-arcane-purple/30" />
+                        <p><strong>Winner's Action:</strong></p>
+                        <ul class="list-inside list-disc space-y-1">
+                            <li>✨ <strong>Spell</strong> — Place one of your gems on any empty turret.</li>
+                            <li>⚗️ <strong>Potion</strong> — Swap your gem with any opponent gem.</li>
+                            <li>🔮 <strong>Charm</strong> — Knock one of your opponent's gems from the tower.</li>
+                        </ul>
+                    </div>
+                </details>
+            </section>
+
+            <section
+                id="match"
+                class="hidden mt-6 w-full max-w-3xl rounded-[10%] border border-arcane-purple/50 bg-[radial-gradient(circle_at_20%_20%,rgba(125,95,163,0.12),transparent_45%),radial-gradient(circle_at_80%_20%,rgba(212,175,106,0.05),transparent_42%),linear-gradient(0deg,#0a0510_0%,#1a0d2e_35%,#09050f_100%)] pt-12 pb-3 shadow-glow"
+            >
+                <canvas
+                    id="canvas"
+                    width="500"
+                    height="540"
+                    class="mx-auto hidden w-full max-w-[500px] rounded-[35%] border-2 border-arcane-purple/60 bg-black/40"
+                ></canvas>
+                <div id="outcome-banner" class="mt-3 sm:min-h-7 min-h-4 text-center font-title sm:text-xl text-md text-arcane-gold"></div>
+                <div id="ui-panel" class="mt-3 min-h-11 flex flex-col items-center justify-start gap-2"></div>
+            </section>
+        </main>
+
+        <script type="module" src="js/client/client.js"></script>
+    </body>
+</html>

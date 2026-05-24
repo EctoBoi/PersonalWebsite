@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", express.static("public"));
 app.route("/").get(function (req, res) {
-    res.sendFile(process.cwd() + "/views/index.html");
+    res.sendFile(process.cwd() + "index.html");
 });
 
 app.use("/EmoticonRumble", express.static("projects/EmoticonRumble/public"));
@@ -22,6 +22,11 @@ app.route("/EmoticonRumble").get(function (req, res) {
 app.use("/OatSoup", express.static("projects/OatSoup/public"));
 app.route("/OatSoup").get(function (req, res) {
     res.sendFile(process.cwd() + "/projects/OatSoup/views/index.html");
+});
+
+app.use("/Lithomancy", express.static("projects/Lithomancy/public"));
+app.route("/Lithomancy").get(function (req, res) {
+    res.sendFile(process.cwd() + "/projects/Lithomancy/views/index.html");
 });
 
 app.use("/Snakish", express.static("projects/Snakish/public"));
@@ -39,14 +44,9 @@ app.route("/SignMaker").get(function (req, res) {
     res.sendFile(process.cwd() + "/projects/SignMaker/views/index.html");
 });
 
-app.use(
-    "/ExistingPixelsGenerator",
-    express.static("projects/ExistingPixelsGenerator/public")
-);
+app.use("/ExistingPixelsGenerator", express.static("projects/ExistingPixelsGenerator/public"));
 app.route("/ExistingPixelsGenerator").get(function (req, res) {
-    res.sendFile(
-        process.cwd() + "/projects/ExistingPixelsGenerator/views/index.html"
-    );
+    res.sendFile(process.cwd() + "/projects/ExistingPixelsGenerator/views/index.html");
 });
 
 app.use(function (req, res, next) {

@@ -22,10 +22,10 @@ const slides: Slide[] = [
     {
         img: "/imgs/lithomancy.jpg",
         title: "Lithomancy",
-        url: "https://lithomancy.up.railway.app",
+        url: "https://justinbanton.ca/Lithomancy",
         sourceUrl: "https://github.com/EctoBoi/lithomancy",
         description:
-            "Browser-based online 1v1 dueling game. Cast spells, concoct potions, and harness charms, a wizardly reimagining of rock paper scissors. <br><strong>Made using:</strong> WebSocket, Tailwind, and TypeScript",
+            "Browser-based online 1v1 dueling game. Cast spells, concoct potions, and harness charms, a wizardly reimagining of rock paper scissors. <br><strong>Made using:</strong> PartyKit, Tailwind, and TypeScript",
     },
     {
         img: "/imgs/SignMaker.jpg",
