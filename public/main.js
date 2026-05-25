@@ -434,7 +434,7 @@ function setNavSize() {
     const backdrop = document.getElementById("nav-backdrop");
     backdrop.style.left = navButtonWidth / 2 + "px";
     backdrop.style.width = navButtonWidth * 3 + "px";
-    backdrop.style.height = navButtonHeight - lineWidth + "px";
+    backdrop.style.height = navButtonHeight + "px";
     backdrop.style.backgroundColor = dColor;
     drawNav(viewportRef.clientWidth / 2, viewportRef.clientHeight / 2);
 }
