@@ -641,6 +641,13 @@ const slides = [
         description: "Browser-based online 1v1 dueling game. Cast spells, concoct potions, and harness charms, a wizardly reimagining of rock paper scissors. <br><strong>Made using:</strong> PartyKit, Tailwind, and TypeScript",
     },
     {
+        img: "/imgs/sector-slots.jpg",
+        title: "Sector Slots",
+        url: "https://sectorslots.netlify.app",
+        sourceUrl: "https://github.com/EctoBoi/sector-slots",
+        description: "Browser-based slot machine with a twist, spin a grid of pipe-like tiles and win by forming enclosed sectors. Features animated spins, sound effects, and adjustable denominations. <br><strong>Made using:</strong> GSAP, Howler, Tailwind, and TypeScript",
+    },
+    {
         img: "/imgs/SignMaker.jpg",
         title: "SignMaker",
         url: "https://justinbanton.ca/SignMaker",
