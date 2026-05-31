@@ -634,18 +634,18 @@ const slides = [
         description: "A multiplayer auction simulator where players buy, sell, and flip items through short-lived bid wars while AI-driven NPCs keep the economy alive. <br><strong>Made using:</strong> Next.js, Prisma, Supabase, and TypeScript",
     },
     {
+        img: "/imgs/sector-slots.jpg",
+        title: "Sector Slots",
+        url: "https://sectorslots.netlify.app",
+        sourceUrl: "https://github.com/EctoBoi/sector-slots",
+        description: "Browser-based slot machine with a debt problem. Spin a grid of pipe-like tiles and win by forming enclosed sectors. Take escalating loans with compound interest, search the couch cushions for loose change, and try not to let your debt hit the ceiling. <br><strong>Made using:</strong> GSAP, Howler, and TypeScript",
+    },
+    {
         img: "/imgs/lithomancy.jpg",
         title: "Lithomancy",
         url: "https://justinbanton.ca/Lithomancy",
         sourceUrl: "https://github.com/EctoBoi/lithomancy",
         description: "Browser-based online 1v1 dueling game. Cast spells, concoct potions, and harness charms, a wizardly reimagining of rock paper scissors. <br><strong>Made using:</strong> PartyKit, Tailwind, and TypeScript",
-    },
-    {
-        img: "/imgs/sector-slots.jpg",
-        title: "Sector Slots",
-        url: "https://sectorslots.netlify.app",
-        sourceUrl: "https://github.com/EctoBoi/sector-slots",
-        description: "Browser-based slot machine with a twist, spin a grid of pipe-like tiles and win by forming enclosed sectors. Features animated spins, sound effects, and adjustable denominations. <br><strong>Made using:</strong> GSAP, Howler, Tailwind, and TypeScript",
     },
     {
         img: "/imgs/SignMaker.jpg",
