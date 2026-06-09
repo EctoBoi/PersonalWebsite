@@ -38,7 +38,7 @@ const slides: Slide[] = [
     {
         img: "/imgs/SignMaker.jpg",
         title: "SignMaker",
-        url: "https://justinbanton.ca/SignMaker",
+        url: "https://sign-maker.netlify.app",
         sourceUrl: "https://github.com/EctoBoi/SignMaker",
         description:
             "A tool to create sale signage of various sizes. It can autofill info taken from Cabelas.ca using my CabBPSSearch chrome extension. <br><strong>Made using:</strong> JavaScript, HTML, and CSS",
